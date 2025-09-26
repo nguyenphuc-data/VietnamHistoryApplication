@@ -50,5 +50,8 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.storage)
+
+
     implementation("androidx.fragment:fragment:1.6.1")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 }
