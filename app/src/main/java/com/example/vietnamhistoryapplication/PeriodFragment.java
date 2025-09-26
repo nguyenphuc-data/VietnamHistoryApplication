@@ -43,10 +43,10 @@ public class PeriodFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        loadThemesFromFirestore();
         viewPager = view.findViewById(R.id.viewPager);
         themeAdapter = new ThemeAdapter(themeList, this::startThemeActivity);
         viewPager.setAdapter(themeAdapter);
-        loadThemesFromFirestore();
     }
 
     private void loadThemesFromFirestore() {
