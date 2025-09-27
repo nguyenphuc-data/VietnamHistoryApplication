@@ -1,15 +1,16 @@
-package com.example.vietnamhistoryapplication;
+package com.example.vietnamhistoryapplication.home;
 
 import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import com.example.vietnamhistoryapplication.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.example.vietnamhistoryapplication.PeriodFragment;
-import com.example.vietnamhistoryapplication.CharacterFragment;
-import com.example.vietnamhistoryapplication.GameFragment;
-import com.example.vietnamhistoryapplication.ExploreFragment;
-import com.example.vietnamhistoryapplication.ProfileFragment;
+import com.example.vietnamhistoryapplication.home.PeriodFragment.PeriodFragment;
+import com.example.vietnamhistoryapplication.home.CharacterFragment.CharacterFragment;
+import com.example.vietnamhistoryapplication.home.GameFragment.GameFragment;
+import com.example.vietnamhistoryapplication.home.ExploreFragment.ExploreFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -17,7 +18,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.home_activity);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(item ->{

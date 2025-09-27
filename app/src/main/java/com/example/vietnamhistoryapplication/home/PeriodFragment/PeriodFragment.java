@@ -1,4 +1,4 @@
-package com.example.vietnamhistoryapplication;
+package com.example.vietnamhistoryapplication.home.PeriodFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.vietnamhistoryapplication.R;
+import com.example.vietnamhistoryapplication.period.PeriodDetailActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,7 +39,7 @@ public class PeriodFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_period, container, false);
+        return inflater.inflate(R.layout.period_fragment, container, false);
     }
 
     @Override
@@ -91,7 +93,7 @@ public class PeriodFragment extends Fragment {
     }
 
     private void startThemeActivity(String slug) {
-        Intent intent = new Intent(getActivity(), ThemeActivity.class);
+        Intent intent = new Intent(getActivity(), PeriodDetailActivity.class);
         intent.putExtra("theme_slug", slug);
         startActivity(intent);
     }
@@ -126,7 +128,7 @@ public class PeriodFragment extends Fragment {
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.theme_item, parent, false);
+                    .inflate(R.layout.periods_item, parent, false);
             return new ViewHolder(view);
         }
 

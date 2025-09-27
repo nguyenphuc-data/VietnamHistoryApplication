@@ -12,28 +12,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VietnamHistoryApplication">
         <activity
-            android:name=".ThemeActivity"
+            android:name=".period.PeriodDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileFragment"
+            android:name=".home.ProfileFragment.ProfileFragment"
             android:exported="false" />
         <activity
-            android:name=".ExploreFragment"
+            android:name=".home.ExploreFragment.ExploreFragment"
             android:exported="false" />
         <activity
-            android:name=".GameFragment"
+            android:name=".home.GameFragment.GameFragment"
             android:exported="false" />
         <activity
-            android:name=".CharacterFragment"
+            android:name=".home.CharacterFragment.CharacterFragment"
             android:exported="false" />
         <activity
-            android:name=".PeriodFragment"
+            android:name=".home.PeriodFragment.PeriodFragment"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".home.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
