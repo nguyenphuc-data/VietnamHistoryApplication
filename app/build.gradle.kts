@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -40,4 +41,17 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Firebase BOM (quản lý version tập trung)
+    implementation(platform(libs.firebase.bom))
+
+    // Firebase services
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.storage)
+
+
+    implementation("androidx.fragment:fragment:1.6.1")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 }

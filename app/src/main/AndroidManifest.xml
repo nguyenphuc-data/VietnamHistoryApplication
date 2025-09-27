@@ -12,6 +12,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VietnamHistoryApplication">
         <activity
+            android:name=".ThemeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileFragment"
+            android:exported="false" />
+        <activity
+            android:name=".ExploreFragment"
+            android:exported="false" />
+        <activity
+            android:name=".GameFragment"
+            android:exported="false" />
+        <activity
+            android:name=".CharacterFragment"
+            android:exported="false" />
+        <activity
+            android:name=".PeriodFragment"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
