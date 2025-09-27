@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_period"
+            android:icon="@drawable/ic_history"
+            android:title="Thời kì" />
+        <item
+            android:id="@+id/nav_character"
+            android:icon="@drawable/ic_person"
+            android:title="Nhân vật" />
+
+        <item
+            android:id="@+id/nav_game"
+            android:icon="@drawable/ic_game"
+            android:title="Trò chơi" />
+
+    </group>
+</menu>

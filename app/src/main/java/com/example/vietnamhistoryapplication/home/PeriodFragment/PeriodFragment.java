@@ -29,8 +29,8 @@ import java.util.List;
 public class PeriodFragment extends Fragment {
 
     private ViewPager2 viewPager;
-    private ThemeAdapter themeAdapter;
-    private List<Theme> themeList = new ArrayList<>();
+    private PeriodAdapter periodAdapter;
+    private List<Period> periodList = new ArrayList<>();
 
     public PeriodFragment() {
         // Required empty public constructor
@@ -45,21 +45,21 @@ public class PeriodFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loadThemesFromFirestore();
+        loadPeriodsFromFirestore();
         viewPager = view.findViewById(R.id.viewPager);
-        themeAdapter = new ThemeAdapter(themeList, this::startThemeActivity);
-        viewPager.setAdapter(themeAdapter);
+        periodAdapter = new PeriodAdapter(periodList, this::startPeriodActivity);
+        viewPager.setAdapter(periodAdapter);
     }
 
-    private void loadThemesFromFirestore() {
+    private void loadPeriodsFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("themes")
+        db.collection("periods")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            themeList.clear();
+                            periodList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String slug = document.getId();
                                 String title = document.getString("title");
@@ -67,18 +67,16 @@ public class PeriodFragment extends Fragment {
                                 Timestamp endTimestamp = document.getTimestamp("endDate");
                                 String description = document.getString("description");
 
-                                // Trích xuất năm từ Timestamp
                                 String startYear = startTimestamp != null ? extractYearFromTimestamp(startTimestamp) : "N/A";
                                 String endYear = endTimestamp != null ? extractYearFromTimestamp(endTimestamp) : "N/A";
-                                String period = startYear + "–" + endYear;
+                                String periodRange = startYear + "–" + endYear;
 
-                                // Thêm vào list nếu title không null
                                 if (title != null) {
-                                    themeList.add(new Theme(slug, title, period, description));
+                                    periodList.add(new Period(slug, title, periodRange, description));
                                 }
                             }
-                            Log.d("PeriodFragment", "Loaded " + themeList.size() + " themes");
-                            themeAdapter.notifyDataSetChanged();
+                            Log.d("PeriodFragment", "Loaded " + periodList.size() + " periods");
+                            periodAdapter.notifyDataSetChanged();
                         } else {
                             Log.e("PeriodFragment", "Error loading data", task.getException());
                         }
@@ -92,35 +90,35 @@ public class PeriodFragment extends Fragment {
         return String.valueOf(cal.get(Calendar.YEAR));
     }
 
-    private void startThemeActivity(String slug) {
+    private void startPeriodActivity(String slug) {
         Intent intent = new Intent(getActivity(), PeriodDetailActivity.class);
-        intent.putExtra("theme_slug", slug);
+        intent.putExtra("period_slug", slug);
         startActivity(intent);
     }
 
-    // Model class cho Theme
-    public static class Theme {
-        String slug, title, period, description;
+    // Model class cho Period
+    public static class Period {
+        String slug, title, periodRange, description;
 
-        public Theme(String slug, String title, String period, String description) {
+        public Period(String slug, String title, String periodRange, String description) {
             this.slug = slug;
             this.title = title;
-            this.period = period;
+            this.periodRange = periodRange;
             this.description = description;
         }
     }
 
     // Adapter cho ViewPager2
-    public static class ThemeAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<ThemeAdapter.ViewHolder> {
-        private List<Theme> themes;
-        private final OnThemeClickListener clickListener;
+    public static class PeriodAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<PeriodAdapter.ViewHolder> {
+        private List<Period> periods;
+        private final OnPeriodClickListener clickListener;
 
-        public interface OnThemeClickListener {
-            void onThemeClick(String slug);
+        public interface OnPeriodClickListener {
+            void onPeriodClick(String slug);
         }
 
-        public ThemeAdapter(List<Theme> themes, OnThemeClickListener clickListener) {
-            this.themes = themes;
+        public PeriodAdapter(List<Period> periods, OnPeriodClickListener clickListener) {
+            this.periods = periods;
             this.clickListener = clickListener;
         }
 
@@ -134,18 +132,17 @@ public class PeriodFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            Theme theme = themes.get(position);
-            holder.tvTitle.setText(theme.title != null ? theme.title : "No Title");
-            holder.tvPeriod.setText(theme.period != null ? theme.period : "No Period");
-            holder.tvDescription.setText(theme.description != null ? theme.description : "No Description");
+            Period period = periods.get(position);
+            holder.tvTitle.setText(period.title != null ? period.title : "No Title");
+            holder.tvPeriod.setText(period.periodRange != null ? period.periodRange : "No Period");
+            holder.tvDescription.setText(period.description != null ? period.description : "No Description");
 
-            // Thêm sự kiện nhấn vào item
-            holder.itemView.setOnClickListener(v -> clickListener.onThemeClick(theme.slug));
+            holder.itemView.setOnClickListener(v -> clickListener.onPeriodClick(period.slug));
         }
 
         @Override
         public int getItemCount() {
-            return themes.size();
+            return periods.size();
         }
 
         public class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
