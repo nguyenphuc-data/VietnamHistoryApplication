@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Tiêu đề "Giai đoạn" -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Giai đoạn"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- RecyclerView để hiển thị danh sách stages -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewStages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- TextView thông báo khi không có stages (tùy chọn, giữ lại nếu cần) -->
+    <TextView
+        android:id="@+id/tvNoStages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Không có stages để hiển thị"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:textSize="16sp"
+        android:textColor="@android:color/black" />
+
+</LinearLayout>

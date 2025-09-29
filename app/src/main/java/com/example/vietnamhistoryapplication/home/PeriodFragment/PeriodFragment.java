@@ -14,13 +14,13 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.vietnamhistoryapplication.R;
-import com.example.vietnamhistoryapplication.period.PeriodDetailActivity;
+import com.example.vietnamhistoryapplication.stage.StageActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,9 +45,9 @@ public class PeriodFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loadPeriodsFromFirestore();
         viewPager = view.findViewById(R.id.viewPager);
-        periodAdapter = new PeriodAdapter(periodList, this::startPeriodActivity);
+        loadPeriodsFromFirestore();
+        periodAdapter = new PeriodAdapter(periodList, this::startStageActivity);
         viewPager.setAdapter(periodAdapter);
     }
 
@@ -61,7 +61,7 @@ public class PeriodFragment extends Fragment {
                         if (task.isSuccessful()) {
                             periodList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                String slug = document.getId();
+                                String slug = document.getId(); // lấy slug từ document ID
                                 String title = document.getString("title");
                                 Timestamp startTimestamp = document.getTimestamp("startDate");
                                 Timestamp endTimestamp = document.getTimestamp("endDate");
@@ -90,9 +90,10 @@ public class PeriodFragment extends Fragment {
         return String.valueOf(cal.get(Calendar.YEAR));
     }
 
-    private void startPeriodActivity(String slug) {
-        Intent intent = new Intent(getActivity(), PeriodDetailActivity.class);
-        intent.putExtra("period_slug", slug);
+    // chuyển sang StageActivity (không phải PeriodDetailActivity)
+    private void startStageActivity(String slug) {
+        Intent intent = new Intent(getActivity(), StageActivity.class);
+        intent.putExtra("slug", slug); // gửi slug sang StageActivity
         startActivity(intent);
     }
 

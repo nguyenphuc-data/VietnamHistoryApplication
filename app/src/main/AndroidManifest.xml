@@ -11,36 +11,55 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.VietnamHistoryApplication">
+
+        <activity
+            android:name=".stage.StageActivity"
+            android:exported="false"
+            android:label="Stage Activity" />
+
         <activity
             android:name=".period.PeriodDetailActivity"
             android:exported="false" />
+
         <activity
             android:name=".home.ProfileFragment.ProfileFragment"
             android:exported="false" />
+
         <activity
             android:name=".home.ExploreFragment.ExploreFragment"
             android:exported="false" />
+
         <activity
             android:name=".home.GameFragment.GameFragment"
             android:exported="false" />
+
         <activity
             android:name=".home.CharacterFragment.CharacterFragment"
             android:exported="false" />
+
         <activity
             android:name=".home.PeriodFragment.PeriodFragment"
             android:exported="false" />
+
         <activity
             android:name=".home.HomeActivity"
             android:exported="false" />
+
         <activity
             android:name=".main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Thêm khai báo cho StageDetailActivity -->
+        <activity
+            android:name=".stage.StageDetailActivity"
+            android:exported="false"
+            android:label="Chi tiết Giai đoạn" />
+
     </application>
 
 </manifest>
