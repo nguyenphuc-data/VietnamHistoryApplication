@@ -16,13 +16,15 @@
         android:textStyle="bold" />
 
     <!-- RecyclerView để hiển thị danh sách stages -->
+
+    <!-- TextView thông báo khi không có stages (tùy chọn, giữ lại nếu cần) -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewStages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <!-- TextView thông báo khi không có stages (tùy chọn, giữ lại nếu cần) -->
     <TextView
         android:id="@+id/tvNoStages"
         android:layout_width="wrap_content"
