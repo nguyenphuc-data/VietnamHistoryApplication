@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <!-- Thanh tiêu đề -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp">
+
+        <!-- Nút mũi tên quay về (to hơn) -->
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="Quay lại"
+            android:src="@drawable/arrow_back" />
+
+        <!-- Tiêu đề căn giữa -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Giai đoạn"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <!-- View trống để cân bằng (giữ chữ ở giữa) -->
+        <View
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+    </LinearLayout>
+
+    <!-- RecyclerView để hiển thị danh sách stages -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewStages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/tvNoStages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Không có stages để hiển thị"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:padding="16dp" />
+
+</LinearLayout>

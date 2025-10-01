@@ -14,18 +14,18 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.vietnamhistoryapplication.R;
-import com.example.vietnamhistoryapplication.period.PeriodDetailActivity;
+import com.example.vietnamhistoryapplication.period.PeriodDetailFragment;
+import com.example.vietnamhistoryapplication.stage.StageActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
 public class PeriodFragment extends Fragment {
 
     private ViewPager2 viewPager;
@@ -45,9 +45,9 @@ public class PeriodFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loadPeriodsFromFirestore();
         viewPager = view.findViewById(R.id.viewPager);
-        periodAdapter = new PeriodAdapter(periodList, this::startPeriodActivity);
+        loadPeriodsFromFirestore();
+        periodAdapter = new PeriodAdapter(periodList, this::startStageActivity);
         viewPager.setAdapter(periodAdapter);
     }
 
@@ -61,18 +61,19 @@ public class PeriodFragment extends Fragment {
                         if (task.isSuccessful()) {
                             periodList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                String slug = document.getId();
+                                String slug = document.getId(); // lấy slug từ document ID
                                 String title = document.getString("title");
                                 Timestamp startTimestamp = document.getTimestamp("startDate");
                                 Timestamp endTimestamp = document.getTimestamp("endDate");
+                                String summary = document.getString("summary");
+                                String image = document.getString("coverMediaRef");
                                 String description = document.getString("description");
-
                                 String startYear = startTimestamp != null ? extractYearFromTimestamp(startTimestamp) : "N/A";
                                 String endYear = endTimestamp != null ? extractYearFromTimestamp(endTimestamp) : "N/A";
                                 String periodRange = startYear + "–" + endYear;
 
                                 if (title != null) {
-                                    periodList.add(new Period(slug, title, periodRange, description));
+                                    periodList.add(new Period(slug, title, periodRange, summary,image,description));
                                 }
                             }
                             Log.d("PeriodFragment", "Loaded " + periodList.size() + " periods");
@@ -90,70 +91,21 @@ public class PeriodFragment extends Fragment {
         return String.valueOf(cal.get(Calendar.YEAR));
     }
 
-    private void startPeriodActivity(String slug) {
-        Intent intent = new Intent(getActivity(), PeriodDetailActivity.class);
-        intent.putExtra("period_slug", slug);
-        startActivity(intent);
+    // chuyển sang StageActivity (không phải PeriodDetailActivity)
+    private void startStageActivity(Period period) {
+//        Intent intent = new Intent(getActivity(), StageActivity.class);
+//        intent.putExtra("slug", slug); // gửi slug sang StageActivity
+//        startActivity(intent);
+        Fragment fragment = PeriodDetailFragment.newInstance(period);
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
-    // Model class cho Period
-    public static class Period {
-        String slug, title, periodRange, description;
 
-        public Period(String slug, String title, String periodRange, String description) {
-            this.slug = slug;
-            this.title = title;
-            this.periodRange = periodRange;
-            this.description = description;
-        }
-    }
 
     // Adapter cho ViewPager2
-    public static class PeriodAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<PeriodAdapter.ViewHolder> {
-        private List<Period> periods;
-        private final OnPeriodClickListener clickListener;
 
-        public interface OnPeriodClickListener {
-            void onPeriodClick(String slug);
-        }
-
-        public PeriodAdapter(List<Period> periods, OnPeriodClickListener clickListener) {
-            this.periods = periods;
-            this.clickListener = clickListener;
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.periods_item, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            Period period = periods.get(position);
-            holder.tvTitle.setText(period.title != null ? period.title : "No Title");
-            holder.tvPeriod.setText(period.periodRange != null ? period.periodRange : "No Period");
-            holder.tvDescription.setText(period.description != null ? period.description : "No Description");
-
-            holder.itemView.setOnClickListener(v -> clickListener.onPeriodClick(period.slug));
-        }
-
-        @Override
-        public int getItemCount() {
-            return periods.size();
-        }
-
-        public class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-            TextView tvTitle, tvPeriod, tvDescription;
-
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                tvTitle = itemView.findViewById(R.id.tvTitle);
-                tvPeriod = itemView.findViewById(R.id.tvPeriod);
-                tvDescription = itemView.findViewById(R.id.tvDescription);
-            }
-        }
-    }
 }
