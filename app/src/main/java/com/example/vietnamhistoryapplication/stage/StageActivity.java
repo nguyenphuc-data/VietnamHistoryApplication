@@ -59,7 +59,8 @@ public class StageActivity extends AppCompatActivity {
                             Timestamp endDate = doc.getTimestamp("endDate");
                             String stageRange = formatDateRange(startDate, endDate);
                             String overview = doc.getString("overview");
-                            stageList.add(new StageItem(stageSlug, title, stageRange, overview));
+                            String image = doc.getString("coverMediaRef");
+                            stageList.add(new StageItem(stageSlug, title, stageRange, overview,image));
                         }
                         Log.d("StageActivity", "Loaded " + stageList.size() + " stages, sorted by sortOrder");
                     }
