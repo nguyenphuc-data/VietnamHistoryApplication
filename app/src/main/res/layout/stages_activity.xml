@@ -5,16 +5,38 @@
     android:orientation="vertical"
     android:background="@android:color/white">
 
-    <!-- Tiêu đề "Giai đoạn" -->
-    <TextView
+    <!-- Thanh tiêu đề -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Giai đoạn"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:background="@android:color/white" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp">
+
+        <!-- Nút mũi tên quay về (to hơn) -->
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="Quay lại"
+            android:src="@drawable/arrow_back" />
+
+        <!-- Tiêu đề căn giữa -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Giai đoạn"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <!-- View trống để cân bằng (giữ chữ ở giữa) -->
+        <View
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+    </LinearLayout>
 
     <!-- RecyclerView để hiển thị danh sách stages -->
     <androidx.recyclerview.widget.RecyclerView
