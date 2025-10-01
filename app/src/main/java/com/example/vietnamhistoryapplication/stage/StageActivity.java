@@ -2,6 +2,8 @@ package com.example.vietnamhistoryapplication.stage;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +27,12 @@ public class StageActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stages_activity);
+
+        // Gắn sự kiện quay về cho nút back
+        ImageView ivBack = findViewById(R.id.ivBack);
+        if (ivBack != null) {
+            ivBack.setOnClickListener(v -> onBackPressed());
+        }
 
         recyclerView = findViewById(R.id.recyclerViewStages);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
