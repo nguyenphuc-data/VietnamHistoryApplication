@@ -16,6 +16,7 @@ import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.common.ImageLoader;
 import com.example.vietnamhistoryapplication.home.PeriodFragment.Period;
 import com.example.vietnamhistoryapplication.stage.StageActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class PeriodDetailFragment extends Fragment {
@@ -60,6 +61,11 @@ public class PeriodDetailFragment extends Fragment {
             Intent intent = new Intent(getActivity(), StageActivity.class);
             intent.putExtra("slug", period.getSlug());
             startActivity(intent);
+        });
+
+        FloatingActionButton btnBack = view.findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v ->{
+            requireActivity().getSupportFragmentManager().popBackStack();
         });
         return view;
     }

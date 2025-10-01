@@ -13,15 +13,30 @@
         android:padding="16dp"
         android:layout_marginTop="12dp">
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
+        <RelativeLayout
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#E8582B"
-            android:layout_marginBottom="12dp"
-            />
+            android:layout_width="match_parent"
+            android:orientation="horizontal">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_period"
+                app:backgroundTint="#B2B2B2"
+                app:tint="#3a3a3a"
+                app:fabCustomSize="38dp"/>
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/btnBack"
+                android:textColor="#E8582B"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
@@ -34,7 +49,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-
                 app:cardPreventCornerOverlap="true"
                 app:cardUseCompatPadding="true"
                 android:clipToOutline="true">
@@ -56,15 +70,26 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                        <TextView
-                            android:id="@+id/tvDescription"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:textColor="#F5F5F5"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
+                    <TextView
+                        android:id="@+id/tvSummery"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:textColor="#F5F5F5"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:text="Tổng quan"
+                        />
+                    <TextView
+                        android:id="@+id/tvDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:textColor="#F5F5F5"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_below="@+id/tvSummery"
+                        />
                     <Button
                         android:id="@+id/btnReadMore"
                         android:layout_width="300dp"
