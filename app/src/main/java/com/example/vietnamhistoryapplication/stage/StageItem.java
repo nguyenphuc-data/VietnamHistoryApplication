@@ -1,6 +1,8 @@
 package com.example.vietnamhistoryapplication.stage;
 
-public class StageItem {
+import java.io.Serializable;
+
+public class StageItem implements Serializable {
     public String slug;
     public String title;
     public String stageRange;

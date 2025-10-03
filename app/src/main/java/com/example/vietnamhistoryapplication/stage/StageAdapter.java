@@ -13,15 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.common.ImageLoader;
+import com.example.vietnamhistoryapplication.stageDetail.StageDetailActivity;
 
 import java.util.List;
 
 public class StageAdapter extends RecyclerView.Adapter<StageAdapter.ViewHolder> {
     private List<StageItem> stageList;
+    private String periodSlug;
     private Context context; // Thêm Context để sử dụng Intent
 
-    public StageAdapter(List<StageItem> stageList) {
+    public StageAdapter(List<StageItem> stageList, String periodSlug) {
         this.stageList = stageList;
+        this.periodSlug = periodSlug;
     }
 
     @NonNull
@@ -49,6 +52,8 @@ public class StageAdapter extends RecyclerView.Adapter<StageAdapter.ViewHolder> 
         // Thêm sự kiện click để chuyển sang StageDetailActivity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, StageDetailActivity.class);
+            intent.putExtra("periodSlug",periodSlug);
+            intent.putExtra("stageSlug", stage.slug);
             context.startActivity(intent);
         });
     }

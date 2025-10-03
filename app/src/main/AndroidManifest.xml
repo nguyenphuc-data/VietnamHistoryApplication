@@ -52,7 +52,7 @@
 
         <!-- Thêm khai báo cho StageDetailActivity -->
         <activity
-            android:name=".stage.StageDetailActivity"
+            android:name=".stageDetail.StageDetailActivity"
             android:exported="false"
             android:label="Chi tiết Giai đoạn" />
 
