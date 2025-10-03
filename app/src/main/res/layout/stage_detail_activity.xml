@@ -2,42 +2,65 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="#F8F4EC">
 
-    <!-- Tiêu đề "Chi tiết Giai đoạn" -->
-    <TextView
+    <!-- Thanh tiêu đề -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Chi tiết Giai đoạn"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
+        android:layout_height="78dp"
+        android:orientation="horizontal"
         android:padding="16dp"
-        android:background="@android:color/darker_gray" />
+        android:background="#F5F5F5"
+        android:elevation="4dp"
+        android:translationZ="2dp">
 
-    <!-- Tiêu đề stage -->
-    <TextView
-        android:id="@+id/tvStageTitle"
+        <!-- Nút mũi tên quay về (to hơn) -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_period"
+            app:backgroundTint="#B2B2B2"
+            app:tint="#3a3a3a"
+            app:fabCustomSize="38dp"/>
+
+        <!-- Tiêu đề căn giữa -->
+        <TextView
+            android:id="@+id/idTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#E8582B"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:padding="8dp" />
-
-    <!-- Thời gian -->
-    <TextView
-        android:id="@+id/tvStageRange"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:padding="8dp" />
-
-    <!-- Mô tả -->
-    <TextView
-        android:id="@+id/tvStageOverview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:padding="8dp" />
+        android:orientation="vertical"
+        android:layout_marginTop="16dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#3A3A3A"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="Sự kiện"
+            android:gravity="center"
+            android:layout_marginBottom="6dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#B2B2B2"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewEvents"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical"/>
+    </LinearLayout>
 
 </LinearLayout>

@@ -33,13 +33,12 @@ public class StageActivity extends AppCompatActivity {
         if (ivBack != null) {
             ivBack.setOnClickListener(v -> onBackPressed());
         }
-
+        String periodSlug = getIntent().getStringExtra("slug");
         recyclerView = findViewById(R.id.recyclerViewStages);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        stageAdapter = new StageAdapter(stageList);
+        stageAdapter = new StageAdapter(stageList,periodSlug);
         recyclerView.setAdapter(stageAdapter);
 
-        String periodSlug = getIntent().getStringExtra("slug");
         if (periodSlug != null) {
             Log.d("StageActivity", "Nhận periodSlug: " + periodSlug);
             loadStagesFromFirestore(periodSlug);
