@@ -2,16 +2,12 @@ package com.example.vietnamhistoryapplication.person.PersonDetail;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.common.ImageLoader;
@@ -19,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PersonDetailActivity extends AppCompatActivity {
     private FirebaseFirestore db;
@@ -31,15 +28,8 @@ public class PersonDetailActivity extends AppCompatActivity {
     private TextView tvName;
     private TextView tvTitle;
     private TextView tvOverview;
-    private RecyclerView rvAchievements;
-    private RecyclerView rvLifetime;
-
-    // Headers (để giữ bố cục)
-    private LinearLayout layoutAchievementsHeader;
-    private LinearLayout layoutLifetimeHeader;
-
-    private PersonDetailAchievementAdapter achievementAdapter;
-    private PersonDetailLifetimeAdapter lifetimeAdapter;
+    private TextView tvAchievements;  // Mới: TextView cho thành tựu
+    private TextView tvLifetime;      // Mới: TextView cho tóm tắt cuộc đời
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,18 +46,8 @@ public class PersonDetailActivity extends AppCompatActivity {
         tvName = findViewById(R.id.tvName);
         tvTitle = findViewById(R.id.tvTitle);
         tvOverview = findViewById(R.id.tvOverview);
-        rvAchievements = findViewById(R.id.rvAchievements);
-        rvLifetime = findViewById(R.id.rvLifetime);
-
-        layoutAchievementsHeader = findViewById(R.id.layout_achievements_header);
-        layoutLifetimeHeader = findViewById(R.id.layout_lifetime_header);
-
-        rvAchievements.setLayoutManager(new LinearLayoutManager(this));
-        rvLifetime.setLayoutManager(new LinearLayoutManager(this));
-
-        // Hiển thị mặc định tất cả (fix: dùng View.VISIBLE, alpha không cần)
-        rvAchievements.setVisibility(View.VISIBLE);
-        rvLifetime.setVisibility(View.VISIBLE);
+        tvAchievements = findViewById(R.id.tvAchievements);  // Mới
+        tvLifetime = findViewById(R.id.tvLifetime);          // Mới
 
         // Nút back
         if (ivBack != null) {
@@ -135,17 +115,19 @@ public class PersonDetailActivity extends AppCompatActivity {
             ivImage.setImageResource(R.drawable.background_1); // Placeholder
         }
 
-        // Thành tựu
+        // Thành tựu: Join list thành string với bullet
         List<String> achievementsList = person.achievements != null ? person.achievements : new ArrayList<>();
-        achievementAdapter = new PersonDetailAchievementAdapter(achievementsList);
-        rvAchievements.setAdapter(achievementAdapter);
-        achievementAdapter.notifyDataSetChanged(); // Fix: Đảm bảo update UI ngay
+        String achievementsText = achievementsList.stream()
+                .map(s -> "• " + s)
+                .collect(Collectors.joining("\n"));
+        tvAchievements.setText(achievementsText.isEmpty() ? "Không có thành tựu" : achievementsText);
 
-        // Tóm tắt cuộc đời
+        // Tóm tắt cuộc đời: Join list thành string với bullet
         List<String> lifetimeList = person.lifetime != null ? person.lifetime : new ArrayList<>();
-        lifetimeAdapter = new PersonDetailLifetimeAdapter(lifetimeList);
-        rvLifetime.setAdapter(lifetimeAdapter);
-        lifetimeAdapter.notifyDataSetChanged(); // Fix: Đảm bảo update UI ngay
+        String lifetimeText = lifetimeList.stream()
+                .map(s -> "• " + s)
+                .collect(Collectors.joining("\n"));
+        tvLifetime.setText(lifetimeText.isEmpty() ? "Không có thông tin" : lifetimeText);
 
         Log.d("PersonDetailActivity", "Bind data thành công: " + person.name + ", achievements: " + achievementsList.size() + ", lifetime: " + lifetimeList.size());
     }
