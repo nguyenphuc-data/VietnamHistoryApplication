@@ -54,6 +54,7 @@ public class PeriodFragment extends Fragment {
     private void loadPeriodsFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("periods")
+                .orderBy("sortOrder")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
