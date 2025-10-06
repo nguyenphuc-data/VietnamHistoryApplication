@@ -7,7 +7,6 @@ public class StageItem implements Serializable {
     public String title;
     public String stageRange;
     public String overview;
-
     public String image;
 
     public StageItem(String slug, String title, String stageRange, String overview,String image) {
