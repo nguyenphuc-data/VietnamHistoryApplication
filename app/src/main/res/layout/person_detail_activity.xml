@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@android:color/white">
 
@@ -15,12 +16,14 @@
         android:padding="16dp">
 
         <!-- Nút mũi tên quay về -->
-        <ImageView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/ivBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="Quay lại"
-            android:src="@drawable/arrow_back" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_period"
+            app:backgroundTint="#B2B2B2"
+            app:tint="#3a3a3a"
+            app:fabCustomSize="34dp" />
 
         <!-- Tiêu đề căn giữa -->
         <TextView
@@ -30,14 +33,14 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Nhân vật lịch sử"
-            android:textColor="@android:color/black"
+            android:textColor="#E8582B"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <!-- View trống để giữ chữ giữa màn hình -->
         <View
-            android:layout_width="32dp"
-            android:layout_height="32dp" />
+            android:layout_width="34dp"
+            android:layout_height="34dp" />
     </LinearLayout>
 
     <!-- ScrollView cho toàn bộ nội dung (ảnh + text) -->
@@ -73,14 +76,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="0dp">
 
                     <TextView
                         android:id="@+id/tvName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp"
+                        android:textSize="35sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -91,16 +94,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="0dp">
 
                     <TextView
                         android:id="@+id/tvTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_variable_font"
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />
 
                 </LinearLayout>
+
+                <!-- Line phân cách bên trên chữ "Giới thiệu" -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginBottom="16dp" />  <!-- Màu xám nhạt, margin dưới để cách chữ -->
 
                 <!-- Section: Giới thiệu -->
                 <TextView
@@ -109,8 +120,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="Giới thiệu"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textColor="#E8582B"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -121,7 +132,7 @@
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp" />
 
-                <!-- Section: Thành tựu (Expandable - chỉ header clickable) -->
+                <!-- Section: Thành tựu (Expandable với arrow) -->
                 <LinearLayout
                     android:id="@+id/layout_achievements_header"
                     android:layout_width="match_parent"
@@ -135,25 +146,34 @@
 
                     <TextView
                         android:id="@+id/achievements_title"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Thành tựu"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textColor="#E8582B"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/ivAchievementArrow"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_down"
+                        android:contentDescription="Mở rộng Thành tựu" />
 
                 </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvAchievements"
+                <TextView
+                    android:id="@+id/tvAchievements"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
-                    android:visibility="gone"
-                    android:nestedScrollingEnabled="false"
-                    tools:listitem="@layout/person_detail_items" />
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="4dp"
+                    android:paddingStart="16dp"
+                    android:visibility="gone" />  <!-- Ban đầu ẩn -->
 
-                <!-- Section: Tóm tắt cuộc đời (Expandable - chỉ header clickable) -->
+                <!-- Section: Tóm tắt cuộc đời (Expandable với arrow) -->
                 <LinearLayout
                     android:id="@+id/layout_lifetime_header"
                     android:layout_width="match_parent"
@@ -167,22 +187,31 @@
 
                     <TextView
                         android:id="@+id/summary_title"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Tóm tắt cuộc đời"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textColor="#E8582B"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/ivLifetimeArrow"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_down"
+                        android:contentDescription="Mở rộng Tóm tắt cuộc đời" />
 
                 </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvLifetime"
+                <TextView
+                    android:id="@+id/tvLifetime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:nestedScrollingEnabled="false"
-                    tools:listitem="@layout/person_detail_items" />
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="6dp"
+                    android:paddingStart="16dp"
+                    android:visibility="gone" />  <!-- Ban đầu ẩn -->
 
             </LinearLayout>
 

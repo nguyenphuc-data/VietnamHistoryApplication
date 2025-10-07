@@ -15,6 +15,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,18 +38,15 @@ public class PersonListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewPersonList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Fix: Lấy periodPersonSlug trước khi tạo Adapter
         String periodPersonSlug = getIntent().getStringExtra("period_slug");
         if (periodPersonSlug == null) {
-            periodPersonSlug = ""; // Fallback nếu null
+            periodPersonSlug = "";
             Log.e("PersonListActivity", "periodPersonSlug is null, set to empty");
         }
 
-        // Fix: Truyền periodPersonSlug vào constructor Adapter (2 tham số)
         personListAdapter = new PersonListAdapter(personListList, periodPersonSlug);
         recyclerView.setAdapter(personListAdapter);
 
-        // Load data nếu có periodPersonSlug
         if (!periodPersonSlug.isEmpty()) {
             Log.d("PersonListActivity", "Nhận periodPersonSlug: " + periodPersonSlug);
             loadPersonsFromFirestore(periodPersonSlug);
@@ -89,9 +87,22 @@ public class PersonListActivity extends AppCompatActivity {
     }
 
     private String formatDateRange(Timestamp start, Timestamp end) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy", Locale.getDefault());
-        String startYear = start != null ? sdf.format(start.toDate()) : "N/A";
-        String endYear = end != null ? sdf.format(end.toDate()) : "N/A";
+        String startYear = "truyền thuyết";
+        if (start != null) {
+            Calendar calStart = Calendar.getInstance();
+            calStart.setTime(start.toDate());
+            int yearStart = calStart.get(Calendar.YEAR);
+            startYear = String.valueOf(yearStart);
+        }
+
+        String endYear = "nay";
+        if (end != null) {
+            Calendar calEnd = Calendar.getInstance();
+            calEnd.setTime(end.toDate());
+            int yearEnd = calEnd.get(Calendar.YEAR);
+            endYear = String.valueOf(yearEnd);
+        }
+
         return startYear + "–" + endYear;
     }
 }

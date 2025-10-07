@@ -62,11 +62,11 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.Vi
             holder.ivImage.setImageResource(R.drawable.background_1);
         }
 
-        // Thêm sự kiện click để chuyển sang PersonDetailActivity (truyền periodSlug và personSlug)
+        // Sự kiện click để chuyển sang PersonDetailActivity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PersonDetailActivity.class);
-            intent.putExtra("PERIOD_SLUG", periodSlug); // Truyền period để load đúng subcollection
-            intent.putExtra("PERSON_SLUG", personList.slug); // Truyền person slug
+            intent.putExtra("period_slug", periodSlug);
+            intent.putExtra("person_slug", personList.slug);
             context.startActivity(intent);
         });
     }
