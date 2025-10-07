@@ -22,7 +22,7 @@
             android:text="Nhân vật lịch sử"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black" />
+            android:textColor="#E8582B" />
 
         <!-- View trống để cân bằng (giữ chữ ở giữa) -->
         <View

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@android:color/white">
 
@@ -14,12 +15,14 @@
         android:padding="16dp">
 
         <!-- Nút mũi tên quay về -->
-        <ImageView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/ivBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="Quay lại"
-            android:src="@drawable/arrow_back" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_period"
+            app:backgroundTint="#B2B2B2"
+            app:tint="#3a3a3a"
+            app:fabCustomSize="34dp" />
 
         <!-- Tiêu đề căn giữa -->
         <TextView
@@ -29,14 +32,14 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Nhân vật lịch sử"
-            android:textColor="@android:color/black"
+            android:textColor="#E8582B"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <!-- View trống để giữ chữ giữa màn hình -->
         <View
-            android:layout_width="32dp"
-            android:layout_height="32dp" />
+            android:layout_width="34dp"
+            android:layout_height="34dp" />
     </LinearLayout>
 
     <!-- 🔹 RecyclerView hiển thị danh sách nhân vật -->

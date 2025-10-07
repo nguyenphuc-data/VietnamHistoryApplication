@@ -1,8 +1,12 @@
 package com.example.vietnamhistoryapplication.person.PersonDetail;
 
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +32,17 @@ public class PersonDetailActivity extends AppCompatActivity {
     private TextView tvName;
     private TextView tvTitle;
     private TextView tvOverview;
-    private TextView tvAchievements;  // Mới: TextView cho thành tựu
-    private TextView tvLifetime;      // Mới: TextView cho tóm tắt cuộc đời
+    private TextView tvAchievements;
+    private TextView tvLifetime;
+
+    // Expandable headers và arrows
+    private LinearLayout layoutAchievementsHeader;
+    private ImageView ivAchievementArrow;
+    private LinearLayout layoutLifetimeHeader;
+    private ImageView ivLifetimeArrow;
+
+    private boolean isAchievementExpanded = false;
+    private boolean isLifetimeExpanded = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +50,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         setContentView(R.layout.person_detail_activity);
 
         initViews();
+        setupClickListeners();
         loadPersonData();
     }
 
@@ -46,13 +60,30 @@ public class PersonDetailActivity extends AppCompatActivity {
         tvName = findViewById(R.id.tvName);
         tvTitle = findViewById(R.id.tvTitle);
         tvOverview = findViewById(R.id.tvOverview);
-        tvAchievements = findViewById(R.id.tvAchievements);  // Mới
-        tvLifetime = findViewById(R.id.tvLifetime);          // Mới
+        tvAchievements = findViewById(R.id.tvAchievements);
+        tvLifetime = findViewById(R.id.tvLifetime);
+
+        // Expandable
+        layoutAchievementsHeader = findViewById(R.id.layout_achievements_header);
+        ivAchievementArrow = findViewById(R.id.ivAchievementArrow);
+        layoutLifetimeHeader = findViewById(R.id.layout_lifetime_header);
+        ivLifetimeArrow = findViewById(R.id.ivLifetimeArrow);
 
         // Nút back
         if (ivBack != null) {
             ivBack.setOnClickListener(v -> onBackPressed());
         }
+    }
+
+    private void setupClickListeners() {
+        layoutAchievementsHeader.setOnClickListener(v -> {
+            Log.d("PersonDetailActivity", "Click Thành tựu header");
+            toggleSection(tvAchievements, ivAchievementArrow, isAchievementExpanded, value -> isAchievementExpanded = value);
+        });
+        layoutLifetimeHeader.setOnClickListener(v -> {
+            Log.d("PersonDetailActivity", "Click Tóm tắt cuộc đời header");
+            toggleSection(tvLifetime, ivLifetimeArrow, isLifetimeExpanded, value -> isLifetimeExpanded = value);
+        });
     }
 
     private void setupFirebase() {
@@ -61,11 +92,11 @@ public class PersonDetailActivity extends AppCompatActivity {
 
     private void loadPersonData() {
         setupFirebase();
-        periodSlug = getIntent().getStringExtra("PERIOD_SLUG");
-        personSlug = getIntent().getStringExtra("PERSON_SLUG");
+        periodSlug = getIntent().getStringExtra("period_slug");
+        personSlug = getIntent().getStringExtra("person_slug");
 
         if (periodSlug == null || personSlug == null || periodSlug.isEmpty() || personSlug.isEmpty()) {
-            Log.e("PersonDetailActivity", "Thiếu PERIOD_SLUG hoặc PERSON_SLUG");
+            Log.e("PersonDetailActivity", "Thiếu period_slug hoặc person_slug");
             Toast.makeText(this, "Không tìm thấy dữ liệu nhân vật", Toast.LENGTH_SHORT).show();
             finish();
             return;
@@ -115,7 +146,7 @@ public class PersonDetailActivity extends AppCompatActivity {
             ivImage.setImageResource(R.drawable.background_1); // Placeholder
         }
 
-        // Thành tựu: Join list thành string với bullet
+        // Thành tựu: Join list thành string với bullet (set text sau toggle nếu cần)
         List<String> achievementsList = person.achievements != null ? person.achievements : new ArrayList<>();
         String achievementsText = achievementsList.stream()
                 .map(s -> "• " + s)
@@ -130,5 +161,34 @@ public class PersonDetailActivity extends AppCompatActivity {
         tvLifetime.setText(lifetimeText.isEmpty() ? "Không có thông tin" : lifetimeText);
 
         Log.d("PersonDetailActivity", "Bind data thành công: " + person.name + ", achievements: " + achievementsList.size() + ", lifetime: " + lifetimeList.size());
+    }
+
+    // Toggle section (TextView + arrow)
+    private void toggleSection(TextView content, ImageView arrow, boolean isExpanded, java.util.function.Consumer<Boolean> stateUpdater) {
+        boolean newExpanded = !isExpanded;
+
+        // Swap arrow icon
+        int newResId = newExpanded ? R.drawable.ic_arrow_up : R.drawable.ic_arrow_down;
+        arrow.setImageResource(newResId);
+        arrow.setRotation(0f);  // Reset
+
+        // Animation xoay nhẹ
+        ObjectAnimator animator = ObjectAnimator.ofFloat(arrow, "rotation", 0f, newExpanded ? 180f : 0f);
+        animator.setDuration(300);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.start();
+
+        // Fade content
+        content.animate()
+                .alpha(newExpanded ? 1f : 0f)
+                .setDuration(300)
+                .withEndAction(() -> {
+                    content.setVisibility(newExpanded ? View.VISIBLE : View.GONE);
+                    Log.d("PersonDetailActivity", "Toggle " + (newExpanded ? "expanded" : "collapsed") + " section");
+                })
+                .start();
+
+        // Update state
+        stateUpdater.accept(newExpanded);
     }
 }

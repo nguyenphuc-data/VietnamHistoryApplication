@@ -20,8 +20,7 @@ import java.util.List;
 public class StageAdapter extends RecyclerView.Adapter<StageAdapter.ViewHolder> {
     private List<StageItem> stageList;
     private String periodSlug;
-    private Context context; // Thêm Context để sử dụng Intent
-
+    private Context context;
     public StageAdapter(List<StageItem> stageList, String periodSlug) {
         this.stageList = stageList;
         this.periodSlug = periodSlug;
@@ -30,7 +29,7 @@ public class StageAdapter extends RecyclerView.Adapter<StageAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        context = parent.getContext(); // Khởi tạo Context từ parent
+        context = parent.getContext();
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.stages_items, parent, false);
         return new ViewHolder(view);
@@ -45,9 +44,9 @@ public class StageAdapter extends RecyclerView.Adapter<StageAdapter.ViewHolder> 
 
         // Chỉnh sửa phần tải ảnh
         if (stage.image != null) {
-            ImageLoader.loadImage(holder.ivImage, stage.image); // Sử dụng stage.image thay vì period.image
+            ImageLoader.loadImage(holder.ivImage, stage.image);
         } else {
-            holder.ivImage.setImageResource(R.drawable.background_1); // Hình ảnh mặc định nếu không có
+            holder.ivImage.setImageResource(R.drawable.background_1);
         }
         // Thêm sự kiện click để chuyển sang StageDetailActivity
         holder.itemView.setOnClickListener(v -> {
