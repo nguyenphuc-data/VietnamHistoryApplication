@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
-    <!-- Thanh tiêu đề -->
+    <!-- 🔹 Thanh tiêu đề -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="16dp">
 
         <!-- Nút mũi tên quay về -->
@@ -26,39 +26,41 @@
 
         <!-- Tiêu đề căn giữa -->
         <TextView
+            android:id="@+id/tvTitleBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Giai đoạn"
+            android:text="Nhân vật lịch sử"
             android:textColor="#E8582B"
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <!-- View trống để cân bằng (giữ chữ ở giữa) -->
+        <!-- View trống để giữ chữ giữa màn hình -->
         <View
             android:layout_width="34dp"
             android:layout_height="34dp" />
     </LinearLayout>
 
-    <!-- RecyclerView để hiển thị danh sách stages -->
+    <!-- 🔹 RecyclerView hiển thị danh sách nhân vật -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewStages"
+        android:id="@+id/recyclerViewPersonList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:scrollbars="vertical" />
+        android:padding="8dp" />
 
+    <!-- 🔹 TextView hiển thị khi không có dữ liệu -->
     <TextView
-        android:id="@+id/tvNoStages"
+        android:id="@+id/tvNoPerson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="16dp"
-        android:text="Không có stages để hiển thị"
+        android:text="Không có persons để hiển thị"
+        android:visibility="gone"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:layout_gravity="center"
         android:textSize="16sp"
-        android:visibility="gone" />
+        android:textColor="@android:color/black"
+        android:padding="16dp" />
 
 </LinearLayout>

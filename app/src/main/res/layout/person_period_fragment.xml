@@ -2,27 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
     <!-- Thanh tiêu đề -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="16dp">
-
-        <!-- Nút mũi tên quay về -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/ivBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back_period"
-            app:backgroundTint="#B2B2B2"
-            app:tint="#3a3a3a"
-            app:fabCustomSize="34dp" />
 
         <!-- Tiêu đề căn giữa -->
         <TextView
@@ -30,35 +19,35 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Giai đoạn"
-            android:textColor="#E8582B"
+            android:text="Nhân vật lịch sử"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#E8582B" />
 
         <!-- View trống để cân bằng (giữ chữ ở giữa) -->
         <View
-            android:layout_width="34dp"
-            android:layout_height="34dp" />
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
     </LinearLayout>
 
-    <!-- RecyclerView để hiển thị danh sách stages -->
+    <!-- RecyclerView để hiển thị danh sách person period -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewStages"
+        android:id="@+id/recyclerViewPersonPeriod"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbars="vertical" />
 
     <TextView
-        android:id="@+id/tvNoStages"
+        android:id="@+id/tvNoPeriod"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="16dp"
         android:text="Không có stages để hiển thị"
+        android:visibility="gone"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:layout_gravity="center"
         android:textSize="16sp"
-        android:visibility="gone" />
+        android:textColor="@android:color/black"
+        android:padding="16dp" />
 
 </LinearLayout>
