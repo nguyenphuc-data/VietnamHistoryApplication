@@ -2,8 +2,10 @@ package com.example.vietnamhistoryapplication.stageDetail;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +28,7 @@ public class StageDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private EventAdapter eventAdapter;
 
-
+    private MutableLiveData<StageDetailItem> stageDetailLiveData = new MutableLiveData<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +36,20 @@ public class StageDetailActivity extends AppCompatActivity {
          String periodSlug = getIntent().getStringExtra("periodSlug");
          String stageSlug = getIntent().getStringExtra("stageSlug");
 
+
          recyclerView = findViewById(R.id.recyclerViewEvents);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
          eventAdapter = new EventAdapter(events);
          recyclerView.setAdapter(eventAdapter);
 
+         stageDetailLiveData.observe(this,items->{
+             TextView tvDetail = findViewById(R.id.tvDetail);
+             StringBuilder sb = new StringBuilder();
+             for (String item : items.details) {
+                 sb.append("• ").append(item).append("\n"); // thêm bullet point
+             }
+             tvDetail.setText(sb.toString());
+         });
 
          loadStageDetailFromFirestore(periodSlug,stageSlug);
 
@@ -68,6 +79,7 @@ public class StageDetailActivity extends AppCompatActivity {
                             List<String> result = (List<String>)documentSnapshot.get("result");
                             String impactOnPresent = documentSnapshot.getString("impactOnPresent");
                             stageDetailItem = new StageDetailItem(stageSlug,title,stageRange,overview,image,details,result,impactOnPresent);
+                            stageDetailLiveData.setValue(stageDetailItem);
                             Log.d("StageDetailActivity","Loaded stage detail: "+stageDetailItem.title);
                         }else{
                             Log.d("StageDetailActivity","Stage detail not found");
@@ -95,7 +107,8 @@ public class StageDetailActivity extends AppCompatActivity {
                                      ? (String) images.get(0).get("link")
                                      : null;
                              String type = doc.getString("type");
-                             Integer sortOrder = doc.getLong("sortOrder").intValue();
+                             Long sortOrderLong = doc.getLong("sortOrder");
+                             int sortOrder = (sortOrderLong != null) ? sortOrderLong.intValue() : 0;
                              events.add(new EventItem(slug,title,dateRange,smallTitle,image,type,sortOrder));
                              Log.d("StageDetailActivity","Loaded event: "+title);
                              eventAdapter.notifyDataSetChanged();
