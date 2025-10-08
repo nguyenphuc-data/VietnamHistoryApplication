@@ -40,7 +40,7 @@
             android:exported="false"
             android:label="Chi tiết Giai đoạn" />
 
-        <!-- Thêm khai báo cho PersonListActivity (bạn đã thêm đúng) -->
+        <!-- Thêm khai báo cho PersonListActivity -->
         <activity
             android:name=".person.PersonList.PersonListActivity"
             android:exported="false"
