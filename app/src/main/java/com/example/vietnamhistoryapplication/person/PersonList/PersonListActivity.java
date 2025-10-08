@@ -12,12 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.vietnamhistoryapplication.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class PersonListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -71,9 +67,9 @@ public class PersonListActivity extends AppCompatActivity {
                             String personSlug = doc.getId();
                             String name = doc.getString("name");
                             String title = doc.getString("title");
-                            Timestamp birthDate = doc.getTimestamp("birthDate");
-                            Timestamp deathDate = doc.getTimestamp("deathDate");
-                            String date = formatDateRange(birthDate, deathDate);
+                            String birthDate = doc.getString("birthDate");
+                            String deathDate = doc.getString("deathDate");
+                            String date = birthDate + " - " + deathDate;
                             String image = doc.getString("coverMediaRef");
                             personListList.add(new PersonListItem(personSlug, name, date, title, image));
                         }
@@ -86,23 +82,4 @@ public class PersonListActivity extends AppCompatActivity {
                 });
     }
 
-    private String formatDateRange(Timestamp start, Timestamp end) {
-        String startYear = "truyền thuyết";
-        if (start != null) {
-            Calendar calStart = Calendar.getInstance();
-            calStart.setTime(start.toDate());
-            int yearStart = calStart.get(Calendar.YEAR);
-            startYear = String.valueOf(yearStart);
-        }
-
-        String endYear = "nay";
-        if (end != null) {
-            Calendar calEnd = Calendar.getInstance();
-            calEnd.setTime(end.toDate());
-            int yearEnd = calEnd.get(Calendar.YEAR);
-            endYear = String.valueOf(yearEnd);
-        }
-
-        return startYear + "–" + endYear;
-    }
 }
