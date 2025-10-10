@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Chronometer;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,8 @@ public class QuizzPlay extends AppCompatActivity {
     private Chronometer chronometer;
     private QuizzViewPagerAdapter adapter;
 
+    private String title;
+    private Long timeLimit;
     private int score = 0;
     private List<QuestionItem> questions = new ArrayList<>();
     private String gameId, quizzId;
@@ -38,10 +41,13 @@ public class QuizzPlay extends AppCompatActivity {
         setContentView(R.layout.quizz_play_activity);
         gameId = getIntent().getStringExtra("gameId");
         quizzId = getIntent().getStringExtra("quizzItem");
+        title = getIntent().getStringExtra("title");
+        timeLimit = getIntent().getLongExtra("timeLimit", 0);
         questionCount = getIntent().getIntExtra("questionCount", 0);
         loadQuestion();
         viewPager = findViewById(R.id.view_pager);
-        chronometer = findViewById(R.id.chronometer);
+        TextView tvTitle = findViewById(R.id.tvQuizName);
+        tvTitle.setText(title);
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
 
@@ -74,7 +80,7 @@ public class QuizzPlay extends AppCompatActivity {
 
     }
     private void setupViewPager() {
-         adapter = new QuizzViewPagerAdapter(this, questions, new QuizzViewPagerAdapter.OnQuestionActionListener() {
+         adapter = new QuizzViewPagerAdapter(this,timeLimit, questions, new QuizzViewPagerAdapter.OnQuestionActionListener() {
             @Override
             public void onAnswerSubmitted(boolean isCorrect) {
                 if (isCorrect) score+=10;
@@ -91,6 +97,7 @@ public class QuizzPlay extends AppCompatActivity {
             }
         });
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(1);
         viewPager.setUserInputEnabled(false); // Vô hiệu swipe để kiểm soát flow
     }
 

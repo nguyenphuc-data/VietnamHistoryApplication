@@ -8,7 +8,7 @@ public class QuizzItem implements Serializable {
     private String level;
     public String type;
     private Map<String, String> eventId;  // {"link": "...", "title": "..."}
-    private Map<String, Object> settings; // {maxPlayers: 1, timeLimit: 60, ...}
+    private Map<String, Long> settings; // {maxPlayers: 1, timeLimit: 60, ...}
     private String description;
     private int questionCount;
     private List<com.example.vietnamhistoryapplication.models.QuestionItem> questions;
@@ -16,7 +16,7 @@ public class QuizzItem implements Serializable {
     public QuizzItem() {}
 
     public QuizzItem(String quizzslug, String level, Map<String, String> eventId,
-                    Map<String, Object> settings, String description, String type) {
+                    Map<String, Long> settings, String description, String type) {
         this.quizzslug = quizzslug;
         this.level = level;
         this.eventId = eventId;
@@ -27,7 +27,9 @@ public class QuizzItem implements Serializable {
 
     public String getQuizzslug() { return quizzslug; }
     public void setQuizzslug(String quizzslug) { this.quizzslug = quizzslug; }
-
+    public Long getTimeLimit(){
+        return settings.get("timeLimit");
+    }
     public String getType(){return type;}
     public String getTitle(){return eventId.get("title");}
     public String getLevel() { return level; }
@@ -36,8 +38,8 @@ public class QuizzItem implements Serializable {
     public Map<String, String> getEventId() { return eventId; }
     public void setEventId(Map<String, String> eventId) { this.eventId = eventId; }
 
-    public Map<String, Object> getSettings() { return settings; }
-    public void setSettings(Map<String, Object> settings) { this.settings = settings; }
+    public Map<String, Long> getSettings() { return settings; }
+    public void setSettings(Map<String, Long> settings) { this.settings = settings; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

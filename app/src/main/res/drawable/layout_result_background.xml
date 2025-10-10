@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bóng đổ nhẹ xuống -->
+    <item android:right="2dp" android:left="2dp" android:top="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#33000000" /> <!-- bóng đổ màu đen nhạt -->
+            <corners android:topLeftRadius="16dp" android:topRightRadius="16dp" />
+        </shape>
+    </item>
+
+    <!-- Lớp chính có viền và bo góc -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F5F5F5" /> <!-- màu nền layout -->
+            <stroke
+                android:width="2dp"
+                android:color="#E8582B" /> <!-- viền -->
+            <corners
+                android:topLeftRadius="16dp"
+                android:topRightRadius="16dp" />
+        </shape>
+    </item>
+</layer-list>

@@ -12,9 +12,11 @@ import java.util.List;
 public class QuizzViewPagerAdapter extends FragmentStateAdapter {
     private List<QuestionItem> questions;
     private OnQuestionActionListener listener;
+    private Long timeLimit;
 
-    public QuizzViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<QuestionItem> questions, OnQuestionActionListener listener) {
+    public QuizzViewPagerAdapter(@NonNull FragmentActivity fragmentActivity,Long timeLimit, List<QuestionItem> questions, OnQuestionActionListener listener) {
         super(fragmentActivity);
+        this.timeLimit = timeLimit;
         this.questions = questions;
         this.listener = listener;
     }
@@ -22,7 +24,7 @@ public class QuizzViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return new QuestionFragment(questions.get(position), listener);
+        return new QuestionFragment(questions.get(position),timeLimit,position, listener);
     }
 
     @Override

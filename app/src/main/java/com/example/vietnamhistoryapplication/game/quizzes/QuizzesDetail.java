@@ -37,6 +37,8 @@ public class QuizzesDetail extends AppCompatActivity {
             intent.putExtra("gameId","quiz-lich-su-viet-nam");
             intent.putExtra("quizzItem",quizzItem.getQuizzslug());
             intent.putExtra("questionCount",quizzItem.getQuestionCount());
+            intent.putExtra("title",quizzItem.getTitle());
+            intent.putExtra("timeLimit",quizzItem.getTimeLimit());
             startActivity(intent);
         });
         tvQuizName.setText(quizzItem.getTitle());

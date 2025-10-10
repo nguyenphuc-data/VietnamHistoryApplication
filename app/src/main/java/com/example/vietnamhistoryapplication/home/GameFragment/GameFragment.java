@@ -73,7 +73,7 @@ public class GameFragment extends Fragment {
                                             String quizzslug = doc.getId();
                                             String level = doc.getString("level");
                                             Map<String, String> eventId = (Map<String, String>) doc.get("eventId");
-                                            Map<String, Object> settings = (Map<String, Object>) doc.get("settings");
+                                            Map<String, Long> settings = (Map<String, Long>) doc.get("settings");
                                             String description = doc.getString("description");
                                             QuizzItem quizzItem = new QuizzItem(quizzslug,level,eventId,settings,description,type);
                                             quizzItems.add(quizzItem);
