@@ -42,13 +42,12 @@ public class StageAdapter extends RecyclerView.Adapter<StageAdapter.ViewHolder> 
         holder.tvPeriod.setText(stage.stageRange != null ? stage.stageRange : "No Period");
         holder.tvDescription.setText(stage.overview != null ? stage.overview : "No Overview");
 
-        // Chỉnh sửa phần tải ảnh
         if (stage.image != null) {
             ImageLoader.loadImage(holder.ivImage, stage.image);
         } else {
             holder.ivImage.setImageResource(R.drawable.background_1);
         }
-        // Thêm sự kiện click để chuyển sang StageDetailActivity
+        // Chuyển sang StageDetailActivity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, StageDetailActivity.class);
             intent.putExtra("periodSlug",periodSlug);
