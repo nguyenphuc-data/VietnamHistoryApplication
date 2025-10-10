@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:padding="12dp">
+
+    <TextView
+        android:id="@+id/tvSlidesTitleStatic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="#FF5722"
+        android:textSize="20sp"
+        android:layout_marginBottom="8dp" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpSlides"
+        android:layout_width="match_parent"
+        android:layout_height="320dp" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        app:tabIndicatorHeight="0dp" app:tabIndicator="@null"/>
+</LinearLayout>

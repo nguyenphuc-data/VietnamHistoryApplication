@@ -20,6 +20,7 @@
         <activity
             android:name=".main.MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,13 +32,17 @@
         <activity
             android:name=".home.HomeActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".event.eventDetail.EventDetailActivity"
+            android:exported="true" />
+        <activity
+            android:name=".event.main.EventHomeActivity"
+            android:exported="false" />
         <activity
             android:name=".stage.StageActivity"
             android:exported="false"
             android:label="Stage Activity" />
 
-        <!-- Thêm khai báo cho StageDetailActivity -->
         <activity
             android:name=".stageDetail.StageDetailActivity"
             android:exported="false"

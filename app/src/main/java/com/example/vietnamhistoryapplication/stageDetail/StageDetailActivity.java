@@ -31,7 +31,8 @@ public class StageDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private EventAdapter eventAdapter;
     private StageOverviewAdapter stageOverviewAdapter;
-
+    private String periodSlug;
+    private String stageSlug;
     private MutableLiveData<StageDetailItem> stageDetailLiveData = new MutableLiveData<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class StageDetailActivity extends AppCompatActivity {
 
              recyclerView = findViewById(R.id.recyclerViewEvents);
              recyclerView.setLayoutManager(new LinearLayoutManager(this));
-             eventAdapter = new EventAdapter(events);
+             eventAdapter = new EventAdapter(events, periodSlug, stageSlug);
              recyclerView.setAdapter(eventAdapter);
          });
 
