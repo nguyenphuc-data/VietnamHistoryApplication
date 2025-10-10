@@ -30,6 +30,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
 }
 
 dependencies {
@@ -55,8 +56,13 @@ dependencies {
     implementation("androidx.fragment:fragment:1.6.1")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
-
+    implementation("com.google.android.exoplayer:exoplayer:2.19.1")
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
+
+
+
 }
