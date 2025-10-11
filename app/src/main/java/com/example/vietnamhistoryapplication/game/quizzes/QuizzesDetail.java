@@ -2,6 +2,7 @@ package com.example.vietnamhistoryapplication.game.quizzes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -27,7 +28,7 @@ public class QuizzesDetail extends AppCompatActivity {
 
         TextView tvQuizName = findViewById(R.id.tvQuizName);
         TextView tvQuizdes = findViewById(R.id.tvQuizdes);
-
+        Log.d("QuizzesDetail", "Question count :"+ quizzItem.getQuestionCount());
         btnBack.setOnClickListener(v->{
             finish();
         });

@@ -75,7 +75,8 @@ public class GameFragment extends Fragment {
                                             Map<String, String> eventId = (Map<String, String>) doc.get("eventId");
                                             Map<String, Long> settings = (Map<String, Long>) doc.get("settings");
                                             String description = doc.getString("description");
-                                            QuizzItem quizzItem = new QuizzItem(quizzslug,level,eventId,settings,description,type);
+                                            Integer questionCount = doc.getLong("questionCount").intValue();
+                                            QuizzItem quizzItem = new QuizzItem(quizzslug,level,eventId,settings,description,type,questionCount);
                                             quizzItems.add(quizzItem);
                                             Log.d("GameFragment","Loaded quizz: "+quizzslug);
                                             gameAdapter.notifyDataSetChanged();

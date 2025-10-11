@@ -16,13 +16,14 @@ public class QuizzItem implements Serializable {
     public QuizzItem() {}
 
     public QuizzItem(String quizzslug, String level, Map<String, String> eventId,
-                    Map<String, Long> settings, String description, String type) {
+                    Map<String, Long> settings, String description, String type, int questionCount) {
         this.quizzslug = quizzslug;
         this.level = level;
         this.eventId = eventId;
         this.settings = settings;
         this.description = description;
         this.type = type;
+        this.questionCount = questionCount;
     }
 
     public String getQuizzslug() { return quizzslug; }

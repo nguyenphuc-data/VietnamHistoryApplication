@@ -24,9 +24,11 @@ public class QuestionFragment extends Fragment {
     private QuestionItem question;
     private QuizzViewPagerAdapter.OnQuestionActionListener listener;
     private RadioGroup radioGroup;
+    private boolean timerStarted = false;
     private TextView tvResult, tvCorrectAnswer, tvExplanation;
     private Button btnSubmit, btnNext;
     private CountDownTimer countDownTimer;
+    private View view;
     private boolean isSubmitted = false;
     private Long timeLimit;
     private TextView tvTimer;
@@ -44,7 +46,7 @@ public class QuestionFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_question, container, false);
+         view = inflater.inflate(R.layout.fragment_question, container, false);
 
         // Khởi tạo các thành phần
         TextView tvQuestion = view.findViewById(R.id.tv_question);
@@ -147,7 +149,14 @@ public class QuestionFragment extends Fragment {
 
         return view;
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ( !timerStarted) {
+            timerStarted = true;
+            startTimer(view);
+        }
+    }
     private void showAnswerResult(View view, int selectedIndex, MaterialButton selectedButton, MaterialButton correctButton, int correctIndex) {
         LinearLayout layoutResult = view.findViewById(R.id.layout_result);
         TextView tvResult = view.findViewById(R.id.tv_result);

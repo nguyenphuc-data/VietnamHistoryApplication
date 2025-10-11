@@ -2,6 +2,7 @@ package com.example.vietnamhistoryapplication.game.quizzes.Question;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Chronometer;
@@ -15,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.vietnamhistoryapplication.R;
+import com.example.vietnamhistoryapplication.game.quizzes.ResultQuizz;
 import com.example.vietnamhistoryapplication.models.QuestionItem;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,11 +27,12 @@ import java.util.List;
 public class QuizzPlay extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ViewPager2 viewPager;
-    private Chronometer chronometer;
+    private int totalTime= 0;
     private QuizzViewPagerAdapter adapter;
 
     private String title;
     private Long timeLimit;
+    CountDownTimer totalTimer;
     private int score = 0;
     private List<QuestionItem> questions = new ArrayList<>();
     private String gameId, quizzId;
@@ -39,6 +42,18 @@ public class QuizzPlay extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.quizz_play_activity);
+
+         totalTimer = new CountDownTimer(Long.MAX_VALUE, 1000) { // đếm "vô hạn"
+            @Override
+            public void onTick(long millisUntilFinished) {
+                    totalTime++; // mỗi giây tăng 1
+            }
+
+            @Override
+            public void onFinish() {
+                // Không cần xử lý, vì ta không bao giờ để nó "finish"
+            }
+        }.start();
         gameId = getIntent().getStringExtra("gameId");
         quizzId = getIntent().getStringExtra("quizzItem");
         title = getIntent().getStringExtra("title");
@@ -92,21 +107,24 @@ public class QuizzPlay extends AppCompatActivity {
                 if (currentPosition < questions.size() - 1) {
                     viewPager.setCurrentItem(currentPosition + 1, true);
                 } else {
-//                    endQuiz();
+                    if (totalTimer != null) totalTimer.cancel();
+                    endQuiz();
                 }
             }
         });
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(1);
         viewPager.setUserInputEnabled(false); // Vô hiệu swipe để kiểm soát flow
     }
 
-//    private void endQuiz() {
-//        // Chuyển sang ResultActivity (cần tạo)
-//        Intent intent = new Intent(this, ResultActivity.class); // Giả sử có ResultActivity
-//        intent.putExtra("score", score);
-//        intent.putExtra("totalTime", (SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000); // Thời gian tạm
-//        startActivity(intent);
-//        finish();
-//    }
+    private void endQuiz() {
+
+        Intent intent = new Intent(this, ResultQuizz.class); // Giả sử có ResultActivity
+        intent.putExtra("score", score);
+        intent.putExtra("questionCount", questionCount);
+        intent.putExtra("title",title);
+        intent.putExtra("totalTime", totalTime); // Thời gian tạm
+        startActivity(intent);
+        finish();
+    }
+
 }
