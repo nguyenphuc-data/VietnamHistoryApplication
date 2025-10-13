@@ -27,6 +27,9 @@ public class QuizzItem implements Serializable {
     }
 
     public String getQuizzslug() { return quizzslug; }
+    public String getEventid(){return eventId.get("eventid");}
+    public String getPeriodId(){return eventId.get("periodID");}
+    public String getstageId(){return eventId.get("stageID");}
     public void setQuizzslug(String quizzslug) { this.quizzslug = quizzslug; }
     public Long getTimeLimit(){
         return settings.get("timeLimit");

@@ -9,6 +9,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.vietnamhistoryapplication.R;
+import com.example.vietnamhistoryapplication.event.main.EventSpecificActivity;
 import com.example.vietnamhistoryapplication.game.quizzes.Question.QuizzPlay;
 import com.example.vietnamhistoryapplication.models.QuizzItem;
 import com.google.android.material.button.MaterialButton;
@@ -25,12 +26,21 @@ public class QuizzesDetail extends AppCompatActivity {
         QuizzItem quizzItem = (QuizzItem) getIntent().getSerializableExtra("quizzItem");
         FloatingActionButton btnBack = findViewById(R.id.btnBack);
         MaterialButton btnPlay = findViewById(R.id.btnPlay);
-
+        MaterialButton btnShare = findViewById(R.id.btnShare);
         TextView tvQuizName = findViewById(R.id.tvQuizName);
         TextView tvQuizdes = findViewById(R.id.tvQuizdes);
         Log.d("QuizzesDetail", "Question count :"+ quizzItem.getQuestionCount());
         btnBack.setOnClickListener(v->{
             finish();
+        });
+        btnShare.setOnClickListener(v->{
+            Intent intent = new Intent(this, EventSpecificActivity.class);
+            intent.putExtra("periodSlug",quizzItem.getPeriodId());
+            intent.putExtra("stageSlug",quizzItem.getstageId());
+            intent.putExtra("eventSlug",quizzItem.getEventid());
+            startActivity(intent);
+            Log.d("QuizzesDetail","EventID: "+quizzItem.getEventId()+"");
+
         });
         btnPlay.setOnClickListener(v->{
             // Chuyển đến màn hình chơi quiz

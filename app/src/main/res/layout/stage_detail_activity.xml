@@ -28,7 +28,7 @@
                 android:src="@drawable/ic_back_period"
                 app:backgroundTint="#B2B2B2"
                 app:tint="#3a3a3a"
-                app:fabCustomSize="38dp" />
+                app:fabCustomSize="34dp" />
 
             <TextView
                 android:id="@+id/idTitle"
