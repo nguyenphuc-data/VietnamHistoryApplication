@@ -1,27 +1,25 @@
 package com.example.vietnamhistoryapplication.person.PersonDetail;
 
-import com.google.firebase.firestore.DocumentReference;
-
 public class PersonEventDetailItem {
     private String slug;
     private String title;
     private String overview;
     private String description;
     private String coverMediaRef;
-    private DocumentReference eventRef;
+    private String eventRef; // Đổi từ DocumentReference sang String
     private String role;
 
     public PersonEventDetailItem() {}
 
     public PersonEventDetailItem(String slug, String title, String overview,
                                  String description, String coverMediaRef,
-                                 DocumentReference eventRef, String role) {
+                                 String eventRef, String role) {
         this.slug = slug;
         this.title = title;
         this.overview = overview;
         this.description = description;
         this.coverMediaRef = coverMediaRef;
-        this.eventRef = eventRef;
+        this.eventRef = eventRef; // Cập nhật constructor
         this.role = role;
     }
 
@@ -30,7 +28,7 @@ public class PersonEventDetailItem {
     public String getOverview() { return overview; }
     public String getDescription() { return description; }
     public String getCoverMediaRef() { return coverMediaRef; }
-    public DocumentReference getEventRef() { return eventRef; }
+    public String getEventRef() { return eventRef; } // Cập nhật getter
     public String getRole() { return role; }
 
     public void setSlug(String slug) { this.slug = slug; }
@@ -38,6 +36,6 @@ public class PersonEventDetailItem {
     public void setOverview(String overview) { this.overview = overview; }
     public void setDescription(String description) { this.description = description; }
     public void setCoverMediaRef(String coverMediaRef) { this.coverMediaRef = coverMediaRef; }
-    public void setEventRef(DocumentReference eventRef) { this.eventRef = eventRef; }
+    public void setEventRef(String eventRef) { this.eventRef = eventRef; } // Cập nhật setter
     public void setRole(String role) { this.role = role; }
 }
