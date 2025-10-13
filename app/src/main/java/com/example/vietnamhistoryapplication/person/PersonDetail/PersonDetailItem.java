@@ -13,12 +13,26 @@ public class PersonDetailItem {
     public String overview;
     public List<String> lifetime;
     public List<String> achievements;
+    public Video video; // Add video field
+
+    // Nested Video class to match Firebase structure
+    public static class Video {
+        public String content;
+        public String link;
+
+        public Video() {}
+
+        public Video(String content, String link) {
+            this.content = content;
+            this.link = link;
+        }
+    }
 
     public PersonDetailItem() {}
 
     public PersonDetailItem(String slug, String name, String title, String birth_year, String death_year,
                             String hometown, String overview, List<String> lifetime, List<String> achievements,
-                            String horizontalImage) {
+                            String horizontalImage, Video video) {
         this.slug = slug;
         this.name = name;
         this.title = title;
@@ -29,5 +43,6 @@ public class PersonDetailItem {
         this.lifetime = lifetime;
         this.achievements = achievements;
         this.horizontalImage = horizontalImage;
+        this.video = video;
     }
 }
