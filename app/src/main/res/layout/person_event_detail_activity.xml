@@ -15,7 +15,6 @@
         android:gravity="center_vertical"
         android:padding="16dp">
 
-        <!-- Nút mũi tên quay về -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/ivBack"
             android:layout_width="wrap_content"
@@ -25,7 +24,6 @@
             app:tint="#3a3a3a"
             app:fabCustomSize="34dp" />
 
-        <!-- Tiêu đề căn giữa -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
@@ -36,13 +34,12 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <!-- View trống để giữ chữ giữa màn hình -->
         <View
             android:layout_width="34dp"
             android:layout_height="34dp" />
     </LinearLayout>
 
-    <!-- ScrollView cho toàn bộ nội dung -->
+    <!-- ScrollView cho nội dung ban đầu -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -54,7 +51,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Ảnh sự kiện -->
             <ImageView
                 android:id="@+id/ivImage"
                 android:layout_width="match_parent"
@@ -62,7 +58,6 @@
                 android:layout_marginBottom="16dp"
                 android:scaleType="centerCrop" />
 
-            <!-- Tiêu đề sự kiện -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,7 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:background="@android:color/darker_gray"
-                    android:layout_marginBottom="16dp" />  <!-- Màu xám nhạt, margin dưới để cách chữ -->
+                    android:layout_marginBottom="16dp" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,7 +93,6 @@
                     android:layout_marginBottom="24dp"
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp" />
-                <!-- Section: Giới thiệu -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -117,8 +111,6 @@
                     android:lineSpacingExtra="4dp" />
             </LinearLayout>
 
-
-            <!-- Button Chi tiết sự kiện -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -134,7 +126,14 @@
                     android:backgroundTint="#E8582B"
                     android:layout_marginBottom="16dp" />
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
+
+    <!-- Container cho Fragment -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone" />
 </LinearLayout>

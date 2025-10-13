@@ -31,9 +31,9 @@ import java.util.Map;
 
 public class EventDetailFragment extends Fragment {
 
-    private static final String ARG_PERIOD = "periodSlug";
-    private static final String ARG_STAGE  = "stageSlug";
-    private static final String ARG_EVENT  = "eventSlug";
+    public static final String ARG_PERIOD = "periodSlug";
+    public static final String ARG_STAGE  = "stageSlug";
+    public static final String ARG_EVENT  = "eventSlug";
 
     private final ArrayList<EventDetailItem> items = new ArrayList<>();
     private EventDetailAdapter adapter;
