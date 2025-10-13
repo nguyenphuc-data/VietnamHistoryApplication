@@ -138,7 +138,7 @@ public class EventDetailFragment extends Fragment {
         // INTRO (summary + ảnh tài liệu)
         String overview = doc.getString("summary");
         String docImage = (images != null && !images.isEmpty())
-                ? String.valueOf(images.get(3).get("link")) : cover;
+                ? String.valueOf(images.get(1).get("link")) : cover;
         items.add(new IntroItem(
                 TextUtils.isEmpty(overview) ? "" : overview,
                 docImage
@@ -218,6 +218,7 @@ public class EventDetailFragment extends Fragment {
 
             }
         }
+
 
         // KẾT QUẢ (result)
         Map<String,Object> content1 = (Map<String, Object>) doc.get("content");
