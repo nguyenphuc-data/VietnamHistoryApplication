@@ -25,12 +25,15 @@
         <activity
             android:name=".main.MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Các Activity khác -->
+        </activity>
+
+        <!-- Các Activity khác -->
         <activity
             android:name=".home.HomeActivity"
             android:exported="false" />
@@ -44,6 +47,7 @@
             android:name=".stage.StageActivity"
             android:exported="false"
             android:label="Stage Activity" />
+
         <activity
             android:name=".stageDetail.StageDetailActivity"
             android:exported="false"
@@ -52,10 +56,17 @@
             android:name=".person.PersonList.PersonListActivity"
             android:exported="false"
             android:theme="@style/Theme.VietnamHistoryApplication" />
+
         <activity
             android:name=".person.PersonDetail.PersonDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.VietnamHistoryApplication" />
+
+        <activity
+            android:name=".person.PersonDetail.PersonEventDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VietnamHistoryApplication" />
+
     </application>
 
 </manifest>

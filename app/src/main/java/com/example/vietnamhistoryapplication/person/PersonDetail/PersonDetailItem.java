@@ -3,7 +3,6 @@ package com.example.vietnamhistoryapplication.person.PersonDetail;
 import java.util.List;
 
 public class PersonDetailItem {
-    public String coverMediaRef;
     public String horizontalImage;
     public String slug;
     public String name;
@@ -11,15 +10,12 @@ public class PersonDetailItem {
     public String birth_year;
     public String death_year;
     public String hometown;
-    public int sortOrder;
     public String overview;
     public List<String> lifetime;
     public List<String> achievements;
 
-    // Constructor mặc định (cho Firestore)
     public PersonDetailItem() {}
 
-    // Constructor đầy đủ (nếu cần)
     public PersonDetailItem(String slug, String name, String title, String birth_year, String death_year,
                             String hometown, String overview, List<String> lifetime, List<String> achievements,
                             String horizontalImage) {

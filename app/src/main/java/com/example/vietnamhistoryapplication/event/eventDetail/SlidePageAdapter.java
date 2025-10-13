@@ -37,7 +37,7 @@ public class SlidePageAdapter extends RecyclerView.Adapter<SlidePageAdapter.View
         Map<String, Object> slide = slides.get(position);
         String link = (String) slide.get("link");
 //        String caption = (String) slide.get("caption");
-        String desc = (String) slide.get("description");
+        String desc = (String) slide.get("detail");
 
         ImageLoader.loadImage(holder.ivSlideImage, link);
 //        holder.tvSlideTitle.setText(caption);
