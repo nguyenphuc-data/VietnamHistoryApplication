@@ -1,5 +1,6 @@
 package com.example.vietnamhistoryapplication.person.PersonDetail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,11 +11,10 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.common.ImageLoader;
-import com.example.vietnamhistoryapplication.event.eventDetail.EventDetailFragment;
+import com.example.vietnamhistoryapplication.event.eventDetail.EventDetailActivity; // Import Activity mới
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class PersonEventDetailActivity extends AppCompatActivity {
@@ -55,14 +55,12 @@ public class PersonEventDetailActivity extends AppCompatActivity {
                     return;
                 }
 
-                // ✅ Sửa lại phần xử lý eventRefPath
-                // Ví dụ: "periods/1954-1975/stages/chong-my/events/tran-bien-gioi"
+                // Parse eventRefPath: "periods/{period}/stages/{stage}/events/{event}"
                 String normalizedPath = eventRefPath.startsWith("/") ? eventRefPath.substring(1) : eventRefPath;
                 String[] pathParts = normalizedPath.split("/");
 
                 Log.d("PersonEventDetailActivity", "Normalized eventRefPath: " + normalizedPath);
 
-                // Kiểm tra đúng cấu trúc: periods/{period}/stages/{stage}/events/{event}
                 if (pathParts.length < 6 ||
                         !pathParts[0].equals("periods") ||
                         !pathParts[2].equals("stages") ||
@@ -72,28 +70,26 @@ public class PersonEventDetailActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Trích xuất tham số chính xác
-                String periodSlug = pathParts[1];
-                String stageSlug = pathParts[3];
-                String eventSlug = pathParts[5];
+                String periodSlugFromPath = pathParts[1];
+                String stageSlugFromPath = pathParts[3];
+                String eventSlugFromPath = pathParts[5];
 
-                Log.d("PersonEventDetailActivity", "Parsed -> periodSlug: " + periodSlug + ", stageSlug: " + stageSlug + ", eventSlug: " + eventSlug);
+                Log.d("PersonEventDetailActivity", "Parsed -> period: " + periodSlugFromPath +
+                        ", stage: " + stageSlugFromPath + ", event: " + eventSlugFromPath);
 
-                // Khởi tạo và hiển thị EventDetailFragment
-                EventDetailFragment fragment = new EventDetailFragment();
-                Bundle args = new Bundle();
-                args.putString(EventDetailFragment.ARG_PERIOD, periodSlug);
-                args.putString(EventDetailFragment.ARG_STAGE, stageSlug);
-                args.putString(EventDetailFragment.ARG_EVENT, eventSlug);
-                fragment.setArguments(args);
+                // Mở EventDetailActivity
+                try {
+                    Intent intent = new Intent(this, EventDetailActivity.class);
+                    intent.putExtra("periodSlug", periodSlugFromPath);
+                    intent.putExtra("stageSlug", stageSlugFromPath);
+                    intent.putExtra("eventSlug", eventSlugFromPath);
+                    startActivity(intent);
 
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment);
-                transaction.addToBackStack(null); // Cho phép quay lại
-                transaction.commit();
-
-                // Hiển thị container
-                findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
+                    Log.d("PersonEventDetailActivity", "Started EventDetailActivity successfully");
+                } catch (Exception e) {
+                    Log.e("PersonEventDetailActivity", "Error starting EventDetailActivity: " + e.getMessage(), e);
+                    Toast.makeText(this, "Lỗi mở chi tiết sự kiện", Toast.LENGTH_SHORT).show();
+                }
             });
         }
     }
@@ -115,8 +111,10 @@ public class PersonEventDetailActivity extends AppCompatActivity {
             return;
         }
 
-        Log.d("PersonDetailActivity", "Load event: " + eventSlug + " từ period: " + periodSlug + ", person: " + personSlug);
+        Log.d("PersonEventDetailActivity", "Loading event: " + eventSlug +
+                " from period: " + periodSlug + ", person: " + personSlug);
 
+        // Load dữ liệu sự kiện từ Firestore
         db.collection("periods_person")
                 .document(periodSlug)
                 .collection("persons")
@@ -128,38 +126,51 @@ public class PersonEventDetailActivity extends AppCompatActivity {
                     if (documentSnapshot.exists()) {
                         PersonEventDetailItem event = documentSnapshot.toObject(PersonEventDetailItem.class);
                         if (event != null) {
+                            // Hiển thị dữ liệu lên UI
                             tvTitle.setText(event.getTitle() != null ? event.getTitle() : "Không có tiêu đề");
                             tvOverview.setText(event.getOverview() != null ? event.getOverview() : "Không có tóm tắt");
                             tvRole.setText(event.getRole() != null ? event.getRole() : "Không có vai trò");
                             tvDescription.setText(event.getDescription() != null ? event.getDescription() : "Không có mô tả");
 
+                            // Load ảnh
                             if (event.getCoverMediaRef() != null && !event.getCoverMediaRef().isEmpty()) {
                                 ImageLoader.loadImage(ivImage, event.getCoverMediaRef());
                             } else {
                                 ivImage.setImageResource(R.drawable.background_1);
                             }
 
+                            // Lấy eventRefPath để mở chi tiết sự kiện
                             eventRefPath = event.getEventRef();
                             if (eventRefPath == null || eventRefPath.isEmpty()) {
                                 Log.e("PersonEventDetailActivity", "eventRef is null or empty for event: " + eventSlug);
                                 Toast.makeText(this, "Tham chiếu sự kiện không tồn tại", Toast.LENGTH_SHORT).show();
+                                btnEventDetails.setEnabled(false);
                             } else {
-                                Log.d("PersonEventDetailActivity", "Tải dữ liệu sự kiện thành công: " + event.getTitle() + ", eventRef: " + eventRefPath);
+                                Log.d("PersonEventDetailActivity", "Loaded event data successfully: " + event.getTitle() +
+                                        ", eventRef: " + eventRefPath);
+                                btnEventDetails.setEnabled(true);
                             }
                         } else {
-                            Log.e("PersonEventDetailActivity", "Không parse được dữ liệu sự kiện cho: " + eventSlug);
+                            Log.e("PersonEventDetailActivity", "Cannot parse event data for: " + eventSlug);
                             Toast.makeText(this, "Lỗi dữ liệu sự kiện", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     } else {
-                        Log.e("PersonEventDetailActivity", "Không tìm thấy document: " + eventSlug);
+                        Log.e("PersonEventDetailActivity", "Document not found: " + eventSlug);
                         Toast.makeText(this, "Không tìm thấy dữ liệu sự kiện", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("PersonEventDetailActivity", "Lỗi tải dữ liệu: " + e.getMessage());
+                    Log.e("PersonEventDetailActivity", "Error loading data: " + e.getMessage(), e);
                     Toast.makeText(this, "Lỗi tải dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

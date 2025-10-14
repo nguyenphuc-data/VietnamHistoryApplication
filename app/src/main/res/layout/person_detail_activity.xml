@@ -218,7 +218,7 @@
                     android:id="@+id/layout_events_header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:clickable="true"
@@ -240,9 +240,22 @@
                         android:layout_height="24dp"
                         android:src="@drawable/ic_arrow_down"
                         android:contentDescription="Mở rộng Sự kiện tham gia" />
-
                 </LinearLayout>
 
+                <!-- 🔹 Thêm đoạn thông báo hướng dẫn -->
+                <TextView
+                    android:id="@+id/tvEventHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="👉 Nhấn vào từng sự kiện bên dưới để xem chi tiết."
+                    android:textColor="#777777"
+                    android:textSize="14sp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone" /> <!-- bạn có thể set VISIBLE khi mở phần sự kiện -->
+
+                <!-- Danh sách sự kiện -->
                 <LinearLayout
                     android:id="@+id/events_container"
                     android:layout_width="match_parent"
@@ -250,6 +263,7 @@
                     android:orientation="vertical"
                     android:paddingStart="16dp"
                     android:visibility="gone" />
+
 
                 <!-- Section: YouTube Video -->
                 <LinearLayout
@@ -269,13 +283,6 @@
                         android:textColor="#E8582B"
                         android:textSize="24sp"
                         android:textStyle="bold" />
-
-                    <ImageView
-                        android:id="@+id/ivVideoArrow"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_down"
-                        android:contentDescription="Mở rộng Video" />
 
                 </LinearLayout>
 

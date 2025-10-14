@@ -29,7 +29,7 @@ public class PersonDetailActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String periodSlug, personSlug;
     private ImageView ivBack, ivImage, ivAchievementArrow, ivLifetimeArrow, ivEventsArrow;
-    private TextView tvName, tvTitle, tvOverview, tvAchievements, tvLifetime, tvVideoContent;
+    private TextView tvName, tvTitle, tvOverview, tvAchievements, tvLifetime, tvVideoContent, tvEventHint;
     private LinearLayout layoutAchievementsHeader, layoutLifetimeHeader, layoutEventsHeader, eventsContainer, youtubeHeader;
     private YouTubePlayerView youtubePlayerView;
     private List<EventItem> events = new ArrayList<>();
@@ -82,7 +82,8 @@ public class PersonDetailActivity extends AppCompatActivity {
         eventsContainer = findViewById(R.id.events_container);
         youtubeHeader = findViewById(R.id.youtube);
         youtubePlayerView = findViewById(R.id.ytPlayer);
-        tvVideoContent = findViewById(R.id.tvVideoContent); // New TextView for video content
+        tvVideoContent = findViewById(R.id.tvVideoContent);
+        tvEventHint = findViewById(R.id.tvEventHint);
 
         if (ivBack != null) {
             ivBack.setOnClickListener(v -> onBackPressed());
@@ -100,7 +101,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         });
         layoutEventsHeader.setOnClickListener(v -> {
             Log.d("PersonDetailActivity", "Click Sự kiện tham gia header");
-            toggleSection(eventsContainer, ivEventsArrow, isEventsExpanded, value -> isEventsExpanded = value);
+            toggleSectionWithHint(eventsContainer, tvEventHint, ivEventsArrow, isEventsExpanded, value -> isEventsExpanded = value);
         });
     }
 
@@ -262,6 +263,30 @@ public class PersonDetailActivity extends AppCompatActivity {
                 .withEndAction(() -> {
                     content.setVisibility(newExpanded ? View.VISIBLE : View.GONE);
                     Log.d("PersonDetailActivity", "Toggle " + (newExpanded ? "mở rộng" : "thu gọn") + " section");
+                })
+                .start();
+
+        stateUpdater.accept(newExpanded);
+    }
+
+    // New version for events (has hint)
+    private void toggleSectionWithHint(View content, View hint, ImageView arrow, boolean isExpanded, java.util.function.Consumer<Boolean> stateUpdater) {
+        boolean newExpanded = !isExpanded;
+
+        int newResId = newExpanded ? R.drawable.ic_arrow_up : R.drawable.ic_arrow_down;
+        arrow.setImageResource(newResId);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(arrow, "rotation", 0f, newExpanded ? 180f : 0f);
+        animator.setDuration(300);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.start();
+
+        content.animate()
+                .alpha(newExpanded ? 1f : 0f)
+                .setDuration(300)
+                .withEndAction(() -> {
+                    content.setVisibility(newExpanded ? View.VISIBLE : View.GONE);
+                    hint.setVisibility(newExpanded ? View.VISIBLE : View.GONE);
+                    Log.d("PersonDetailActivity", "Toggle " + (newExpanded ? "mở rộng" : "thu gọn") + " sự kiện");
                 })
                 .start();
 
