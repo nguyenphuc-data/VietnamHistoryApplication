@@ -98,7 +98,7 @@ public class QuizzPlay extends AppCompatActivity {
          adapter = new QuizzViewPagerAdapter(this,timeLimit, questions, new QuizzViewPagerAdapter.OnQuestionActionListener() {
             @Override
             public void onAnswerSubmitted(boolean isCorrect) {
-                if (isCorrect) score+=10;
+                if (isCorrect) score+=1;
                 // Cập nhật giao diện nếu cần (tùy chọn)
             }
 

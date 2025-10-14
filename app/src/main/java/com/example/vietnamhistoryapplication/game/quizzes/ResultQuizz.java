@@ -40,7 +40,7 @@ public class ResultQuizz extends AppCompatActivity {
 
         // --- Hiển thị dữ liệu ---
         tvQuizTitle.setText(title != null ? title : "Kết quả Quiz");
-        tvScore.setText(score + " điểm");
+        tvScore.setText(score*10 + " điểm");
         tvscoreQuest.setText("Số câu đúng: " + score + "/" + questionCount);
         tvTotalTime.setText("Tổng thời gian: " + totalTime + "s");
 
