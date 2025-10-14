@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F8FF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Thanh tiêu đề -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_period"
+                app:backgroundTint="#B2B2B2"
+                app:tint="#3a3a3a"
+                app:fabCustomSize="38dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:id="@+id/tvQuizTitleTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Quiz "
+                android:textColor="#3A3A3A"
+                android:textStyle="bold"
+                android:textSize="22sp" />
+        </RelativeLayout>
+
+        <!-- Ảnh minh họa -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            app:cardCornerRadius="8dp"
+            android:layout_marginTop="10dp"
+            app:cardElevation="4dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            android:clipToOutline="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/quizz_placeholder"/>
+
+        </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Tiêu đề quiz -->
+        <TextView
+            android:id="@+id/tvQuizName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#1E1E1E"
+            android:layout_marginTop="20dp" />
+
+        <!-- Các thông tin nhỏ -->
+
+
+        <!-- Mô tả -->
+        <TextView
+            android:id="@+id/tvQuizdes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" Quizzz"
+            android:textColor="#3A3A3A"
+            android:textSize="20sp"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+        <!-- Hai nút hành động -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_alignParentBottom="true"
+            android:padding="20dp"
+            android:layout_marginBottom="36dp"
+            >
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnShare"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="Xem tài liệu"
+                android:textColor="#3a3a3a"
+                android:textStyle="bold"
+                app:backgroundTint="#F5F5F5"
+                app:cornerRadius="12dp"
+                app:strokeColor="#3a3a3a"
+                app:strokeWidth="2dp"
+                android:layout_marginHorizontal="8dp"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPlay"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="Bắt đầu chơi"
+                android:textColor="#F5F5F5"
+                android:textStyle="bold"
+                app:cornerRadius="12dp"
+                app:backgroundTint="#e8582b"
+                android:layout_marginHorizontal="8dp"/>
+        </LinearLayout>
+
+</RelativeLayout>
