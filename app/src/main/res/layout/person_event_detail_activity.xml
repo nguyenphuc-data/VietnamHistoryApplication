@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:orientation="vertical">
 
     <!-- 🔹 Thanh tiêu đề -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:padding="16dp">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_back_period"
             app:backgroundTint="#B2B2B2"
-            app:tint="#3a3a3a"
-            app:fabCustomSize="34dp" />
+            app:fabCustomSize="34dp"
+            app:tint="#3a3a3a" />
 
         <TextView
             android:id="@+id/tvTitle"
@@ -39,7 +39,7 @@
             android:layout_height="34dp" />
     </LinearLayout>
 
-    <!-- ScrollView cho nội dung ban đầu -->
+    <!-- ScrollView cho nội dung -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -55,7 +55,7 @@
                 android:id="@+id/ivImage"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:scaleType="centerCrop" />
 
             <LinearLayout
@@ -65,18 +65,23 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <!-- 🔹 Overview gần hình hơn & line spacing rộng hơn -->
                 <TextView
                     android:id="@+id/tvOverview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
-                    android:textSize="35sp"
-                    android:textStyle="bold" />
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginBottom="16dp" />
+                    android:layout_marginBottom="16dp"
+                    android:background="@android:color/darker_gray" />
+
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -91,8 +96,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="4dp" />
+                    android:lineSpacingExtra="4dp"
+                    android:textSize="14sp" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -107,8 +113,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
-                    android:textSize="14sp"
-                    android:lineSpacingExtra="4dp" />
+                    android:lineSpacingExtra="4dp"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -120,11 +126,11 @@
                     android:id="@+id/btnEventDetail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:backgroundTint="#E8582B"
                     android:text="Chi tiết sự kiện"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    android:backgroundTint="#E8582B"
-                    android:layout_marginBottom="16dp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
