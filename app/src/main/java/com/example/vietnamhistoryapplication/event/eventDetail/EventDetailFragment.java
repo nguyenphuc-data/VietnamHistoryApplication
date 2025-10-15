@@ -51,10 +51,10 @@ public class EventDetailFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.event_detail_fragment, container, false);
         rv = view.findViewById(R.id.recycler_view_event_details);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));  // Đảm bảo LayoutManager đã được gắn vào RecyclerView
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new EventDetailAdapter(items, getViewLifecycleOwner());  // Gắn adapter đúng cách
-        rv.setAdapter(adapter);  // Gắn adapter vào RecyclerView
+        adapter = new EventDetailAdapter(items, getViewLifecycleOwner());
+        rv.setAdapter(adapter);
 
         return view;
     }
@@ -65,21 +65,21 @@ public class EventDetailFragment extends Fragment {
 
         // Lấy view
         ivBack = view.findViewById(R.id.ivBack);
-        tvTitle = view.findViewById(R.id.tvTitle);
-        rv = view.findViewById(R.id.recycler_view_event_details);
-
-        // Xử lý sự kiện back
         ivBack.setOnClickListener(v ->
                 requireActivity().getOnBackPressedDispatcher().onBackPressed()
         );
 
+        rv = view.findViewById(R.id.recycler_view_event_details);
+
+        tvTitle = view.findViewById(R.id.tvTitle);
+
         // Lấy tham số từ bundle
         Bundle args = getArguments();
-//        if (args == null) {
-//            Toast.makeText(requireContext(), "Thiếu tham số sự kiện.", Toast.LENGTH_LONG).show();
-//            requireActivity().getOnBackPressedDispatcher().onBackPressed();
-//            return;
-//        }
+        if (args == null) {
+            Toast.makeText(requireContext(), "Thiếu tham số sự kiện.", Toast.LENGTH_LONG).show();
+            requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            return;
+        }
         periodSlug = args.getString(ARG_PERIOD);
         stageSlug = args.getString(ARG_STAGE);
         eventSlug = args.getString(ARG_EVENT);
@@ -91,11 +91,6 @@ public class EventDetailFragment extends Fragment {
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
             return;
         }
-
-        // Cài đặt RecyclerView
-//        rv.setLayoutManager(new LinearLayoutManager(getContext()));
-//        adapter = new EventDetailAdapter(items, (LifecycleOwner) this);
-//        rv.setAdapter(adapter);
 
         // Tải dữ liệu từ Firestore
         loadFromFirestore(periodSlug, stageSlug, eventSlug);
@@ -119,8 +114,8 @@ public class EventDetailFragment extends Fragment {
 
         String title = doc.getString("title");
         String smallTitle = doc.getString("smallTitle");
-//        TextView tvTitle = findViewById(R.id.tvTitle);  // Lấy tvTitle từ layout
-//        tvTitle.setText(title != null ? title : "Tiêu đề không có");
+
+        tvTitle.setText(title != null ? title : "Tiêu đề không có");
 
         // HEADER
         List<Map<String,Object>> images = (List<Map<String,Object>>) doc.get("images");
@@ -181,10 +176,6 @@ public class EventDetailFragment extends Fragment {
             items.add(new VideoItem("Tóm tắt diễn biến", youtubeId));
         }
 
-        // SLIDES (ảnh nền + tiêu đề + nội dung)
-//        if (images != null && !images.isEmpty()) {
-//            items.add(new SlidesItem(images, "Nội dung"));
-//        }
 
         Map<String, Object> content = (Map<String, Object>) doc.get("content");
         if (content != null) {
