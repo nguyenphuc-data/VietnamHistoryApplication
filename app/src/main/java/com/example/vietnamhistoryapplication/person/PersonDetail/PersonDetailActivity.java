@@ -16,8 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.common.ImageLoader;
+import com.example.vietnamhistoryapplication.common.YouTubeUtils;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +29,9 @@ public class PersonDetailActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String periodSlug, personSlug;
     private ImageView ivBack, ivImage, ivAchievementArrow, ivLifetimeArrow, ivEventsArrow;
-    private TextView tvName, tvTitle, tvOverview, tvAchievements, tvLifetime;
-    private LinearLayout layoutAchievementsHeader, layoutLifetimeHeader, layoutEventsHeader, eventsContainer;
+    private TextView tvName, tvTitle, tvOverview, tvAchievements, tvLifetime, tvVideoContent, tvEventHint;
+    private LinearLayout layoutAchievementsHeader, layoutLifetimeHeader, layoutEventsHeader, eventsContainer, youtubeHeader;
+    private YouTubePlayerView youtubePlayerView;
     private List<EventItem> events = new ArrayList<>();
     private boolean isAchievementExpanded = false;
     private boolean isLifetimeExpanded = false;
@@ -77,6 +80,10 @@ public class PersonDetailActivity extends AppCompatActivity {
         ivLifetimeArrow = findViewById(R.id.ivLifetimeArrow);
         ivEventsArrow = findViewById(R.id.ivEventsArrow);
         eventsContainer = findViewById(R.id.events_container);
+        youtubeHeader = findViewById(R.id.youtube);
+        youtubePlayerView = findViewById(R.id.ytPlayer);
+        tvVideoContent = findViewById(R.id.tvVideoContent);
+        tvEventHint = findViewById(R.id.tvEventHint);
 
         if (ivBack != null) {
             ivBack.setOnClickListener(v -> onBackPressed());
@@ -94,7 +101,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         });
         layoutEventsHeader.setOnClickListener(v -> {
             Log.d("PersonDetailActivity", "Click Sự kiện tham gia header");
-            toggleSection(eventsContainer, ivEventsArrow, isEventsExpanded, value -> isEventsExpanded = value);
+            toggleSectionWithHint(eventsContainer, tvEventHint, ivEventsArrow, isEventsExpanded, value -> isEventsExpanded = value);
         });
     }
 
@@ -218,6 +225,23 @@ public class PersonDetailActivity extends AppCompatActivity {
                 .collect(Collectors.joining("\n"));
         tvLifetime.setText(lifetimeText.isEmpty() ? "Không có thông tin" : lifetimeText);
 
+        // Handle YouTube video
+        if (person.video != null && person.video.link != null && !person.video.link.isEmpty()) {
+            youtubeHeader.setVisibility(View.VISIBLE);
+            youtubePlayerView.setVisibility(View.VISIBLE);
+            if (person.video.content != null && !person.video.content.isEmpty()) {
+                tvVideoContent.setText(person.video.content);
+                tvVideoContent.setVisibility(View.VISIBLE);
+            } else {
+                tvVideoContent.setVisibility(View.GONE);
+            }
+            YouTubeUtils.loadVideo(youtubePlayerView, person.video.link, this);
+        } else {
+            youtubeHeader.setVisibility(View.GONE);
+            youtubePlayerView.setVisibility(View.GONE);
+            tvVideoContent.setVisibility(View.GONE);
+        }
+
         Log.d("PersonDetailActivity", "Bind data thành công: " + person.name + ", thành tựu: " + achievementsList.size() + ", tóm tắt cuộc đời: " + lifetimeList.size());
     }
 
@@ -243,5 +267,35 @@ public class PersonDetailActivity extends AppCompatActivity {
                 .start();
 
         stateUpdater.accept(newExpanded);
+    }
+
+    // New version for events (has hint)
+    private void toggleSectionWithHint(View content, View hint, ImageView arrow, boolean isExpanded, java.util.function.Consumer<Boolean> stateUpdater) {
+        boolean newExpanded = !isExpanded;
+
+        int newResId = newExpanded ? R.drawable.ic_arrow_up : R.drawable.ic_arrow_down;
+        arrow.setImageResource(newResId);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(arrow, "rotation", 0f, newExpanded ? 180f : 0f);
+        animator.setDuration(300);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.start();
+
+        content.animate()
+                .alpha(newExpanded ? 1f : 0f)
+                .setDuration(300)
+                .withEndAction(() -> {
+                    content.setVisibility(newExpanded ? View.VISIBLE : View.GONE);
+                    hint.setVisibility(newExpanded ? View.VISIBLE : View.GONE);
+                    Log.d("PersonDetailActivity", "Toggle " + (newExpanded ? "mở rộng" : "thu gọn") + " sự kiện");
+                })
+                .start();
+
+        stateUpdater.accept(newExpanded);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        youtubePlayerView.release(); // Release YouTubePlayerView to prevent memory leaks
     }
 }

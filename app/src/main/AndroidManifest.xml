@@ -14,21 +14,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VietnamHistoryApplication">
         <activity
-            android:name=".game.quizzes.QuizzesDetail"
+            android:name=".event.main.EventSpecificActivity"
             android:exported="false" />
-        <!-- Activity chính (launcher) -->
+        <activity
+            android:name=".game.quizzes.ResultQuizz"
+            android:exported="false" />
+        <activity
+            android:name=".game.quizzes.Question.QuizzPlay"
+            android:exported="false" />
+        <activity
+            android:name=".game.quizzes.QuizzesDetail"
+            android:exported="false" /> <!-- Activity chính (launcher) -->
         <activity
             android:name=".main.MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Các Activity khác -->
+        </activity> <!-- Các Activity khác -->
         <activity
             android:name=".home.HomeActivity"
             android:exported="false" />
@@ -42,28 +47,22 @@
             android:name=".stage.StageActivity"
             android:exported="false"
             android:label="Stage Activity" />
-
         <activity
             android:name=".stageDetail.StageDetailActivity"
             android:exported="false"
-            android:label="Chi tiết Giai đoạn" />
-
-        <!-- Thêm khai báo cho PersonListActivity -->
+            android:label="Chi tiết Giai đoạn" /> <!-- Thêm khai báo cho PersonListActivity -->
         <activity
             android:name=".person.PersonList.PersonListActivity"
             android:exported="false"
             android:theme="@style/Theme.VietnamHistoryApplication" />
-
         <activity
             android:name=".person.PersonDetail.PersonDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.VietnamHistoryApplication" />
-
         <activity
             android:name=".person.PersonDetail.PersonEventDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.VietnamHistoryApplication" />
-
     </application>
 
 </manifest>

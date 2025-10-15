@@ -111,7 +111,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:background="@android:color/darker_gray"
-                    android:layout_marginBottom="16dp" />  <!-- Màu xám nhạt, margin dưới để cách chữ -->
+                    android:layout_marginBottom="16dp" />
 
                 <!-- Section: Giới thiệu -->
                 <TextView
@@ -171,7 +171,7 @@
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp"
                     android:paddingStart="16dp"
-                    android:visibility="gone" />  <!-- Ban đầu ẩn -->
+                    android:visibility="gone" />
 
                 <!-- Section: Tóm tắt cuộc đời (Expandable với arrow) -->
                 <LinearLayout
@@ -211,14 +211,14 @@
                     android:textSize="14sp"
                     android:lineSpacingExtra="6dp"
                     android:paddingStart="16dp"
-                    android:visibility="gone" />  <!-- Ban đầu ẩn -->
+                    android:visibility="gone" />
 
                 <!-- Section: Sự kiện tham gia (Expandable với LinearLayout) -->
                 <LinearLayout
                     android:id="@+id/layout_events_header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:clickable="true"
@@ -240,15 +240,67 @@
                         android:layout_height="24dp"
                         android:src="@drawable/ic_arrow_down"
                         android:contentDescription="Mở rộng Sự kiện tham gia" />
-
                 </LinearLayout>
 
+                <!-- 🔹 Thêm đoạn thông báo hướng dẫn -->
+                <TextView
+                    android:id="@+id/tvEventHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="👉 Nhấn vào từng sự kiện bên dưới để xem chi tiết."
+                    android:textColor="#777777"
+                    android:textSize="14sp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone" /> <!-- bạn có thể set VISIBLE khi mở phần sự kiện -->
+
+                <!-- Danh sách sự kiện -->
                 <LinearLayout
                     android:id="@+id/events_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingStart="16dp"
+                    android:visibility="gone" />
+
+
+                <!-- Section: YouTube Video -->
+                <LinearLayout
+                    android:id="@+id/youtube"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Có thể bạn muốn xem"
+                        android:textColor="#E8582B"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvVideoContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="4dp"
+                    android:paddingStart="16dp"
+                    android:visibility="gone" />
+
+                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                    android:id="@+id/ytPlayer"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:layout_marginBottom="24dp"
                     android:visibility="gone" />
 
             </LinearLayout>

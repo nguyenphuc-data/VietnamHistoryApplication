@@ -48,7 +48,7 @@ public class StageDetailActivity extends AppCompatActivity {
              TextView tvDetail = findViewById(R.id.tvDetail);
              TextView tvStageRange = findViewById(R.id.tvstageRange);
              ImageView ivImage = findViewById(R.id.ivImage);
-
+             TextView idTitle = findViewById(R.id.idTitle);
 
              StringBuilder sb = new StringBuilder();
              for (String item : items.details) {
@@ -65,6 +65,7 @@ public class StageDetailActivity extends AppCompatActivity {
              recyclerView = findViewById(R.id.recyclerViewEvents);
              recyclerView.setLayoutManager(new LinearLayoutManager(this));
              eventAdapter = new EventAdapter(events, periodSlug, stageSlug);
+             idTitle.setText(items.title);
              recyclerView.setAdapter(eventAdapter);
          });
 
@@ -107,6 +108,7 @@ public class StageDetailActivity extends AppCompatActivity {
                  .collection("stages")
                  .document(stageSlug)
                  .collection("events")
+                 .orderBy("sortOrder")
                  .get()
                  .addOnSuccessListener(querySnapshot -> {
                      if(querySnapshot.isEmpty()){

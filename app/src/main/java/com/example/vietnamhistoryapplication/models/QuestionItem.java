@@ -8,18 +8,17 @@ public class QuestionItem {
     private int correctAnswer;
     private int orderQuestion;
     private String explanation;
-    private String imageUrl;
+
 
     public QuestionItem() {}
 
     public QuestionItem(String question, List<String> options, int correctAnswer,
-                        int orderQuestion, String explanation, String imageUrl) {
+                        int orderQuestion, String explanation) {
         this.question = question;
         this.options = options;
         this.correctAnswer = correctAnswer;
         this.orderQuestion = orderQuestion;
         this.explanation = explanation;
-        this.imageUrl = imageUrl;
     }
 
     public String getQuestion() { return question; }
@@ -37,6 +36,5 @@ public class QuestionItem {
     public String getExplanation() { return explanation; }
     public void setExplanation(String explanation) { this.explanation = explanation; }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
 }
