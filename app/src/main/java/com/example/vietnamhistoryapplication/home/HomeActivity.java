@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.vietnamhistoryapplication.home.PeriodFragment.PeriodFragment;
 import com.example.vietnamhistoryapplication.home.GameFragment.GameFragment;
 import com.example.vietnamhistoryapplication.home.ExploreFragment.ExploreFragment;
+import com.example.vietnamhistoryapplication.home.ProfileFragment.ProfileFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -32,6 +33,8 @@ public class HomeActivity extends AppCompatActivity {
                 selectedFragment = new GameFragment();
             }else if(itemId == R.id.nav_explore){
                 selectedFragment = new ExploreFragment();
+            }else if(itemId ==R.id.nav_profile){
+                selectedFragment = new ProfileFragment();
             }
             if (selectedFragment != null) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,

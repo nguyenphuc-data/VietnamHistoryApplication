@@ -12,7 +12,20 @@
           "package_name": "com.example.vietnamhistoryapplication"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "270718697154-3p505ujtcd3nqlspul04lfe6c7a5etpc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vietnamhistoryapplication",
+            "certificate_hash": "13dce855473a5e3085990e937a3d90e7eaf05d06"
+          }
+        },
+        {
+          "client_id": "270718697154-eiltb60btef5b8f6oqonvtnmnek6ae1g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBUL5rixwW4ztlhQrurmMadAFW72Nvrgz4"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "270718697154-eiltb60btef5b8f6oqonvtnmnek6ae1g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
