@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.home.HomeActivity;
+import com.example.vietnamhistoryapplication.profile.ProfileOverviewFragment;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -26,8 +27,11 @@ import com.google.android.gms.auth.api.signin.*;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.*;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileFragment extends Fragment {
 
@@ -44,7 +48,6 @@ public class ProfileFragment extends Fragment {
 
         FacebookSdk.sdkInitialize(requireContext());
         mAuth = FirebaseAuth.getInstance();
-
         // ---- Google ----
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)) // từ Firebase console
@@ -108,10 +111,12 @@ public class ProfileFragment extends Fragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
-                        startActivity(new Intent(requireActivity(), HomeActivity.class));
-                        requireActivity().finish();
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            checkAndCreateUser(user);
+                        }
                     } else {
-                        Toast.makeText(requireContext(), "Đăng nhập Facebook thất bại.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Đăng nhập Google thất bại.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -121,17 +126,54 @@ public class ProfileFragment extends Fragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
-                        startActivity(new Intent(requireActivity(), HomeActivity.class));
-                        requireActivity().finish();
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            checkAndCreateUser(user);
+                        }
                     } else {
-                        Toast.makeText(requireContext(), "Đăng nhập Google thất bại.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Đăng nhập Facebook thất bại.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+    private void checkAndCreateUser(FirebaseUser firebaseUser) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        db.collection("users").document(firebaseUser.getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (!documentSnapshot.exists()) {
+                        // 🔹 Người dùng mới → tạo mới document
+                        Map<String, Object> userData = new HashMap<>();
+                        userData.put("uid", firebaseUser.getUid());
+                        userData.put("name", firebaseUser.getDisplayName());
+                        userData.put("email", firebaseUser.getEmail());
+                        userData.put("photo", firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : "");
+                        userData.put("bio", "");
+                        userData.put("createdAt", System.currentTimeMillis());
+
+                        db.collection("users").document(firebaseUser.getUid())
+                                .set(userData)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(requireContext(), "Tạo tài khoản mới thành công", Toast.LENGTH_SHORT).show();
+                                    moveToProfileOverview();
+                                })
+                                .addOnFailureListener(e ->
+                                        Toast.makeText(requireContext(), "Lỗi tạo tài khoản mới: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                );
+                    } else {
+                        // 🔹 Người dùng đã tồn tại → chuyển luôn
+                        moveToProfileOverview();
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(requireContext(), "Lỗi truy cập Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+    private void moveToProfileOverview() {
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new ProfileOverviewFragment())
+                .addToBackStack(null)
+                .commit();
     }
 }
