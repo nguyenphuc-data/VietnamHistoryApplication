@@ -26,7 +26,7 @@ public class QuestionFragment extends Fragment {
     private RadioGroup radioGroup;
     private boolean timerStarted = false;
     private TextView tvResult, tvCorrectAnswer, tvExplanation;
-    private Button btnSubmit, btnNext;
+    private Button  btnNext;
     private CountDownTimer countDownTimer;
     private View view;
     private boolean isSubmitted = false;
@@ -99,15 +99,15 @@ public class QuestionFragment extends Fragment {
                     selectedButton = btn_option_d;
                 }
 
-                // Layout kết quả
-                LinearLayout layoutResult = view.findViewById(R.id.layout_result);
-                TextView tvResult = view.findViewById(R.id.tv_result);
-                TextView tvCorrectAnswer = view.findViewById(R.id.tv_correct_answer);
-                TextView tvExplanation = view.findViewById(R.id.tv_explanation);
-
-                layoutResult.setVisibility(View.VISIBLE);
-                layoutResult.setAlpha(0f);
-                layoutResult.animate().alpha(1f).setDuration(400).start();
+//                // Layout kết quả
+//                LinearLayout layoutResult = view.findViewById(R.id.layout_result);
+//                TextView tvResult = view.findViewById(R.id.tv_result);
+//                TextView tvCorrectAnswer = view.findViewById(R.id.tv_correct_answer);
+//                TextView tvExplanation = view.findViewById(R.id.tv_explanation);
+//
+//                layoutResult.setVisibility(View.VISIBLE);
+//                layoutResult.setAlpha(0f);
+//                layoutResult.animate().alpha(1f).setDuration(400).start();
 
                 // Disable các nút sau khi chọn
                 btn_option_a.setEnabled(false);
