@@ -1,22 +1,92 @@
-<LinearLayout
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:padding="24dp">
 
-    <Button
-        android:id="@+id/btnFaceBook"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Đăng nhập bằng FaceBook"
-        android:layout_marginTop="20dp"/>
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <Button
-        android:id="@+id/btnGoogle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Đăng nhập bằng Google"
-        android:layout_marginTop="20dp"/>
-</LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Khám Phá Lịch Sử"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="#3E2723"
+                android:fontFamily="serif"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đăng nhập để bắt đầu hành trình"
+                android:textSize="16sp"
+                android:textColor="#5D4037"
+                android:fontFamily="serif"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFaceBook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đăng nhập bằng Facebook"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#4285F4"
+                android:drawableLeft="@drawable/ic_facebook"
+                android:drawablePadding="16dp"
+                android:padding="16dp"
+                android:elevation="4dp"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="48dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoogle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đăng nhập bằng Google"
+                android:textColor="#4285F4"
+                android:backgroundTint="#FFFFFF"
+                android:drawableLeft="@drawable/ic_google"
+                android:drawablePadding="16dp"
+                android:padding="16dp"
+                android:elevation="6dp"
+                android:textAllCaps="false"
+                app:strokeWidth="2dp"
+                app:strokeColor="#4285F4"
+                app:layout_constraintTop_toBottomOf="@id/btnFaceBook"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

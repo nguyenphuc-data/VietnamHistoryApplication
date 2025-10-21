@@ -54,7 +54,8 @@
         <activity
             android:name=".person.PersonList.PersonListActivity"
             android:exported="false"
-            android:theme="@style/Theme.VietnamHistoryApplication" />
+            android:theme="@style/Theme.VietnamHistoryApplication"
+            />
         <activity
             android:name=".person.PersonDetail.PersonDetailActivity"
             android:exported="false"

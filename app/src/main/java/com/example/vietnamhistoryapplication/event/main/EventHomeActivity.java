@@ -12,6 +12,7 @@ import com.example.vietnamhistoryapplication.event.eventDetail.EventDetailFragme
 import com.example.vietnamhistoryapplication.home.PeriodFragment.PeriodFragment;
 import com.example.vietnamhistoryapplication.home.PersonFragment.PersonPeriodFragment;
 import com.example.vietnamhistoryapplication.home.GameFragment.GameFragment;
+import com.example.vietnamhistoryapplication.person.PersonList.PersonListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class EventHomeActivity extends AppCompatActivity {
@@ -41,9 +42,19 @@ public class EventHomeActivity extends AppCompatActivity {
                 args.putString("eventSlug", eventSlug);
                 selectedFragment.setArguments(args);
             } else if (itemId == R.id.nav_character) {
-                selectedFragment = new PersonPeriodFragment();
+                selectedFragment = new PersonListFragment();
+                Bundle args = new Bundle();
+                args.putString("periodSlug", periodSlug);
+                args.putString("stageSlug", stageSlug);
+                args.putString("eventSlug", eventSlug);
+                selectedFragment.setArguments(args);
             } else if (itemId == R.id.nav_game) {
                 selectedFragment = new GameFragment();
+                Bundle args = new Bundle();
+                args.putString("periodSlug", periodSlug);
+                args.putString("stageSlug", stageSlug);
+                args.putString("eventSlug", eventSlug);
+                selectedFragment.setArguments(args);
             }
             if (selectedFragment != null) {
                 getSupportFragmentManager().beginTransaction()
