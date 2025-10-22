@@ -57,38 +57,73 @@ public class GameFragment extends Fragment {
     }
     private void loadGameFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Lấy argument truyền vào (có thể null)
+        Bundle args = getArguments();
+        String periodSlug = args != null ? args.getString("periodSlug") : null;
+        String stageSlug = args != null ? args.getString("stageSlug") : null;
+        String eventSlug = args != null ? args.getString("eventSlug") : null;
+
         db.collection("games")
                 .document("quiz-lich-su-viet-nam")
+                .collection("quizzes")
                 .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if(documentSnapshot.exists()){
-                        String type = documentSnapshot.getString("type");
-                        db.collection("games")
-                                .document("quiz-lich-su-viet-nam")
-                                .collection("quizzes")
-                                .get()
-                                .addOnSuccessListener(querySnapshot ->{
-                                    if(!querySnapshot.isEmpty()){
-                                        for(QueryDocumentSnapshot doc : querySnapshot){
-                                            String quizzslug = doc.getId();
-                                            String level = doc.getString("level");
-                                            Map<String, String> eventId = (Map<String, String>) doc.get("eventID");
-                                            Map<String, Long> settings = (Map<String, Long>) doc.get("settings");
-                                            String description = doc.getString("description");
-                                            Integer questionCount = doc.getLong("questionCount").intValue();
-                                            QuizzItem quizzItem = new QuizzItem(quizzslug,level,eventId,settings,description,type,questionCount);
-                                            quizzItems.add(quizzItem);
-                                            Log.d("GameFragment","Loaded quizz: "+quizzslug);
-                                            gameAdapter.notifyDataSetChanged();
-                                        }
-                                    }
-                                } );
-                        Log.d("GameFragment","Loaded game: "+type);
-                        }else{
-                        Log.d("GameFragment","Game not found");
+                .addOnSuccessListener(querySnapshot -> {
+                    quizzItems.clear();
 
+                    if (!querySnapshot.isEmpty()) {
+                        // Lấy tất
+                        if ((periodSlug == null && stageSlug == null && eventSlug == null)) {
+                            for (QueryDocumentSnapshot doc : querySnapshot) {
+                                String quizzslug = doc.getId();
+                                String level = doc.getString("level");
+                                Map<String, String> eventId = (Map<String, String>) doc.get("eventID");
+                                Map<String, Long> settings = (Map<String, Long>) doc.get("settings");
+                                String description = doc.getString("description");
+                                String type = "quizzes";
+                                Integer questionCount = doc.getLong("questionCount").intValue();
+
+                                QuizzItem quizzItem = new QuizzItem(
+                                        quizzslug, level, eventId, settings, description, type, questionCount
+                                );
+                                quizzItems.add(quizzItem);
+                            }
+                        }
+                        else{
+                            for (QueryDocumentSnapshot doc : querySnapshot) {
+                                Map<String, String> eventId = (Map<String, String>) doc.get("eventID");
+                                if (eventId == null) continue;
+
+                                // Nếu có slug thì chỉ thêm quiz phù hợp
+                                boolean match = true;
+                                if (!periodSlug.equals(eventId.get("periodID"))) match = false;
+                                if (!stageSlug.equals(eventId.get("stageID"))) match = false;
+                                if (!eventSlug.equals(eventId.get("eventid"))) match = false;
+
+                                if (match) {
+                                    String quizzslug = doc.getId();
+                                    String level = doc.getString("level");
+                                    Map<String, Long> settings = (Map<String, Long>) doc.get("settings");
+                                    String description = doc.getString("description");
+                                    String type = "quizzes";
+                                    Integer questionCount = doc.getLong("questionCount").intValue();
+
+                                    QuizzItem quizzItem = new QuizzItem(
+                                            quizzslug, level, eventId, settings, description, type, questionCount
+                                    );
+                                    quizzItems.add(quizzItem);
+                                    Log.d("GameFragment", "Loaded quizz: " + quizzslug);
+                                }
+                            }
+                        }
+
+
+
+
+                        gameAdapter.notifyDataSetChanged();
                     }
-                });
+                })
+                .addOnFailureListener(e -> Log.e("GameFragment", "Error loading quizzes", e));
     }
     private void startQuizzDetail(QuizzItem quizzItem) {
         Intent intent = new Intent(getActivity(), QuizzesDetail.class);
