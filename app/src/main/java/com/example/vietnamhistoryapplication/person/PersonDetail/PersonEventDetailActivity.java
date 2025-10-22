@@ -3,7 +3,6 @@ package com.example.vietnamhistoryapplication.person.PersonDetail;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.common.ImageLoader;
-import com.example.vietnamhistoryapplication.event.eventDetail.EventDetailActivity; // Import Activity mới
+import com.example.vietnamhistoryapplication.event.eventDetail.EventDetailActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class PersonEventDetailActivity extends AppCompatActivity {
@@ -55,7 +54,6 @@ public class PersonEventDetailActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Parse eventRefPath: "periods/{period}/stages/{stage}/events/{event}"
                 String normalizedPath = eventRefPath.startsWith("/") ? eventRefPath.substring(1) : eventRefPath;
                 String[] pathParts = normalizedPath.split("/");
 
@@ -126,20 +124,17 @@ public class PersonEventDetailActivity extends AppCompatActivity {
                     if (documentSnapshot.exists()) {
                         PersonEventDetailItem event = documentSnapshot.toObject(PersonEventDetailItem.class);
                         if (event != null) {
-                            // Hiển thị dữ liệu lên UI
                             tvTitle.setText(event.getTitle() != null ? event.getTitle() : "Không có tiêu đề");
                             tvOverview.setText(event.getOverview() != null ? event.getOverview() : "Không có tóm tắt");
                             tvRole.setText(event.getRole() != null ? event.getRole() : "Không có vai trò");
                             tvDescription.setText(event.getDescription() != null ? event.getDescription() : "Không có mô tả");
 
-                            // Load ảnh
                             if (event.getCoverMediaRef() != null && !event.getCoverMediaRef().isEmpty()) {
                                 ImageLoader.loadImage(ivImage, event.getCoverMediaRef());
                             } else {
                                 ivImage.setImageResource(R.drawable.background_1);
                             }
 
-                            // Lấy eventRefPath để mở chi tiết sự kiện
                             eventRefPath = event.getEventRef();
                             if (eventRefPath == null || eventRefPath.isEmpty()) {
                                 Log.e("PersonEventDetailActivity", "eventRef is null or empty for event: " + eventSlug);

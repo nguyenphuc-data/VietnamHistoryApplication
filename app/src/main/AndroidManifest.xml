@@ -64,6 +64,10 @@
             android:name=".person.PersonDetail.PersonEventDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.VietnamHistoryApplication" />
+        <activity
+            android:name=".profile.EditProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.VietnamHistoryApplication" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
