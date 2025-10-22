@@ -13,9 +13,8 @@ public class PersonDetailItem {
     public String overview;
     public List<String> lifetime;
     public List<String> achievements;
-    public Video video; // Add video field
+    public Video video;
 
-    // Nested Video class to match Firebase structure
     public static class Video {
         public String content;
         public String link;
