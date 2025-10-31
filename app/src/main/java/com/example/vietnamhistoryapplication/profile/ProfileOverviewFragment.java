@@ -18,9 +18,11 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.vietnamhistoryapplication.models.UserModel;
 import com.example.vietnamhistoryapplication.profile.EditProfileActivity;
 import com.example.vietnamhistoryapplication.home.ProfileFragment.ProfileFragment;
 import com.example.vietnamhistoryapplication.R;
+import com.example.vietnamhistoryapplication.utils.UserSession;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -72,7 +74,7 @@ public class ProfileOverviewFragment extends Fragment {
     }
 
     private void loadUserData() {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        UserModel currentUser = UserSession.getCurrentUser();
         if (currentUser == null) {
             Toast.makeText(getActivity(), "Không có người dùng đăng nhập", Toast.LENGTH_SHORT).show();
             return;
@@ -118,19 +120,10 @@ public class ProfileOverviewFragment extends Fragment {
     }
 
     private void signOut() {
-        mAuth.signOut();
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
-        googleSignInClient.signOut().addOnCompleteListener(task -> {
-            Intent intent = new Intent(getActivity(), ProfileFragment.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            requireActivity().finish();
-        });
+        UserSession.clear();
+        requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new ProfileFragment())
+                    .commit();
     }
 }

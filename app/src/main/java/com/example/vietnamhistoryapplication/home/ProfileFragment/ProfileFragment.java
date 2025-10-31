@@ -5,55 +5,63 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.vietnamhistoryapplication.R;
-import com.example.vietnamhistoryapplication.home.HomeActivity;
+import com.example.vietnamhistoryapplication.models.UserModel;
 import com.example.vietnamhistoryapplication.profile.ProfileOverviewFragment;
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
+import com.example.vietnamhistoryapplication.utils.UserSession;
 import com.google.android.gms.auth.api.signin.*;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.*;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileFragment extends Fragment {
 
-    private CallbackManager callbackManager;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private GoogleSignInClient googleSignInClient;
-
-    // Launcher để thay thế startActivityForResult
     private ActivityResultLauncher<Intent> googleSignInLauncher;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private TextInputEditText etEmail, etPassword;
+    private MaterialButton btnLogin, btnGoogle;
+    private TextView tvRegister;
 
-        FacebookSdk.sdkInitialize(requireContext());
+    // 🔹 Giữ dữ liệu user hiện tại (dạng Singleton)
+    public static UserModel currentUserModel;
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.profile_fragment, container, false);
+
         mAuth = FirebaseAuth.getInstance();
-        // ---- Google ----
+        db = FirebaseFirestore.getInstance();
+
+        etEmail = view.findViewById(R.id.etEmail);
+        etPassword = view.findViewById(R.id.etPassword);
+        btnLogin = view.findViewById(R.id.btnLogin);
+        btnGoogle = view.findViewById(R.id.btnGoogle);
+        tvRegister = view.findViewById(R.id.tvRegister);
+
+        // ---------------- GOOGLE LOGIN ----------------
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id)) // từ Firebase console
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
 
         googleSignInLauncher = registerForActivityResult(
@@ -71,43 +79,89 @@ public class ProfileFragment extends Fragment {
                 }
         );
 
-        // ---- Facebook ----
-        callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
+        // ---------------- LOGIN BUTTON ----------------
+        btnLogin.setOnClickListener(v -> {
+            String username = etEmail.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
 
-            @Override public void onCancel() {}
-            @Override public void onError(@NonNull FacebookException error) {
-                Toast.makeText(requireContext(), "Lỗi Facebook: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(requireContext(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            } else {
+                loginWithUsername(username, password);
             }
         });
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.profile_fragment, container, false);
-
-
-        view.findViewById(R.id.btnGoogle).setOnClickListener(v -> {
+        // ---------------- GOOGLE LOGIN BUTTON ----------------
+        btnGoogle.setOnClickListener(v -> {
             Intent signInIntent = googleSignInClient.getSignInIntent();
             googleSignInLauncher.launch(signInIntent);
         });
 
-
-        view.findViewById(R.id.btnFaceBook).setOnClickListener(v -> {
-            LoginManager.getInstance().logInWithReadPermissions(
-                    this, Arrays.asList("email", "public_profile")
-            );
+        // ---------------- REGISTER ----------------
+        tvRegister.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new RegisterFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
 
         return view;
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+    // ---------------- LOGIN WITH USERNAME ----------------
+    private void loginWithUsername(String username, String password) {
+        db.collection("users")
+                .whereEqualTo("username", username)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        Toast.makeText(requireContext(), "Không tìm thấy tài khoản này", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
+                    String storedPassword = document.getString("password");
+
+                    if (storedPassword != null && storedPassword.equals(password)) {
+                        Toast.makeText(requireContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+
+                        // Lấy các trường an toàn từ DocumentSnapshot
+                        String uid = document.getString("uid");
+                        String name = document.getString("name");
+                        String usern = document.getString("username");
+                        String email = document.getString("email");
+                        String photo = document.getString("photo");
+                        String bio = document.getString("bio");
+                        Long createdAtLong = document.getLong("createdAt");
+                        long createdAt = createdAtLong != null ? createdAtLong : System.currentTimeMillis();
+
+                        // Lưu vào model (theo constructor của UserModel)
+                        UserModel user = new UserModel(
+                                uid,
+                                name,
+                                usern,
+                                email,
+                                photo,
+                                bio,
+                                createdAt
+                        );
+                        saveUserToModel(user);
+
+                        moveToProfileOverview();
+                    } else {
+                        Toast.makeText(requireContext(), "Sai mật khẩu", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(requireContext(), "Lỗi đăng nhập: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    // ---------------- GOOGLE LOGIN ----------------
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
@@ -121,33 +175,18 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(requireActivity(), task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if (user != null) {
-                            checkAndCreateUser(user);
-                        }
-                    } else {
-                        Toast.makeText(requireContext(), "Đăng nhập Facebook thất bại.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
     private void checkAndCreateUser(FirebaseUser firebaseUser) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         db.collection("users").document(firebaseUser.getUid())
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (!documentSnapshot.exists()) {
-                        // 🔹 Người dùng mới → tạo mới document
+                        // Tạo dữ liệu mới trong Firestore
                         Map<String, Object> userData = new HashMap<>();
                         userData.put("uid", firebaseUser.getUid());
                         userData.put("name", firebaseUser.getDisplayName());
+                        userData.put("username", null); // chưa có username
                         userData.put("email", firebaseUser.getEmail());
-                        userData.put("photo", firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : "");
+                        userData.put("photo", firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : null);
                         userData.put("bio", "");
                         userData.put("createdAt", System.currentTimeMillis());
 
@@ -155,13 +194,45 @@ public class ProfileFragment extends Fragment {
                                 .set(userData)
                                 .addOnSuccessListener(aVoid -> {
                                     Toast.makeText(requireContext(), "Tạo tài khoản mới thành công", Toast.LENGTH_SHORT).show();
+
+                                    // Lưu vào model (điền đủ các trường)
+                                    UserModel user = new UserModel(
+                                            firebaseUser.getUid(),
+                                            firebaseUser.getDisplayName(),
+                                            null,
+                                            firebaseUser.getEmail(),
+                                            firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : null,
+                                            "",
+                                            (long) userData.get("createdAt")
+                                    );
+                                    saveUserToModel(user);
+
                                     moveToProfileOverview();
                                 })
                                 .addOnFailureListener(e ->
                                         Toast.makeText(requireContext(), "Lỗi tạo tài khoản mới: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                                 );
                     } else {
-                        // 🔹 Người dùng đã tồn tại → chuyển luôn
+                        // Nếu đã có user trong Firestore -> đọc dữ liệu và lưu vào model
+                        String uid = documentSnapshot.getString("uid");
+                        String name = documentSnapshot.getString("name");
+                        String username = documentSnapshot.getString("username");
+                        String email = documentSnapshot.getString("email");
+                        String photo = documentSnapshot.getString("photo");
+                        String bio = documentSnapshot.getString("bio");
+                        Long createdAtLong = documentSnapshot.getLong("createdAt");
+                        long createdAt = createdAtLong != null ? createdAtLong : System.currentTimeMillis();
+
+                        UserModel user = new UserModel(
+                                uid,
+                                name,
+                                username,
+                                email,
+                                photo,
+                                bio,
+                                createdAt
+                        );
+                        saveUserToModel(user);
                         moveToProfileOverview();
                     }
                 })
@@ -169,11 +240,18 @@ public class ProfileFragment extends Fragment {
                         Toast.makeText(requireContext(), "Lỗi truy cập Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
     }
+
+    // ---------------- SAVE TO MODEL ----------------
+    private void saveUserToModel(UserModel user) {
+        currentUserModel = user;
+        UserSession.setCurrentUser(user); // ✅ Lưu vào session dùng chung
+    }
+
+    // ---------------- MOVE TO PROFILE OVERVIEW ----------------
     private void moveToProfileOverview() {
-        requireActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, new ProfileOverviewFragment())
-                .addToBackStack(null)
-                .commit();
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, new ProfileOverviewFragment());
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
