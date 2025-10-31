@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.home.PersonFragment.PersonPeriodFragment;
+import com.example.vietnamhistoryapplication.models.UserModel;
 import com.example.vietnamhistoryapplication.profile.ProfileOverviewFragment;
+import com.example.vietnamhistoryapplication.utils.UserSession;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -54,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
             }else if(itemId == R.id.nav_explore){
                 selectedFragment = new ExploreFragment();
             }else if(itemId ==R.id.nav_profile){
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                UserModel user = UserSession.getCurrentUser();
                 if (user != null) {
                     // Người dùng đã đăng nhập
                     selectedFragment = new ProfileOverviewFragment();
