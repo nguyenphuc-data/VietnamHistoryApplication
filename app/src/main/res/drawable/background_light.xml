@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Nền trắng xám nhạt, hơi có texture nhẹ (chuyên nghiệp) -->
+    <solid android:color="#FAFAFA" />
+
+    <!-- Tùy chọn: thêm gradient nhẹ từ trên xuống -->
+    <gradient
+        android:startColor="#FFFFFF"
+        android:endColor="#F5F5F5"
+        android:angle="270" />
+
+    <!-- Bo góc nhẹ (nếu dùng cho Card) -->
+    <corners android:radius="0dp" />
+</shape>
