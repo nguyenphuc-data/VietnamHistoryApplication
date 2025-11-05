@@ -48,9 +48,9 @@ public class TimeLinePuzzleDetail extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         btnStartGame.setOnClickListener(v -> {
-//            Intent intent = new Intent(this, TimeLineGameActivity.class);
-//            intent.putExtra(TimeLineGameActivity.EXTRA_ERA, era); // Truyền tiếp
-//            startActivity(intent);
+            Intent intent = new Intent(this, TimeLineActivity.class);
+            intent.putExtra("era", era);
+            startActivity(intent);
         });
 
     }
