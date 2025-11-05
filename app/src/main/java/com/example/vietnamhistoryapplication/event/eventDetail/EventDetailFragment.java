@@ -139,6 +139,24 @@ public class EventDetailFragment extends Fragment {
                 docImage
         ));
 
+        //Map
+        Map<String, Object> content = (Map<String, Object>) doc.get("content");
+//        if (content != null) {
+//            List<Map<String, Object>> warSummary = (List<Map<String, Object>>) content.get("warSummary");
+//            if (warSummary != null && !warSummary.isEmpty()) {
+//                Map<String, Object> firstItem = warSummary.get(0);
+//                Map<String, Object> diaDiem = (Map<String, Object>) firstItem.get("diadiem");
+//                if (diaDiem != null) {
+//                    Map<String, Object> latLon = (Map<String, Object>) diaDiem.get("latLon");
+//                    if (latLon != null) {
+//                        double lat = (double) latLon.get("latitude");
+//                        double lon = (double) latLon.get("longitude");
+//                        String name = (String) diaDiem.get("content");
+//                        items.add(new MapItem(lat, lon, name));
+//                    }
+//                }
+//            }
+//        }
         // LÍ DO (warCause)
         List<String> reasons = (List<String>) doc.get("warCause");
         if (reasons != null && !reasons.isEmpty()) items.add(new SectionListItem("Lí do", reasons));
@@ -177,7 +195,7 @@ public class EventDetailFragment extends Fragment {
         }
 
 
-        Map<String, Object> content = (Map<String, Object>) doc.get("content");
+//        Map<String, Object> content = (Map<String, Object>) doc.get("content");
         if (content != null) {
             List<Map<String, Object>> warSummary = (List<Map<String, Object>>) content.get("warSummary");
             if (warSummary != null && !warSummary.isEmpty()) {
