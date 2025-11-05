@@ -8,6 +8,6 @@ public abstract class EventDetailItem {
     public static final int TYPE_SECTION_LIST2 = 3;
     public static final int TYPE_SLIDES = 4;
     public static final int TYPE_VIDEO = 5;
-//    public static final int TYPE_MAP = 2;
+
     public abstract int getType();
 }
