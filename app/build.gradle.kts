@@ -68,9 +68,10 @@ dependencies {
     implementation("com.facebook.android:facebook-android-sdk:17.0.0")
     implementation("com.google.firebase:firebase-auth:22.3.0")
     implementation("com.google.android.gms:play-services-auth:21.1.0")
-
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
     implementation("de.hdodenhof:circleimageview:3.1.0")  // Avatar tròn
-
-
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("com.google.android.material:material:1.12.0")
 }
