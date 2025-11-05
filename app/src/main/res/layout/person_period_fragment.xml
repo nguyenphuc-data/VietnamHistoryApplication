@@ -31,6 +31,7 @@
     </LinearLayout>
 
     <!-- RecyclerView để hiển thị danh sách person period -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewPersonPeriod"
         android:layout_width="match_parent"
