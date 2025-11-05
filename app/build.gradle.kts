@@ -62,7 +62,7 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
-
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
 
 
 }

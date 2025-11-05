@@ -18,10 +18,12 @@ import com.example.vietnamhistoryapplication.common.YouTubeUtils;
 import com.example.vietnamhistoryapplication.event.eventDetail.ui.EventDetailItem;
 import com.example.vietnamhistoryapplication.event.eventDetail.ui.HeaderItem;
 import com.example.vietnamhistoryapplication.event.eventDetail.ui.IntroItem;
+//import com.example.vietnamhistoryapplication.event.eventDetail.ui.MapItem;
 import com.example.vietnamhistoryapplication.event.eventDetail.ui.SectionListItem;
 import com.example.vietnamhistoryapplication.event.eventDetail.ui.SectionListItem2;
 import com.example.vietnamhistoryapplication.event.eventDetail.ui.SlidesItem;
 import com.example.vietnamhistoryapplication.event.eventDetail.ui.VideoItem;
+import com.google.android.gms.maps.MapView;
 import com.google.android.material.tabs.TabLayout;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
@@ -59,16 +61,17 @@ public class EventDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         throw new IllegalArgumentException("Unknown type: " + viewType);
     }
-
+//     else if (viewType == EventDetailItem.TYPE_MAP) {
+//        return new VHMap(inf.inflate(R.layout.event_detail_item_map, parent, false));
     @Override public void onBindViewHolder(@NonNull RecyclerView.ViewHolder h, int pos) {
         EventDetailItem it = data.get(pos);
 
         if (h instanceof VHHeader) {
             HeaderItem m = (HeaderItem) it;
             VHHeader v = (VHHeader) h;
-            v.tvTitle.setText(m.getTitle());  // Sử dụng getter
+            v.tvTitle.setText(m.getTitle());
             v.tvSubtitle.setText(m.getSubtitle());
-            ImageLoader.loadImage(v.imgCover, m.getCoverUrl());  // Sử dụng getter
+            ImageLoader.loadImage(v.imgCover, m.getCoverUrl());
         } else if (h instanceof VHIntro) {
             IntroItem m = (IntroItem) it;
             VHIntro v = (VHIntro) h;
@@ -78,11 +81,11 @@ public class EventDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             SectionListItem m = (SectionListItem) it;
             VHSection v = (VHSection) h;
             v.tvTitle.setText(m.getTitle());
-            v.tvBullets.setText(m.asBulletedString());  // Use the method to get bullets
+            v.tvBullets.setText(m.asBulletedString());
         } else if (h instanceof VHSection2){
             SectionListItem2 m = (SectionListItem2) it;
             VHSection2 v = (VHSection2) h;
-            v.tvSectionTitle.setText(m.getTitle());                // ví dụ: "Mục tiêu"
+            v.tvSectionTitle.setText(m.getTitle());
             v.tvUSLabel.setText("Phía Mỹ:");
             v.tvVNLabel.setText("Phía Việt Nam:");
             v.tvUSBullets.setText(m.asBulletedStringUs());
@@ -99,7 +102,19 @@ public class EventDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             YouTubeUtils.loadVideo(v.yt, m.getVideoUrlOrId(), lifecycleOwner);
         }
     }
-
+//    else if (h instanceof VHMap) {
+//        MapItem m = (MapItem) it;
+//        VHMap v = (VHMap) h;
+//
+//        v.mapView.onCreate(null);
+//        v.mapView.getMapAsync(googleMap -> {
+//            com.google.android.gms.maps.model.LatLng location =
+//                    new com.google.android.gms.maps.model.LatLng(m.getLatitude(), m.getLongitude());
+//            googleMap.addMarker(new com.google.android.gms.maps.model.MarkerOptions()
+//                    .position(location)
+//                    .title(m.getLocationName()));
+//            googleMap.moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(location, 10f));
+//        });
     static class VHHeader extends RecyclerView.ViewHolder {
         ImageView imgCover; TextView tvTitle, tvSubtitle, tvPeriod;
         VHHeader(@NonNull View v) {
@@ -118,6 +133,13 @@ public class EventDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             imgDocument = v.findViewById(R.id.imgDocument);
         }
     }
+//    static class VHMap extends RecyclerView.ViewHolder {
+//        MapView mapView;
+//        VHMap(View v) {
+//            super(v);
+//            mapView = v.findViewById(R.id.mapView);
+//        }
+//    }
     static class VHSection extends RecyclerView.ViewHolder {
         TextView tvTitle, tvBullets;
         VHSection(@NonNull View v) {

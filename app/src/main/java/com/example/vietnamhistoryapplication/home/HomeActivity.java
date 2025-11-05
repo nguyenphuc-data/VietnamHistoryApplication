@@ -6,11 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.vietnamhistoryapplication.R;
+import com.example.vietnamhistoryapplication.home.ExploreFragment.ExploreFragment;
 import com.example.vietnamhistoryapplication.home.PersonFragment.PersonPeriodFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.vietnamhistoryapplication.home.PeriodFragment.PeriodFragment;
 import com.example.vietnamhistoryapplication.home.GameFragment.GameFragment;
-import com.example.vietnamhistoryapplication.home.ExploreFragment.ExploreFragment;
+import com.example.vietnamhistoryapplication.home.ExploreFragment.Explore;
 
 public class HomeActivity extends AppCompatActivity {
 

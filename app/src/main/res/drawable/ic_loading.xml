@@ -1,0 +1,18 @@
+<!-- res/drawable/ic_loading.xml -->
+<rotate
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="0"
+    android:toDegrees="360"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:duration="1000"
+    android:repeatCount="infinite">
+
+    <shape
+        android:shape="ring"
+        android:innerRadiusRatio="3"
+        android:thickness="3dp"
+        android:useLevel="false">
+        <solid android:color="#FFFFFF" />
+    </shape>
+</rotate>
