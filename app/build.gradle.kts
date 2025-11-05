@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.services)
-
 }
 
 android {
@@ -64,10 +63,12 @@ dependencies {
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
 
-//    google, facebook
-    implementation("com.facebook.android:facebook-login:latest.release")
-    implementation("com.google.firebase:firebase-auth:22.3.0")
-    implementation("com.google.android.gms:play-services-auth:21.1.0")
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
 
 
 }
