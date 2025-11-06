@@ -3,4 +3,16 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="_000000">#C5431A</color>
+    <!-- MÀU CHÍNH ỨNG DỤNG -->
+    <color name="colorPrimary">#E8582B</color>
+    <color name="colorPrimaryVariant">#D94A1F</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <!-- MÀU NỀN -->
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorSurface">#FFFFFF</color>
+
+    <!-- MÀU VĂN BẢN -->
+    <color name="colorOnBackground">#222222</color>
+    <color name="colorOnSurface">#222222</color>
 </resources>

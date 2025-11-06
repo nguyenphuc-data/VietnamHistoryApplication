@@ -1,3 +1,4 @@
+// src/main/java/com/example/vietnamhistoryapplication/profile/ProfileOverviewFragment.java
 package com.example.vietnamhistoryapplication.profile;
 
 import android.content.Intent;
@@ -7,30 +8,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import com.example.vietnamhistoryapplication.models.UserModel;
-import com.example.vietnamhistoryapplication.profile.EditProfileActivity;
-import com.example.vietnamhistoryapplication.home.ProfileFragment.ProfileFragment;
+import com.bumptech.glide.Glide;
+import com.example.vietnamhistoryapplication.forum.ForumActivity;
 import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.utils.UserSession;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileOverviewFragment extends Fragment {
 
-    private ImageView ivProfilePhoto;
+    private CircleImageView ivProfilePhoto;  // ĐỔI SANG CircleImageView
     private TextView tvUserName, tvEmail;
     private Button btnEdit, btnLogout;
 
@@ -45,8 +42,7 @@ public class ProfileOverviewFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.profile_overview_fragment, container, false);
     }
 
@@ -60,65 +56,79 @@ public class ProfileOverviewFragment extends Fragment {
         btnEdit = view.findViewById(R.id.btnEdit);
         btnLogout = view.findViewById(R.id.btnLogout);
 
-        // Luôn dùng ảnh mặc định
-        ivProfilePhoto.setImageResource(R.drawable.avatar);
-
-        btnEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-            startActivity(intent);
-        });
+        btnEdit.setOnClickListener(v -> startActivity(new Intent(getActivity(), EditProfileActivity.class)));
 
         btnLogout.setOnClickListener(v -> signOut());
 
-        loadUserData(); // Chỉ load tên + email
+        view.findViewById(R.id.btnForum).setOnClickListener(v ->
+                startActivity(new Intent(requireActivity(), ForumActivity.class))
+        );
+
+        loadUserData(); // LẤY ẢNH + TÊN + EMAIL
     }
 
     private void loadUserData() {
-        UserModel currentUser = UserSession.getCurrentUser();
-        if (currentUser == null) {
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        if (firebaseUser == null) {
             Toast.makeText(getActivity(), "Không có người dùng đăng nhập", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String uid = currentUser.getUid();
-        db.collection("users")
-                .document(uid)
-                .get()
+        String uid = firebaseUser.getUid();
+
+        db.collection("users").document(uid).get()
                 .addOnSuccessListener(document -> {
                     if (document.exists()) {
                         String name = document.getString("name");
                         String email = document.getString("email");
+                        String photoUrl = document.getString("photo"); // ẢNH TỪ users
 
-                        tvUserName.setText(name != null ? name : "Người dùng");
+                        // ƯU TIÊN: photo từ users → Google → mặc định
+                        if (photoUrl != null && !photoUrl.isEmpty()) {
+                            loadPhoto(photoUrl);
+                        } else {
+                            String googlePhoto = firebaseUser.getPhotoUrl() != null
+                                    ? firebaseUser.getPhotoUrl().toString()
+                                    : null;
+                            if (googlePhoto != null && !googlePhoto.isEmpty()) {
+                                loadPhoto(googlePhoto);
+                            } else {
+                                ivProfilePhoto.setImageResource(R.drawable.avatar);
+                            }
+                        }
+
+                        tvUserName.setText(name != null && !name.trim().isEmpty() ? name : "Người dùng");
                         tvEmail.setText(email != null ? "Email: " + email : "Email: Chưa có");
-                    } else {
-                        Toast.makeText(getActivity(), "Không tìm thấy dữ liệu người dùng", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("ProfileFragment", "Lỗi tải dữ liệu: ", e);
+                    Log.e("Profile", "Lỗi tải dữ liệu", e);
                     Toast.makeText(getActivity(), "Lỗi tải dữ liệu", Toast.LENGTH_SHORT).show();
                 });
     }
 
+    private void loadPhoto(String url) {
+        Glide.with(this)
+                .load(url)
+                .placeholder(R.drawable.avatar)
+                .error(R.drawable.avatar)
+                .into(ivProfilePhoto);
+    }
+
     private void signOut() {
-        // Đăng xuất Firebase
         mAuth.signOut();
 
-        // Đăng xuất Google (nếu dùng Google Sign-In)
         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(
                 requireActivity(),
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
         );
         googleSignInClient.signOut();
 
-        // Xóa session
         UserSession.clear();
 
-        // Chuyển về màn hình đăng nhập
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, new ProfileFragment())
+                .replace(R.id.fragment_container, new com.example.vietnamhistoryapplication.home.ProfileFragment.ProfileFragment())
                 .commit();
     }
 }
