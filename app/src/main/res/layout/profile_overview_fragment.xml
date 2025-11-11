@@ -7,7 +7,7 @@
     android:background="?android:attr/colorBackground"
     android:padding="24dp">
 
-    <!-- Thanh nút Edit và Logout - góc phải -->
+    <!-- NÚT EDIT + LOGOUT -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +15,6 @@
         android:gravity="end"
         android:layout_marginBottom="16dp">
 
-        <!-- Nút Edit -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEdit"
             style="@style/Widget.Material3.Button.TextButton"
@@ -28,7 +27,6 @@
             android:layout_marginEnd="12dp"
             app:cornerRadius="12dp" />
 
-        <!-- Nút Logout -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
             style="@style/Widget.Material3.Button.TextButton"
@@ -43,7 +41,7 @@
             app:iconTint="@android:color/holo_red_light" />
     </LinearLayout>
 
-    <!-- Card chứa thông tin người dùng -->
+    <!-- CARD THÔNG TIN -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,20 +57,17 @@
             android:gravity="center_horizontal"
             android:padding="32dp">
 
-            <!-- Avatar tròn - ĐÃ THAY BẰNG DRAWABLE -->
-            <com.google.android.material.imageview.ShapeableImageView
+            <!-- AVATAR TRÒN - DÙNG CircleImageView -->
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/ivProfilePhoto"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:src="@drawable/avatar"
-                android:scaleType="centerCrop"
-                android:background="@drawable/avatar_circle"
-                android:clipToOutline="true"
-                app:strokeColor="?attr/colorPrimary"
-                app:strokeWidth="3dp"
+                app:civ_border_width="3dp"
+                app:civ_border_color="#FFFFFF"
                 android:elevation="6dp" />
 
-            <!-- Tên người dùng -->
+            <!-- TÊN -->
             <TextView
                 android:id="@+id/tvUserName"
                 android:layout_width="wrap_content"
@@ -83,7 +78,7 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface" />
 
-            <!-- Email -->
+            <!-- EMAIL -->
             <TextView
                 android:id="@+id/tvEmail"
                 android:layout_width="wrap_content"
@@ -94,6 +89,28 @@
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical" />
+
+            <!-- NÚT DIỄN ĐÀN -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnForum"
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:layout_width="match_parent"
+                android:layout_height="62dp"
+                android:layout_margin="24dp"
+                android:text="DIỄN ĐÀN LỊCH SỬ"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                app:backgroundTint="@null"
+                android:background="@drawable/ripple_forum_button"
+                app:icon="@drawable/ic_forum"
+                app:iconGravity="start"
+                app:iconPadding="12dp"
+                app:iconTint="@android:color/white"
+                app:cornerRadius="16dp"
+                app:elevation="8dp"
+                app:strokeColor="#FF6B35"
+                app:strokeWidth="1.5dp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
