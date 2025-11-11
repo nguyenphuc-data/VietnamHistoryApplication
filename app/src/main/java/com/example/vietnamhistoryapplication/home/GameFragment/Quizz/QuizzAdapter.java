@@ -1,5 +1,4 @@
-package com.example.vietnamhistoryapplication.home.GameFragment;
-
+package com.example.vietnamhistoryapplication.home.GameFragment.Quizz;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,30 +11,28 @@ import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.models.QuizzItem;
 
 import java.util.List;
-
-public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
+public class QuizzAdapter extends RecyclerView.Adapter<QuizzAdapter.ViewHolder>  {
     private List<QuizzItem> quizzList;
-
     public interface OnQuizClickListener {
         void onQuizClick(QuizzItem quizzItem);
     }
-    OnQuizClickListener clickListener;
+    QuizzAdapter.OnQuizClickListener clickListener;
 
-    public GameAdapter(List<QuizzItem> quizzList, OnQuizClickListener clickListener) {
+    public QuizzAdapter(List<QuizzItem> quizzList, QuizzAdapter.OnQuizClickListener clickListener) {
         this.quizzList = quizzList;
         this.clickListener = clickListener;
     }
 
     @NonNull
     @Override
-    public GameAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public QuizzAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.games_items, parent, false);
-        return new GameAdapter.ViewHolder(view);
+                .inflate(R.layout.quizz_items, parent, false);
+        return new QuizzAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GameAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull QuizzAdapter.ViewHolder holder, int position) {
         QuizzItem quizz = quizzList.get(position);
         // Add binding here
         holder.tvTitle.setText(quizz.getTitle());  // Adjust getters as needed
