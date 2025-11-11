@@ -23,7 +23,6 @@ import com.example.vietnamhistoryapplication.event.eventDetail.ui.SectionListIte
 import com.example.vietnamhistoryapplication.event.eventDetail.ui.SectionListItem2;
 import com.example.vietnamhistoryapplication.event.eventDetail.ui.SlidesItem;
 import com.example.vietnamhistoryapplication.event.eventDetail.ui.VideoItem;
-import com.google.android.gms.maps.MapView;
 import com.google.android.material.tabs.TabLayout;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
