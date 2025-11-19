@@ -9,7 +9,7 @@
     android:background="#000000"
     tools:context=".game.timelinepuzzle.TimeLineActivity">
 
-    <!-- NỀN TRỜI (phần trên, chiếm 40%) -->
+    <!-- NỀN TRỜI (Giả định có resource `summer3`) -->
     <ImageView
         android:id="@+id/ivSummer3"
         android:layout_width="0dp"
@@ -22,7 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.5" />
 
-    <!-- CÁI BÀN (phần dưới, chiếm 60%) -->
+    <!-- CÁI BÀN (Giả định có resource `rell_table`) -->
     <ImageView
         android:id="@+id/ivTable"
         android:layout_width="0dp"
@@ -30,10 +30,56 @@
         android:src="@drawable/rell_table"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
-        android:translationY="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.55" />
+
+    <!-- RECYCLERVIEW DÒNG THỜI GIAN (Bảng Đáp án - 4x2 GRID, KHÔNG CUỘN) -->
+
+
+    <!-- CARD CONTAINER LAYER (Lớp chứa các lá bài để chọn - Ở dưới bàn) -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTimelineSlots"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/card_container_layer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivTable"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="1"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:listitem="@layout/item_timeline_slot"
+        tools:spanCount="4" />
+
+    <FrameLayout
+        android:id="@+id/card_container_layer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivTable"
+        app:layout_constraintVertical_bias="0.98"> <!-- Đã điều chỉnh xuống dưới cùng -->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_card"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:orientation="horizontal"/>
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
