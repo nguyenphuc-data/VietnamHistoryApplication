@@ -18,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.explore.article.AudioArticleListFragment;
+import com.example.vietnamhistoryapplication.explore.museum.MuseumDetailFragment;
 import com.example.vietnamhistoryapplication.home.ExploreFragment.Explore;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -108,6 +109,13 @@ public class ExploreFragment extends Fragment implements ExploreAdapter.OnExplor
         if ("bai-bao".equals(item.getSlug())) {
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new AudioArticleListFragment())
+                    .addToBackStack(null)
+                    .commit();
+        }else if ("bao-tang".equals(item.getSlug())) {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.fragment_container, new MuseumDetailFragment())
                     .addToBackStack(null)
                     .commit();
         }

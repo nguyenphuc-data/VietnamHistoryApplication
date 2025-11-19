@@ -2,6 +2,7 @@ package com.example.vietnamhistoryapplication.explore.article;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -13,10 +14,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.common.ImageLoader;
+import com.example.vietnamhistoryapplication.explore.articleDetail.ArticleFragment;
 import com.google.android.material.button.MaterialButton;
 
 import java.io.IOException;
@@ -56,7 +59,7 @@ public class AudioArticleAdapter extends RecyclerView.Adapter<AudioArticleAdapte
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgThumb;
         android.widget.TextView tvTitle, tvExcerpt;
-        MaterialButton btnPlay;
+        MaterialButton btnPlay, btnRead;
         ProgressBar progressBar;
 
         ViewHolder(@NonNull View itemView) {
@@ -65,6 +68,7 @@ public class AudioArticleAdapter extends RecyclerView.Adapter<AudioArticleAdapte
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvExcerpt = itemView.findViewById(R.id.tvExcerpt);
             btnPlay = itemView.findViewById(R.id.btnPlay);
+            btnRead = itemView.findViewById(R.id.btnRead);
             progressBar = itemView.findViewById(R.id.progress);
         }
 
@@ -120,6 +124,21 @@ public class AudioArticleAdapter extends RecyclerView.Adapter<AudioArticleAdapte
                     AudioArticleAdapter.this.currentPlayingPosition = position;
                     AudioArticleAdapter.this.startPlayback(item.getAudioUrl(), position, context);
                     // UI sẽ cập nhật trong onPrepared
+                }
+            });
+            // Xử lý nút Read
+            btnRead.setOnClickListener(v -> {
+                ArticleFragment fragment = new ArticleFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("documentId", item.getId());
+                fragment.setArguments(bundle);
+
+                if (context instanceof AppCompatActivity) {
+                    ((AppCompatActivity) context).getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, fragment)
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
         }
@@ -203,4 +222,5 @@ public class AudioArticleAdapter extends RecyclerView.Adapter<AudioArticleAdapte
         stopCurrentPlayback();
         super.onDetachedFromRecyclerView(recyclerView);
     }
+
 }
