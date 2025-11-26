@@ -1,15 +1,29 @@
 package com.example.vietnamhistoryapplication.game.timelinepuzzle;
 
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.vietnamhistoryapplication.R;
 import com.example.vietnamhistoryapplication.models.Era;
@@ -22,23 +36,27 @@ import java.util.List;
 
 public class TimeLineActivity extends AppCompatActivity implements CardAdapter.OnCardInteractionListener {
 
-    private static final String TAG = "TimeLineActivity";
-
-    // Danh sách cho khu vực chọn (đã xáo trộn)
-    private RecyclerView rvCards;
+    private RecyclerView rvCards, rvTimelineSlots;
     private CardAdapter cardAdapter;
-    private List<Event> shuffledEvents = new ArrayList<>();
-
-    // Danh sách các sự kiện đã sắp xếp theo THỨ TỰ (KEY đáp án)
-    private List<Event> sortedEvents;
-
-    // Danh sách cho khu vực đáp án (Ban đầu là null)
-    private RecyclerView rvTimelineSlots;
     private TimelineSlotAdapter slotAdapter;
+    private List<Event> shuffledEvents = new ArrayList<>();
+    private List<Event> sortedEvents;
     private List<Event> placedEvents = new ArrayList<>();
-
-    // Vị trí sự kiện tiếp theo cần điền (tương ứng với Index trong placedEvents và sortedEvents)
     private int currentStep = 0;
+
+    private ImageView ivWarrior, ivTurret;
+    private ImageView hp1, hp2, hp3;
+    private AnimationDrawable warriorIdleAnimation;
+
+    private View rootLayout;
+    private boolean isProcessing = false;
+    private Toast mToast;
+
+    private int wrongCount = 0;
+    private int attackCount = 0;
+    private static final int MAX_WRONG = 5;
+    private static final int MAX_ATTACK_STEPS = 3;
+    private static final float STEP_DISTANCE = 0.126f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,108 +65,235 @@ public class TimeLineActivity extends AppCompatActivity implements CardAdapter.O
 
         rvCards = findViewById(R.id.rvCards);
         rvTimelineSlots = findViewById(R.id.rvTimelineSlots);
+        ivWarrior = findViewById(R.id.ivWarrior);
+        ivTurret = findViewById(R.id.ivTurret);
+        hp1 = findViewById(R.id.hp1);
+        hp2 = findViewById(R.id.hp2);
+        hp3 = findViewById(R.id.hp3);
+        rootLayout = findViewById(R.id.main);
 
-        Intent intent = getIntent();
-        Era eraObject = (Era) intent.getSerializableExtra("era");
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
-        if (eraObject != null) {
-            List<Event> rawEvents = eraObject.getEvents();
+        setupGameAnimations();
+        loadEraData();
+    }
 
-            if (rawEvents != null && !rawEvents.isEmpty()) {
-
-                // 1. CHUẨN BỊ DỮ LIỆU
-
-                // TẠO KEY (Đã sắp xếp theo trường 'order')
-                sortedEvents = new ArrayList<>(rawEvents);
-                // Sắp xếp theo trường 'order' (từ 1, 2, 3...)
-                Collections.sort(sortedEvents, Comparator.comparingInt(Event::getOrder));
-
-                // Tạo danh sách ô đáp án trống (số lượng ô bằng số lượng sự kiện)
-                for (int i = 0; i < sortedEvents.size(); i++) {
-                    placedEvents.add(null);
-                }
-
-                // Tạo danh sách lá bài để chọn (đã xáo trộn)
-                shuffledEvents.addAll(rawEvents);
-                Collections.shuffle(shuffledEvents);
-
-                // 2. THIẾT LẬP RECYCLERVIEWS
-                setupRecyclerViews();
-            } else {
-                Toast.makeText(this, "Thời đại này không có sự kiện nào.", Toast.LENGTH_LONG).show();
-                Log.e(TAG, "Events list is empty or null.");
-            }
-        } else {
-            Toast.makeText(this, "Không tìm thấy dữ liệu thời đại (era).", Toast.LENGTH_LONG).show();
-            Log.e(TAG, "Era object is null.");
+    private void loadEraData() {
+        Era era = (Era) getIntent().getSerializableExtra("era");
+        if (era == null || era.getEvents() == null || era.getEvents().isEmpty()) {
+            showToast("Không có dữ liệu!");
+            finish();
+            return;
         }
+
+        List<Event> rawEvents = era.getEvents();
+        sortedEvents = new ArrayList<>(rawEvents);
+        Collections.sort(sortedEvents, Comparator.comparingInt(Event::getOrder));
+
+        for (int i = 0; i < sortedEvents.size(); i++) placedEvents.add(null);
+
+        shuffledEvents.addAll(rawEvents);
+        Collections.shuffle(shuffledEvents);
+
+        setupRecyclerViews();
     }
 
     private void setupRecyclerViews() {
-        // Lá bài để chọn
         cardAdapter = new CardAdapter(shuffledEvents, this);
         rvCards.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvCards.setAdapter(cardAdapter);
 
-        // Setup RecyclerView cho các ô dòng thời gian (đáp án) - 4 cột
         slotAdapter = new TimelineSlotAdapter(placedEvents);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 4);
-        rvTimelineSlots.setLayoutManager(layoutManager);
+        rvTimelineSlots.setLayoutManager(new GridLayoutManager(this, 4));
         rvTimelineSlots.setNestedScrollingEnabled(false);
         rvTimelineSlots.setAdapter(slotAdapter);
     }
 
-    // --- LOGIC CHƠI GAME VÀ PHẢN HỒI ANIMATION ---
+    private void setupGameAnimations() {
+        ivWarrior.setBackgroundResource(R.drawable.warrior2_idle);
+        warriorIdleAnimation = (AnimationDrawable) ivWarrior.getBackground();
 
-    @Override
-    public void onCardClick(Event selectedEvent, int position) {
+        ivTurret.setBackgroundResource(R.drawable.turret_idle);
+        AnimationDrawable turretAnim = (AnimationDrawable) ivTurret.getBackground();
 
-        if (currentStep >= sortedEvents.size()) {
-            Toast.makeText(this, "Trò chơi đã hoàn thành!", Toast.LENGTH_SHORT).show();
-            return;
+        ivWarrior.post(() -> warriorIdleAnimation.start());
+        ivTurret.post(() -> turretAnim.start());
+    }
+
+    private void lockScreen() {
+        isProcessing = true;
+        rootLayout.setClickable(false);
+    }
+
+    private void unlockScreen() {
+        rootLayout.postDelayed(() -> {
+            isProcessing = false;
+            rootLayout.setClickable(true);
+        }, 1200);
+    }
+
+    private void showToast(String message) {
+        if (mToast != null) mToast.cancel();
+        mToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        mToast.show();
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (mToast != null) mToast.cancel();
+        }, 1000);
+    }
+
+    private void playWarriorWalkAndMove() {
+        wrongCount++;
+        if (wrongCount > MAX_WRONG) {
+            playWarriorAttack();
+        } else {
+            ivWarrior.setBackgroundResource(R.drawable.warrior2_walk);
+            AnimationDrawable walkAnim = (AnimationDrawable) ivWarrior.getBackground();
+            walkAnim.start();
+
+            float currentBias = ((ConstraintLayout.LayoutParams) ivWarrior.getLayoutParams()).horizontalBias;
+            float newBias = Math.min(currentBias + STEP_DISTANCE, 0.79f);
+
+            ValueAnimator animator = ValueAnimator.ofFloat(currentBias, newBias);
+            animator.setDuration(800);
+            animator.addUpdateListener(animation -> {
+                float value = (float) animation.getAnimatedValue();
+                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) ivWarrior.getLayoutParams();
+                params.horizontalBias = value;
+                ivWarrior.setLayoutParams(params);
+            });
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(android.animation.Animator animation) {
+                    backToIdle();
+                }
+            });
+            animator.start();
+        }
+    }
+
+    private void playWarriorAttack() {
+        attackCount++;
+
+        ivWarrior.setBackgroundResource(R.drawable.warior2_atack);
+        AnimationDrawable attackAnim = (AnimationDrawable) ivWarrior.getBackground();
+        attackAnim.start();
+
+        ivTurret.animate().scaleX(0.88f).scaleY(0.88f).setDuration(120)
+                .withEndAction(() -> ivTurret.animate().scaleX(1f).scaleY(1f).setDuration(200).start())
+                .start();
+
+        switch (attackCount) {
+            case 1: hp1.setBackgroundResource(R.drawable.hp_left_empty); break;
+            case 2: hp2.setBackgroundResource(R.drawable.hp_middle_empty); break;
+            case 3: hp3.setBackgroundResource(R.drawable.hp_right_empty); break;
         }
 
-        // Lấy View của lá bài được chọn để thực hiện animation
+        ivWarrior.postDelayed(this::backToIdle, 800);
+
+        if (attackCount >= MAX_ATTACK_STEPS) {
+            new Handler(Looper.getMainLooper()).postDelayed(this::showGameOverDialog, 1000);
+        }
+    }
+
+    private void backToIdle() {
+        ivWarrior.setBackgroundResource(R.drawable.warrior2_idle);
+        warriorIdleAnimation = (AnimationDrawable) ivWarrior.getBackground();
+        ivWarrior.post(() -> warriorIdleAnimation.start());
+    }
+
+    // =================== DIALOG THẮNG / THUA KIỂU CLASH OF CLANS ===================
+    private void showVictoryDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_victory, null);
+
+        Button btnReplay = view.findViewById(R.id.btnReplay);
+        Button btnMenu = view.findViewById(R.id.btnMenu);
+
+        AlertDialog dialog = builder.setView(view).create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.setCancelable(false);
+
+        btnReplay.setOnClickListener(v -> {
+            dialog.dismiss();
+            restartGame();
+        });
+
+        btnMenu.setOnClickListener(v -> {
+            dialog.dismiss();
+            finish();
+        });
+
+        dialog.show();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0x80000000));
+    }
+
+    private void showGameOverDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_game_over, null);
+
+        Button btnReplay = view.findViewById(R.id.btnReplay);
+        Button btnMenu = view.findViewById(R.id.btnMenu);
+
+        AlertDialog dialog = builder.setView(view).create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.setCancelable(false);
+
+        btnReplay.setOnClickListener(v -> {
+            dialog.dismiss();
+            restartGame();
+        });
+
+        btnMenu.setOnClickListener(v -> {
+            dialog.dismiss();
+            finish();
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0x80000000));
+        dialog.show();
+    }
+
+    private void restartGame() {
+        finish();
+        startActivity(getIntent());
+    }
+
+    // =================== KHI NGƯỜI CHƠI CHỌN THẺ ===================
+    @Override
+    public void onCardClick(Event selectedEvent, int position) {
+        if (isProcessing || currentStep >= sortedEvents.size()) return;
+
+        lockScreen();
+
         RecyclerView.ViewHolder viewHolder = rvCards.findViewHolderForAdapterPosition(position);
         View cardView = viewHolder != null ? viewHolder.itemView : null;
 
-        // Giá trị order đúng = currentStep + 1
-        int requiredOrder = currentStep + 1;
+        if (selectedEvent.getOrder() == currentStep + 1) {
+            // ĐÚNG
+            if (cardView != null) cardAdapter.animateFeedback(cardView, true);
 
-        // SO SÁNH ĐÁP ÁN
-        if (selectedEvent.getOrder() == requiredOrder) {
-
-            // ĐÚNG ĐÁP ÁN
-            if (cardView != null) {
-                // 1. Kích hoạt animation hạ xuống 0f (chuẩn bị xóa)
-                cardAdapter.animateFeedback(cardView, true);
-            }
-
-            // DI CHUYỂN LÁ BÀI XUỐNG BẢNG DÒNG THỜI GIAN
             placedEvents.set(currentStep, selectedEvent);
             slotAdapter.notifyItemChanged(currentStep);
 
-            // LOẠI BỎ LÁ BÀI ĐÃ CHỌN KHỎI KHU VỰC CHỌN
             shuffledEvents.remove(position);
             cardAdapter.notifyItemRemoved(position);
             cardAdapter.notifyItemRangeChanged(position, shuffledEvents.size());
 
-            // CHUYỂN SANG BƯỚC TIẾP THEO
             currentStep++;
 
             if (currentStep >= sortedEvents.size()) {
-                Toast.makeText(this, "XUẤT SẮC! Hoàn thành dòng thời gian!", Toast.LENGTH_LONG).show();
+                new Handler(Looper.getMainLooper()).postDelayed(this::showVictoryDialog, 800);
             } else {
-                Toast.makeText(this, "Đúng! Tiếp tục với sự kiện thứ " + (currentStep + 1) + ".", Toast.LENGTH_SHORT).show();
+                showToast("Đúng rồi!");
             }
 
         } else {
-            // SAI ĐÁP ÁN (Sai thứ tự)
-            if (cardView != null) {
-                // Kích hoạt animation lắc ngang và hạ xuống
-                cardAdapter.animateFeedback(cardView, false);
-            }
-            Toast.makeText(this, "Sai rồi. Hãy chọn sự kiện có thứ tự tiếp theo.", Toast.LENGTH_SHORT).show();
+            // SAI
+            if (cardView != null) cardAdapter.animateFeedback(cardView, false);
+            playWarriorWalkAndMove();
+            showToast("SAI RỒI!");
         }
+
+        unlockScreen();
     }
 }

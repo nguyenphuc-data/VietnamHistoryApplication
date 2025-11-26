@@ -60,7 +60,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                         // 1. Khi nhấn xuống (Hover): Di chuyển nhẹ lên (8dp)
                         v.animate()
                                 .translationY(LIFT_SLIGHTLY_PX)
-                                .setDuration(100)
+                                .setDuration(80)
                                 .start();
                         // Reset translationX về 0 (đề phòng)
                         v.setTranslationX(0f);
@@ -70,15 +70,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                         // 2. Khi nhả ra (Chọn): Nâng hẳn lên (16dp) và kích hoạt logic click
                         v.animate()
                                 .translationY(LIFT_HIGH_PX) // Nâng hẳn lên 16dp
-                                .setDuration(150)
+                                .setDuration(60)
                                 .start();
 
                         if (listener != null) {
-                            // LẤY VỊ TRÍ MỚI NHẤT VÀ CHÍNH XÁC NHẤT TỪ HOLDER
                             int currentPosition = holder.getAdapterPosition();
-
                             if (currentPosition != RecyclerView.NO_POSITION) {
-                                // GỌI listener.onCardClick VỚI ĐỐI TƯỢNG EVENT (Model) và vị trí mới nhất
                                 listener.onCardClick(event, currentPosition);
                             }
                         }
@@ -88,7 +85,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                         // Khi sự kiện bị hủy: Đưa về vị trí ban đầu
                         v.animate()
                                 .translationY(0f)
-                                .setDuration(150)
+                                .setDuration(60)
                                 .start();
                         return true;
                 }
@@ -108,7 +105,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             // Trường hợp chọn ĐÚNG: Hạ ngay lập tức về 0f (chuẩn bị xóa view)
             view.animate()
                     .translationY(0f)
-                    .setDuration(150)
+                    .setDuration(60)
                     .start();
         } else {
             // Trường hợp chọn SAI: Lắc ngang và sau đó hạ xuống
@@ -117,25 +114,25 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             Resources res = view.getResources();
             final float SHAKE_DISTANCE_PX = res.getDisplayMetrics().density * 4;
 
-            // Animation lắc ngang (tổng thời gian 500ms)
+
             // Lắc sang trái (-4), sang phải (+4), lắc nhẹ trái (-2), về giữa (0)
             view.animate()
                     .translationX(-SHAKE_DISTANCE_PX)
-                    .setDuration(100) // Lắc trái
+                    .setDuration(15) // Lắc trái
                     .withEndAction(() -> {
                         view.animate()
                                 .translationX(SHAKE_DISTANCE_PX)
-                                .setDuration(100) // Lắc phải
+                                .setDuration(15) // Lắc phải
                                 .withEndAction(() -> {
                                     view.animate()
                                             .translationX(-SHAKE_DISTANCE_PX / 2)
-                                            .setDuration(100) // Lắc nhẹ trái
+                                            .setDuration(15) // Lắc nhẹ trái
                                             .withEndAction(() -> {
                                                 // Kết thúc lắc, đưa về vị trí giữa X=0 và hạ xuống Y=0
                                                 view.animate()
                                                         .translationX(0f)
                                                         .translationY(0f) // Hạ về vị trí ban đầu
-                                                        .setDuration(200)
+                                                        .setDuration(15)
                                                         .start();
                                             })
                                             .start();
