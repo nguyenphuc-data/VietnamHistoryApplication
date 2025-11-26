@@ -225,7 +225,6 @@ public class PersonDetailActivity extends AppCompatActivity {
                 .collect(Collectors.joining("\n"));
         tvLifetime.setText(lifetimeText.isEmpty() ? "Không có thông tin" : lifetimeText);
 
-        // Handle YouTube video
         if (person.video != null && person.video.link != null && !person.video.link.isEmpty()) {
             youtubeHeader.setVisibility(View.VISIBLE);
             youtubePlayerView.setVisibility(View.VISIBLE);
@@ -269,7 +268,6 @@ public class PersonDetailActivity extends AppCompatActivity {
         stateUpdater.accept(newExpanded);
     }
 
-    // New version for events (has hint)
     private void toggleSectionWithHint(View content, View hint, ImageView arrow, boolean isExpanded, java.util.function.Consumer<Boolean> stateUpdater) {
         boolean newExpanded = !isExpanded;
 
@@ -296,6 +294,6 @@ public class PersonDetailActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        youtubePlayerView.release(); // Release YouTubePlayerView to prevent memory leaks
+        youtubePlayerView.release();
     }
 }

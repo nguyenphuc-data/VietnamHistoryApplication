@@ -64,5 +64,13 @@ dependencies {
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
     implementation("com.google.android.gms:play-services-maps:18.1.0")
 
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.facebook.android:facebook-login:16.3.0")
+
+
 
 }

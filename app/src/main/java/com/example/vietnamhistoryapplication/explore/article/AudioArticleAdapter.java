@@ -101,8 +101,6 @@ public class AudioArticleAdapter extends RecyclerView.Adapter<AudioArticleAdapte
                     int progress = (int) (1000L * current / total);
                     progressBar.setProgress(progress);
                 }
-            } else {
-                progressBar.setProgress(0);
             }
 
             // Xử lý click

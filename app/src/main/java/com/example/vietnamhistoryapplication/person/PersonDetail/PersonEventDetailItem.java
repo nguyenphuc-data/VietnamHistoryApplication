@@ -6,7 +6,7 @@ public class PersonEventDetailItem {
     private String overview;
     private String description;
     private String coverMediaRef;
-    private String eventRef; // Đổi từ DocumentReference sang String
+    private String eventRef;
     private String role;
 
     public PersonEventDetailItem() {}

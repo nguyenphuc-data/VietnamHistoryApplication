@@ -2,4 +2,8 @@
     <string name="app_name">VietnamHistoryApplication</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="facebook_app_id">684262924723155</string>
+    <string name="fb_login_protocol_scheme">fb684262924723155</string>
+    <string name="default_web_client_id">270718697154-eiltb60btef5b8f6oqonvtnmnek6ae1g.apps.googleusercontent.com</string>
+    <string name="facebook_client_token">a88015e184332a045b11e664a47ce503</string>
 </resources>

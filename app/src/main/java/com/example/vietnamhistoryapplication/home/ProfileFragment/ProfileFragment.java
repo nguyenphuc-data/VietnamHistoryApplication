@@ -1,66 +1,257 @@
 package com.example.vietnamhistoryapplication.home.ProfileFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.vietnamhistoryapplication.R;
+import com.example.vietnamhistoryapplication.models.UserModel;
+import com.example.vietnamhistoryapplication.profile.ProfileOverviewFragment;
+import com.example.vietnamhistoryapplication.utils.UserSession;
+import com.google.android.gms.auth.api.signin.*;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.*;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.HashMap;
+import java.util.Map;
+
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private GoogleSignInClient googleSignInClient;
+    private ActivityResultLauncher<Intent> googleSignInLauncher;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private TextInputEditText etEmail, etPassword;
+    private MaterialButton btnLogin, btnGoogle;
+    private TextView tvRegister;
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    // 🔹 Giữ dữ liệu user hiện tại (dạng Singleton)
+    public static UserModel currentUserModel;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.profile_fragment, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        etEmail = view.findViewById(R.id.etEmail);
+        etPassword = view.findViewById(R.id.etPassword);
+        btnLogin = view.findViewById(R.id.btnLogin);
+        btnGoogle = view.findViewById(R.id.btnGoogle);
+        tvRegister = view.findViewById(R.id.tvRegister);
+
+        // ---------------- GOOGLE LOGIN ----------------
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
+
+        googleSignInLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getData() != null) {
+                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                        try {
+                            GoogleSignInAccount account = task.getResult(ApiException.class);
+                            firebaseAuthWithGoogle(account);
+                        } catch (ApiException e) {
+                            Toast.makeText(requireContext(), "Google Sign-in thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        );
+
+        // ---------------- LOGIN BUTTON ----------------
+        btnLogin.setOnClickListener(v -> {
+            String username = etEmail.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
+
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(requireContext(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            } else {
+                loginWithUsername(username, password);
+            }
+        });
+
+        // ---------------- GOOGLE LOGIN BUTTON ----------------
+        btnGoogle.setOnClickListener(v -> {
+            Intent signInIntent = googleSignInClient.getSignInIntent();
+            googleSignInLauncher.launch(signInIntent);
+        });
+
+        // ---------------- REGISTER ----------------
+        tvRegister.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new RegisterFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.profile_fragment, container, false);
+    // ---------------- LOGIN WITH USERNAME ----------------
+    private void loginWithUsername(String username, String password) {
+        db.collection("users")
+                .whereEqualTo("username", username)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        Toast.makeText(requireContext(), "Không tìm thấy tài khoản này", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
+                    String storedPassword = document.getString("password");
+
+                    if (storedPassword != null && storedPassword.equals(password)) {
+                        Toast.makeText(requireContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+
+                        // Lấy các trường an toàn từ DocumentSnapshot
+                        String uid = document.getString("uid");
+                        String name = document.getString("name");
+                        String usern = document.getString("username");
+                        String email = document.getString("email");
+                        String photo = document.getString("photo");
+                        String bio = document.getString("bio");
+                        Long createdAtLong = document.getLong("createdAt");
+                        long createdAt = createdAtLong != null ? createdAtLong : System.currentTimeMillis();
+
+                        // Lưu vào model (theo constructor của UserModel)
+                        UserModel user = new UserModel(
+                                uid,
+                                name,
+                                usern,
+                                email,
+                                photo,
+                                bio,
+                                createdAt
+                        );
+                        saveUserToModel(user);
+
+                        moveToProfileOverview();
+                    } else {
+                        Toast.makeText(requireContext(), "Sai mật khẩu", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(requireContext(), "Lỗi đăng nhập: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    // ---------------- GOOGLE LOGIN ----------------
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(requireActivity(), task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            checkAndCreateUser(user);
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "Đăng nhập Google thất bại.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void checkAndCreateUser(FirebaseUser firebaseUser) {
+        db.collection("users").document(firebaseUser.getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (!documentSnapshot.exists()) {
+                        // Tạo dữ liệu mới trong Firestore
+                        Map<String, Object> userData = new HashMap<>();
+                        userData.put("uid", firebaseUser.getUid());
+                        userData.put("name", firebaseUser.getDisplayName());
+                        userData.put("username", null); // chưa có username
+                        userData.put("email", firebaseUser.getEmail());
+                        userData.put("photo", firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : null);
+                        userData.put("bio", "");
+                        userData.put("createdAt", System.currentTimeMillis());
+
+                        db.collection("users").document(firebaseUser.getUid())
+                                .set(userData)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(requireContext(), "Tạo tài khoản mới thành công", Toast.LENGTH_SHORT).show();
+
+                                    // Lưu vào model (điền đủ các trường)
+                                    UserModel user = new UserModel(
+                                            firebaseUser.getUid(),
+                                            firebaseUser.getDisplayName(),
+                                            null,
+                                            firebaseUser.getEmail(),
+                                            firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : null,
+                                            "",
+                                            (long) userData.get("createdAt")
+                                    );
+                                    saveUserToModel(user);
+
+                                    moveToProfileOverview();
+                                })
+                                .addOnFailureListener(e ->
+                                        Toast.makeText(requireContext(), "Lỗi tạo tài khoản mới: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                );
+                    } else {
+                        // Nếu đã có user trong Firestore -> đọc dữ liệu và lưu vào model
+                        String uid = documentSnapshot.getString("uid");
+                        String name = documentSnapshot.getString("name");
+                        String username = documentSnapshot.getString("username");
+                        String email = documentSnapshot.getString("email");
+                        String photo = documentSnapshot.getString("photo");
+                        String bio = documentSnapshot.getString("bio");
+                        Long createdAtLong = documentSnapshot.getLong("createdAt");
+                        long createdAt = createdAtLong != null ? createdAtLong : System.currentTimeMillis();
+
+                        UserModel user = new UserModel(
+                                uid,
+                                name,
+                                username,
+                                email,
+                                photo,
+                                bio,
+                                createdAt
+                        );
+                        saveUserToModel(user);
+                        moveToProfileOverview();
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(requireContext(), "Lỗi truy cập Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    // ---------------- SAVE TO MODEL ----------------
+    private void saveUserToModel(UserModel user) {
+        currentUserModel = user;
+        UserSession.setCurrentUser(user); // ✅ Lưu vào session dùng chung
+    }
+
+    // ---------------- MOVE TO PROFILE OVERVIEW ----------------
+    private void moveToProfileOverview() {
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, new ProfileOverviewFragment());
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
