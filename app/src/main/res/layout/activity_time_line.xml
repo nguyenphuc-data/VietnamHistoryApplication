@@ -9,31 +9,158 @@
     android:background="#000000"
     tools:context=".game.timelinepuzzle.TimeLineActivity">
 
-    <!-- NỀN TRỜI (phần trên, chiếm 40%) -->
+    <!-- NÚT BACK -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back_period"
+        app:backgroundTint="#B2B2B2"
+        app:tint="#3A3A3A"
+        app:fabCustomSize="44dp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:layout_margin="16dp"
+    app:elevation="6dp"
+    app:pressedTranslationZ="12dp" />
+
+    <!-- 1. NỀN TRỜI -->
     <ImageView
         android:id="@+id/ivSummer3"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/summer3"
         android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.5" />
+        app:layout_constraintHeight_percent="0.5"
+        tools:ignore="ContentDescription" />
 
-    <!-- CÁI BÀN (phần dưới, chiếm 60%) -->
+    <!-- 2. CÁI BÀN  -->
     <ImageView
         android:id="@+id/ivTable"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/rell_table"
         android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        android:translationY="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.55" />
+        app:layout_constraintHeight_percent="0.55"
+        tools:ignore="ContentDescription" />
+
+    <!-- WARRIOR -->
+    <ImageView
+        android:id="@+id/ivWarrior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.32"
+        app:layout_constraintHorizontal_bias="0.05" />
+
+    <!-- (TURRET) -->
+
+    <!-- RecyclerView các ô timeline -->
+
+    <ImageView
+        android:id="@+id/hp1"
+        android:layout_width="48dp"
+        android:layout_height="18dp"
+        android:background="@drawable/hp_left_full"
+        android:elevation="12dp"
+        android:translationZ="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.685"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.255" />
+
+    <ImageView
+        android:id="@+id/hp2"
+        android:layout_width="48dp"
+        android:layout_height="18dp"
+        android:background="@drawable/hp_middle_full"
+        android:elevation="12dp"
+        android:translationZ="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/hp1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.255" />
+
+    <ImageView
+        android:id="@+id/hp3"
+        android:layout_width="48dp"
+        android:layout_height="18dp"
+        android:background="@drawable/hp_right_full"
+        android:elevation="12dp"
+        android:translationZ="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/hp2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.255" />
+
+    <ImageView
+        android:id="@+id/ivTurret"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.861"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.309" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTimelineSlots"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/card_container_layer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivTable"
+        app:layout_constraintWidth_percent="1"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:listitem="@layout/item_timeline_slot"
+        tools:spanCount="4" />
+
+    <!-- CARD CONTAINER LAYER -->
+    <FrameLayout
+        android:id="@+id/card_container_layer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivTable"
+        app:layout_constraintVertical_bias="0.98">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_card"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,15 @@
+<!-- btn_victory.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="#C0392B" />
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="#E74C3C" />
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+</selector>

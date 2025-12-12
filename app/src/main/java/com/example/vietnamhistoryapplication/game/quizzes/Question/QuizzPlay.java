@@ -35,6 +35,7 @@ public class QuizzPlay extends AppCompatActivity {
     CountDownTimer totalTimer;
     private int score = 0;
     private List<QuestionItem> questions = new ArrayList<>();
+    private List<Integer> answerResults = new ArrayList<>();
     private String gameId, quizzId;
     private int questionCount;
     @Override
@@ -97,9 +98,9 @@ public class QuizzPlay extends AppCompatActivity {
     private void setupViewPager() {
          adapter = new QuizzViewPagerAdapter(this,timeLimit, questions, new QuizzViewPagerAdapter.OnQuestionActionListener() {
             @Override
-            public void onAnswerSubmitted(boolean isCorrect) {
+            public void onAnswerSubmitted(boolean isCorrect, int mychoice) {
                 if (isCorrect) score+=1;
-                // Cập nhật giao diện nếu cần (tùy chọn)
+                answerResults.add(mychoice);
             }
 
             @Override
@@ -122,7 +123,9 @@ public class QuizzPlay extends AppCompatActivity {
         intent.putExtra("score", score);
         intent.putExtra("questionCount", questionCount);
         intent.putExtra("title",title);
-        intent.putExtra("totalTime", totalTime); // Thời gian tạm
+        intent.putExtra("totalTime", totalTime);
+        intent.putExtra("questions", new ArrayList<>(questions));
+        intent.putExtra("answerResults", new ArrayList<>(answerResults));
         startActivity(intent);
         finish();
     }

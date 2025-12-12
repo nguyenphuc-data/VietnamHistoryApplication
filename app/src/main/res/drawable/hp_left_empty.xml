@@ -1,0 +1,10 @@
+<!-- hp_left_empty.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#444444" />
+            <corners android:topLeftRadius="12dp" android:bottomLeftRadius="12dp" />
+            <stroke android:width="3dp" android:color="#000000" />
+        </shape>
+    </item>
+</layer-list>

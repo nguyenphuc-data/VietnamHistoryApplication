@@ -6,9 +6,15 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vietnamhistoryapplication.R;
+import com.example.vietnamhistoryapplication.models.QuestionItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResultQuizz extends AppCompatActivity {
 
@@ -16,7 +22,8 @@ public class ResultQuizz extends AppCompatActivity {
     private int score;
     private int totalTime;
     private int questionCount;
-
+    private List<QuestionItem> questions;
+    private List<Integer> answerResults;
     private TextView tvQuizTitle, tvScore, tvscoreQuest, tvTotalTime;
 
     @Override
@@ -30,6 +37,8 @@ public class ResultQuizz extends AppCompatActivity {
         score = getIntent().getIntExtra("score", 0);
         totalTime = getIntent().getIntExtra("totalTime", 0);
         questionCount = getIntent().getIntExtra("questionCount", 0);
+        questions = (ArrayList<QuestionItem>) getIntent().getSerializableExtra("questions");
+        answerResults = (ArrayList<Integer>) getIntent().getSerializableExtra("answerResults");
 
         // --- Ánh xạ view ---
         tvQuizTitle = findViewById(R.id.tvQuizTitle);
@@ -44,9 +53,15 @@ public class ResultQuizz extends AppCompatActivity {
         tvscoreQuest.setText("Số câu đúng: " + score + "/" + questionCount);
         tvTotalTime.setText("Tổng thời gian: " + totalTime + "s");
 
-        // --- Nút quay lại ---
+
         btnBack.setOnClickListener(v -> {
-            finish(); // Quay về activity trước (QuizzPlay)
+            finish();
         });
+
+        // Hiển thị chi tiết đáp án
+        RecyclerView rvAnswers = findViewById(R.id.rv_answers);
+        rvAnswers.setLayoutManager(new LinearLayoutManager(this));
+        AnswerDetailAdapter adapter = new AnswerDetailAdapter(questions, answerResults);
+        rvAnswers.setAdapter(adapter);
     }
 }

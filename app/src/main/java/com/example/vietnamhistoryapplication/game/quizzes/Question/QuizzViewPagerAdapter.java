@@ -33,7 +33,7 @@ public class QuizzViewPagerAdapter extends FragmentStateAdapter {
     }
 
     public interface OnQuestionActionListener {
-        void onAnswerSubmitted(boolean isCorrect);
+        void onAnswerSubmitted(boolean isCorrect, int mychoice);
         void onNextClicked(int currentPosition);
     }
 }
