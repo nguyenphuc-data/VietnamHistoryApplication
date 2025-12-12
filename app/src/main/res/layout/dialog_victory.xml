@@ -36,7 +36,20 @@
         android:lineSpacingExtra="6dp"
         android:layout_marginBottom="32dp" />
 
-    <!-- Nút đẹp lung linh -->
+    <TextView
+        android:id="@+id/tv_correct_answers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="#4CAF50"
+        android:background="#11000000"
+        android:padding="16dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:fontFamily="sans-serif-medium"
+        android:text="Đang tải đáp án..." />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

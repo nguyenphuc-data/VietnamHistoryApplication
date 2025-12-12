@@ -202,9 +202,25 @@ public class TimeLineActivity extends AppCompatActivity implements CardAdapter.O
     }
 
     // =================== DIALOG THẮNG / THUA KIỂU CLASH OF CLANS ===================
+    private String getCorrectTimelineText() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Đáp án đúng theo thứ tự:\n\n");
+
+        for (Event event : sortedEvents) {
+            sb.append(event.getYear())
+                    .append(" - ")
+                    .append(event.getName())
+                    .append("\n");
+        }
+
+        return sb.toString().trim();
+    }
     private void showVictoryDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_victory, null);
+
+        TextView tvCorrectAnswers = view.findViewById(R.id.tv_correct_answers);
+        tvCorrectAnswers.setText(getCorrectTimelineText()); // HIỂN THỊ ĐÁP ÁN
 
         Button btnReplay = view.findViewById(R.id.btnReplay);
         Button btnMenu = view.findViewById(R.id.btnMenu);
@@ -232,6 +248,10 @@ public class TimeLineActivity extends AppCompatActivity implements CardAdapter.O
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_game_over, null);
 
+        // Dòng mới: hiển thị đáp án ngay cả khi thua
+        TextView tvCorrectAnswers = view.findViewById(R.id.tv_correct_answers);
+        tvCorrectAnswers.setText(getCorrectTimelineText());
+
         Button btnReplay = view.findViewById(R.id.btnReplay);
         Button btnMenu = view.findViewById(R.id.btnMenu);
 
@@ -240,17 +260,11 @@ public class TimeLineActivity extends AppCompatActivity implements CardAdapter.O
         dialog.getWindow().setGravity(Gravity.CENTER);
         dialog.setCancelable(false);
 
-        btnReplay.setOnClickListener(v -> {
-            dialog.dismiss();
-            restartGame();
-        });
+        btnReplay.setOnClickListener(v -> { dialog.dismiss(); restartGame(); });
+        btnMenu.setOnClickListener(v -> { dialog.dismiss(); finish(); });
 
-        btnMenu.setOnClickListener(v -> {
-            dialog.dismiss();
-            finish();
-        });
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0x80000000));
         dialog.show();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0x80000000));
     }
 
     private void restartGame() {

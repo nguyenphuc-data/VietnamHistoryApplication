@@ -1,8 +1,9 @@
 package com.example.vietnamhistoryapplication.models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class QuestionItem {
+public class QuestionItem implements Serializable {
     private String question;
     private List<String> options;
     private int correctAnswer;

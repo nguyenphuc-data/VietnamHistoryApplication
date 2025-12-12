@@ -179,7 +179,7 @@ public class QuestionFragment extends Fragment {
                     android.content.res.ColorStateList.valueOf(Color.parseColor("#4CAF50"))
             );
             selectedButton.setTextColor(Color.WHITE);
-            listener.onAnswerSubmitted(true);
+            listener.onAnswerSubmitted(true, correctIndex);
         } else {
             tvResult.setText("❌ Sai rồi!");
             tvResult.setTextColor(Color.parseColor("#E8582B"));
@@ -197,7 +197,7 @@ public class QuestionFragment extends Fragment {
                     android.content.res.ColorStateList.valueOf(Color.parseColor("#4CAF50"))
             );
             correctButton.setTextColor(Color.WHITE);
-            listener.onAnswerSubmitted(false);
+            listener.onAnswerSubmitted(false, selectedIndex);
         }
 
         String correctText = question.getOptions().get(correctIndex);
@@ -249,7 +249,7 @@ public class QuestionFragment extends Fragment {
         tvExplanation.setText(question.getExplanation());
         btnNext.setVisibility(View.VISIBLE);
 
-        if (listener != null) listener.onAnswerSubmitted(false);
+        if (listener != null) listener.onAnswerSubmitted(false, -1);
     }
     public void onDestroyView() {
         super.onDestroyView();
