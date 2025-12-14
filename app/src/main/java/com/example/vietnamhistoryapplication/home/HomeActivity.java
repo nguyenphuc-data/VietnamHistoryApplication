@@ -34,20 +34,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.home_activity);
-//        //        ------------------------------
-//        FirebaseAuth.getInstance().signOut(); // đăng xuất Firebase
-//
-////       xóa token Google Sign IN
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.default_web_client_id))
-//                .requestEmail()
-//                .build();
-//
-//        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
-//
-//        googleSignInClient.signOut();
-//
-////------------------------------------
+        autoBrightnessManager = new AutoBrightnessManager(this);
+
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(item ->{
             Fragment selectedFragment = null;
