@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+
+    <item android:drawable="@drawable/warrior2_walk000" android:duration="100" />
+    <item android:drawable="@drawable/warrior2_walk001" android:duration="100" />
+    <item android:drawable="@drawable/warrior2_walk002" android:duration="100" />
+    <item android:drawable="@drawable/warrior2_walk003" android:duration="100" />
+    <item android:drawable="@drawable/warrior2_walk004" android:duration="100" />
+    <item android:drawable="@drawable/warrior2_walk005" android:duration="100" />
+    <item android:drawable="@drawable/warrior2_walk006" android:duration="100" />
+    <item android:drawable="@drawable/warrior2_walk007" android:duration="100" />
+</animation-list>
