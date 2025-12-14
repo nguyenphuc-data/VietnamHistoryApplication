@@ -59,7 +59,7 @@ public class AudioArticleAdapter extends RecyclerView.Adapter<AudioArticleAdapte
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgThumb;
         android.widget.TextView tvTitle, tvExcerpt;
-        MaterialButton btnPlay, btnRead;
+        MaterialButton btnPlay;
         ProgressBar progressBar;
 
         ViewHolder(@NonNull View itemView) {
@@ -68,7 +68,6 @@ public class AudioArticleAdapter extends RecyclerView.Adapter<AudioArticleAdapte
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvExcerpt = itemView.findViewById(R.id.tvExcerpt);
             btnPlay = itemView.findViewById(R.id.btnPlay);
-            btnRead = itemView.findViewById(R.id.btnRead);
             progressBar = itemView.findViewById(R.id.progress);
         }
 
@@ -101,6 +100,8 @@ public class AudioArticleAdapter extends RecyclerView.Adapter<AudioArticleAdapte
                     int progress = (int) (1000L * current / total);
                     progressBar.setProgress(progress);
                 }
+            } else {
+                progressBar.setProgress(0);
             }
 
             // Xử lý click
@@ -122,21 +123,6 @@ public class AudioArticleAdapter extends RecyclerView.Adapter<AudioArticleAdapte
                     AudioArticleAdapter.this.currentPlayingPosition = position;
                     AudioArticleAdapter.this.startPlayback(item.getAudioUrl(), position, context);
                     // UI sẽ cập nhật trong onPrepared
-                }
-            });
-            // Xử lý nút Read
-            btnRead.setOnClickListener(v -> {
-                ArticleFragment fragment = new ArticleFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("documentId", item.getId());
-                fragment.setArguments(bundle);
-
-                if (context instanceof AppCompatActivity) {
-                    ((AppCompatActivity) context).getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_container, fragment)
-                            .addToBackStack(null)
-                            .commit();
                 }
             });
         }
@@ -220,5 +206,4 @@ public class AudioArticleAdapter extends RecyclerView.Adapter<AudioArticleAdapte
         stopCurrentPlayback();
         super.onDetachedFromRecyclerView(recyclerView);
     }
-
 }

@@ -1,133 +1,64 @@
 package com.example.vietnamhistoryapplication.home.GameFragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.vietnamhistoryapplication.R;
-import com.example.vietnamhistoryapplication.game.quizzes.QuizzesDetail;
-import com.example.vietnamhistoryapplication.models.GameItem;
-import com.example.vietnamhistoryapplication.models.QuizzItem;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.example.vietnamhistoryapplication.home.GameFragment.Quizz.QuizzFragment;
+import com.example.vietnamhistoryapplication.home.GameFragment.TimeLinePuzzle.TimeLinePuzzleFragment;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 public class GameFragment extends Fragment {
 
+    private Button btnQuizz, btnTimeline;
 
-    public List<QuizzItem> quizzItems = new ArrayList<>();
-    GameAdapter gameAdapter;
-    public GameFragment() {
-        // Required empty public constructor
-    }
-
-
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.game_fragment, container, false);
 
+        btnQuizz = view.findViewById(R.id.btn_quizz);
+        btnTimeline = view.findViewById(R.id.btn_timeline);
+
+        // Mặc định mở QuizzFragment
+        replaceFragment(new QuizzFragment());
+        highlightButton(btnQuizz);
+
+        btnQuizz.setOnClickListener(v -> {
+            replaceFragment(new QuizzFragment());
+            highlightButton(btnQuizz);
+        });
+
+        btnTimeline.setOnClickListener(v -> {
+            replaceFragment(new TimeLinePuzzleFragment());
+            highlightButton(btnTimeline);
+        });
+
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.game_fragment, container, false);
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerGames);
 
-        loadGameFromFirestore();
-        gameAdapter = new GameAdapter(quizzItems, this::startQuizzDetail);
-        recyclerView.setAdapter(gameAdapter);
-    }
-    private void loadGameFromFirestore() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private void highlightButton(Button selectedButton) {
+        int normalColor = getResources().getColor(R.color.button_orange, null);
+        int pressedColor = getResources().getColor(R.color.button_orange_dark, null);
 
-        // Lấy argument truyền vào (có thể null)
-        Bundle args = getArguments();
-        String periodSlug = args != null ? args.getString("periodSlug") : null;
-        String stageSlug = args != null ? args.getString("stageSlug") : null;
-        String eventSlug = args != null ? args.getString("eventSlug") : null;
+        btnQuizz.setBackgroundTintList(android.content.res.ColorStateList.valueOf(normalColor));
+        btnTimeline.setBackgroundTintList(android.content.res.ColorStateList.valueOf(normalColor));
 
-        db.collection("games")
-                .document("quiz-lich-su-viet-nam")
-                .collection("quizzes")
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    quizzItems.clear();
-
-                    if (!querySnapshot.isEmpty()) {
-                        // Lấy tất
-                        if ((periodSlug == null && stageSlug == null && eventSlug == null)) {
-                            for (QueryDocumentSnapshot doc : querySnapshot) {
-                                String quizzslug = doc.getId();
-                                String level = doc.getString("level");
-                                Map<String, String> eventId = (Map<String, String>) doc.get("eventID");
-                                Map<String, Long> settings = (Map<String, Long>) doc.get("settings");
-                                String description = doc.getString("description");
-                                String type = "quizzes";
-                                Integer questionCount = doc.getLong("questionCount").intValue();
-
-                                QuizzItem quizzItem = new QuizzItem(
-                                        quizzslug, level, eventId, settings, description, type, questionCount
-                                );
-                                quizzItems.add(quizzItem);
-                            }
-                        }
-                        else{
-                            for (QueryDocumentSnapshot doc : querySnapshot) {
-                                Map<String, String> eventId = (Map<String, String>) doc.get("eventID");
-                                if (eventId == null) continue;
-
-                                // Nếu có slug thì chỉ thêm quiz phù hợp
-                                boolean match = true;
-                                if (!periodSlug.equals(eventId.get("periodID"))) match = false;
-                                if (!stageSlug.equals(eventId.get("stageID"))) match = false;
-                                if (!eventSlug.equals(eventId.get("eventid"))) match = false;
-
-                                if (match) {
-                                    String quizzslug = doc.getId();
-                                    String level = doc.getString("level");
-                                    Map<String, Long> settings = (Map<String, Long>) doc.get("settings");
-                                    String description = doc.getString("description");
-                                    String type = "quizzes";
-                                    Integer questionCount = doc.getLong("questionCount").intValue();
-
-                                    QuizzItem quizzItem = new QuizzItem(
-                                            quizzslug, level, eventId, settings, description, type, questionCount
-                                    );
-                                    quizzItems.add(quizzItem);
-                                    Log.d("GameFragment", "Loaded quizz: " + quizzslug);
-                                }
-                            }
-                        }
-
-
-
-
-                        gameAdapter.notifyDataSetChanged();
-                    }
-                })
-                .addOnFailureListener(e -> Log.e("GameFragment", "Error loading quizzes", e));
-    }
-    private void startQuizzDetail(QuizzItem quizzItem) {
-        Intent intent = new Intent(getActivity(), QuizzesDetail.class);
-        intent.putExtra("quizzItem", quizzItem);
-        startActivity(intent);
+        selectedButton.setBackgroundTintList(android.content.res.ColorStateList.valueOf(pressedColor));
     }
 }
