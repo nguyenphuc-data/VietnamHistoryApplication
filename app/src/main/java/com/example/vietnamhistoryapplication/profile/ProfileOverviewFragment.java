@@ -1,4 +1,3 @@
-// src/main/java/com/example/vietnamhistoryapplication/profile/ProfileOverviewFragment.java
 package com.example.vietnamhistoryapplication.profile;
 
 import android.content.Intent;
@@ -27,7 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileOverviewFragment extends Fragment {
 
-    private CircleImageView ivProfilePhoto;  // ĐỔI SANG CircleImageView
+    private CircleImageView ivProfilePhoto;
     private TextView tvUserName, tvEmail;
     private Button btnEdit, btnLogout;
 
@@ -64,7 +63,7 @@ public class ProfileOverviewFragment extends Fragment {
                 startActivity(new Intent(requireActivity(), ForumActivity.class))
         );
 
-        loadUserData(); // LẤY ẢNH + TÊN + EMAIL
+        loadUserData();
     }
 
     private void loadUserData() {
@@ -81,9 +80,8 @@ public class ProfileOverviewFragment extends Fragment {
                     if (document.exists()) {
                         String name = document.getString("name");
                         String email = document.getString("email");
-                        String photoUrl = document.getString("photo"); // ẢNH TỪ users
+                        String photoUrl = document.getString("photo");
 
-                        // ƯU TIÊN: photo từ users → Google → mặc định
                         if (photoUrl != null && !photoUrl.isEmpty()) {
                             loadPhoto(photoUrl);
                         } else {

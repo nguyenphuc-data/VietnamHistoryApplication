@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.vietnamhistoryapplication.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
@@ -19,6 +20,7 @@ public class NewPostActivity extends AppCompatActivity {
 
     private EditText etTitle, etContent;
     private Button btnPost;
+    private FloatingActionButton ivBack;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
@@ -27,16 +29,24 @@ public class NewPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_post_activity);
 
+        initViews();
+        setupFirebase();
+        setupClickListeners();
+    }
+    private void initViews() {
+        ivBack = findViewById(R.id.ivBack);
         etTitle = findViewById(R.id.etTitle);
         etContent = findViewById(R.id.etContent);
         btnPost = findViewById(R.id.btnPost);
-
+    }
+    private void setupFirebase() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
+    }
+    private void setupClickListeners() {
+        ivBack.setOnClickListener(v -> onBackPressed());
         btnPost.setOnClickListener(v -> submitPost());
     }
-
     private void submitPost() {
         String title = etTitle.getText().toString().trim();
         String content = etContent.getText().toString().trim();
@@ -67,15 +77,15 @@ public class NewPostActivity extends AppCompatActivity {
         post.put("likeCount", 0L);
         post.put("likes", new ArrayList<String>());
 
+        // Vô hiệu hóa nút để tránh bấm liên tục
         btnPost.setEnabled(false);
         btnPost.setText("Đang đăng...");
 
-        // DÙNG .add() → AUTO-ID, KHÔNG TRÙNG!
         db.collection("forum").document("posts").collection("all")
                 .add(post)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(this, "Đăng bài thành công!", Toast.LENGTH_SHORT).show();
-                    finish();
+                    finish(); // quay về ForumActivity
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_LONG).show();

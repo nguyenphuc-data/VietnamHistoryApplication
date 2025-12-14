@@ -1,4 +1,3 @@
-// src/main/java/com/example/vietnamhistoryapplication/forum/EditPostActivity.java
 package com.example.vietnamhistoryapplication.forum;
 
 import android.os.Bundle;
@@ -38,7 +37,6 @@ public class EditPostActivity extends AppCompatActivity {
 
     private void loadPost() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // SỬA: ĐƯỜNG DẪN MỚI
         db.collection("forum").document("posts").collection("all").document(postId).get()
                 .addOnSuccessListener(doc -> {
                     if (doc.exists()) {
@@ -61,7 +59,6 @@ public class EditPostActivity extends AppCompatActivity {
         updates.put("content", content);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // SỬA: ĐƯỜNG DẪN MỚI
         db.collection("forum").document("posts").collection("all").document(postId).update(updates)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Đã cập nhật", Toast.LENGTH_SHORT).show();
