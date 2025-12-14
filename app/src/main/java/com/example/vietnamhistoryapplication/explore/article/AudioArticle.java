@@ -1,4 +1,3 @@
-// com.example.vietnamhistoryapplication/explore/audio/AudioArticle.java
 package com.example.vietnamhistoryapplication.explore.article;
 
 public class AudioArticle {

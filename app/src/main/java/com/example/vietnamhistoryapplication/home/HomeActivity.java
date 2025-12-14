@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.vietnamhistoryapplication.R;
+import com.example.vietnamhistoryapplication.home.ExploreFragment.ExploreFragment;
 import com.example.vietnamhistoryapplication.home.PersonFragment.PersonPeriodFragment;
 import com.example.vietnamhistoryapplication.models.UserModel;
 import com.example.vietnamhistoryapplication.profile.ProfileOverviewFragment;
@@ -33,7 +34,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.home_activity);
-
         autoBrightnessManager = new AutoBrightnessManager(this);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
