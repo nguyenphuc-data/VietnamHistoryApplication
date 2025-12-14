@@ -65,9 +65,11 @@ dependencies {
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
 
 //    google, facebook
-    implementation("com.facebook.android:facebook-login:latest.release")
+    implementation("com.facebook.android:facebook-android-sdk:17.0.0")
     implementation("com.google.firebase:firebase-auth:22.3.0")
     implementation("com.google.android.gms:play-services-auth:21.1.0")
+
+    implementation("de.hdodenhof:circleimageview:3.1.0")  // Avatar tròn
 
 
 }
