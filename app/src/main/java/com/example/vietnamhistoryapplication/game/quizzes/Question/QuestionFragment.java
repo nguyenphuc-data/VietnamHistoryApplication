@@ -72,8 +72,6 @@ public class QuestionFragment extends Fragment {
         btn_option_c.setText(question.getOptions().get(2));
         btn_option_d.setText(question.getOptions().get(3));
 
-//        Bắt đầu đếm ngược
-        startTimer(view);
 
         // Xử lí quizzGroup
         quizGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
@@ -99,15 +97,7 @@ public class QuestionFragment extends Fragment {
                     selectedButton = btn_option_d;
                 }
 
-//                // Layout kết quả
-//                LinearLayout layoutResult = view.findViewById(R.id.layout_result);
-//                TextView tvResult = view.findViewById(R.id.tv_result);
-//                TextView tvCorrectAnswer = view.findViewById(R.id.tv_correct_answer);
-//                TextView tvExplanation = view.findViewById(R.id.tv_explanation);
-//
-//                layoutResult.setVisibility(View.VISIBLE);
-//                layoutResult.setAlpha(0f);
-//                layoutResult.animate().alpha(1f).setDuration(400).start();
+
 
                 // Disable các nút sau khi chọn
                 btn_option_a.setEnabled(false);
@@ -159,10 +149,7 @@ public class QuestionFragment extends Fragment {
     }
     private void showAnswerResult(View view, int selectedIndex, MaterialButton selectedButton, MaterialButton correctButton, int correctIndex) {
         LinearLayout layoutResult = view.findViewById(R.id.layout_result);
-        TextView tvResult = view.findViewById(R.id.tv_result);
-        TextView tvCorrectAnswer = view.findViewById(R.id.tv_correct_answer);
-        TextView tvExplanation = view.findViewById(R.id.tv_explanation);
-        Button btnNext = view.findViewById(R.id.btn_next);
+
 
 
         layoutResult.setVisibility(View.VISIBLE);
@@ -207,10 +194,6 @@ public class QuestionFragment extends Fragment {
     }
     private void showTimeoutResult(View view) {
         LinearLayout layoutResult = view.findViewById(R.id.layout_result);
-        TextView tvResult = view.findViewById(R.id.tv_result);
-        TextView tvCorrectAnswer = view.findViewById(R.id.tv_correct_answer);
-        TextView tvExplanation = view.findViewById(R.id.tv_explanation);
-        Button btnNext = view.findViewById(R.id.btn_next);
 
         MaterialButton btnA = view.findViewById(R.id.btn_option_a);
         MaterialButton btnB = view.findViewById(R.id.btn_option_b);

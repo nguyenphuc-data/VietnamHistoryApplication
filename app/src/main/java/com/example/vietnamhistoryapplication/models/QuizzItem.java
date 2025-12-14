@@ -11,7 +11,7 @@ public class QuizzItem implements Serializable {
     private Map<String, Long> settings; // {maxPlayers: 1, timeLimit: 60, ...}
     private String description;
     private int questionCount;
-    private List<com.example.vietnamhistoryapplication.models.QuestionItem> questions;
+    private List<QuestionItem> questions;
 
     public QuizzItem() {}
 

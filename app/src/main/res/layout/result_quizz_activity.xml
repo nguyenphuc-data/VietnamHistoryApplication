@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="#FEF7FF">
 
-    <!-- Nút Back và Tiêu đề (giữ nguyên ở trên cùng) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"

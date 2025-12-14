@@ -32,7 +32,6 @@ public class ResultQuizz extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.result_quizz_activity);
 
-        // --- Nhận dữ liệu từ Intent ---
         title = getIntent().getStringExtra("title");
         score = getIntent().getIntExtra("score", 0);
         totalTime = getIntent().getIntExtra("totalTime", 0);
@@ -40,14 +39,13 @@ public class ResultQuizz extends AppCompatActivity {
         questions = (ArrayList<QuestionItem>) getIntent().getSerializableExtra("questions");
         answerResults = (ArrayList<Integer>) getIntent().getSerializableExtra("answerResults");
 
-        // --- Ánh xạ view ---
         tvQuizTitle = findViewById(R.id.tvQuizTitle);
         tvScore = findViewById(R.id.tvScore);
         tvscoreQuest = findViewById(R.id.tvscoreQuest);
         tvTotalTime = findViewById(R.id.tvTotalTime);
         FloatingActionButton btnBack = findViewById(R.id.btnBack);
 
-        // --- Hiển thị dữ liệu ---
+
         tvQuizTitle.setText(title != null ? title : "Kết quả Quiz");
         tvScore.setText(score*10 + " điểm");
         tvscoreQuest.setText("Số câu đúng: " + score + "/" + questionCount);

@@ -52,7 +52,6 @@ public class QuizzPlay extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                // Không cần xử lý, vì ta không bao giờ để nó "finish"
             }
         }.start();
         gameId = getIntent().getStringExtra("gameId");

@@ -26,7 +26,6 @@ public class QuizzFragment extends  Fragment{
     public List<QuizzItem> quizzItems = new ArrayList<>();
     QuizzAdapter quizzAdapter;
     public  QuizzFragment(){
-        // Required empty public constructor
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +48,7 @@ public class QuizzFragment extends  Fragment{
     private void loadGameFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Lấy argument truyền vào (có thể null)
+        // Lấy argument(có thể null)
         Bundle args = getArguments();
         String periodSlug = args != null ? args.getString("periodSlug") : null;
         String stageSlug = args != null ? args.getString("stageSlug") : null;
@@ -107,8 +106,6 @@ public class QuizzFragment extends  Fragment{
                                 }
                             }
                         }
-
-
 
 
                         quizzAdapter.notifyDataSetChanged();

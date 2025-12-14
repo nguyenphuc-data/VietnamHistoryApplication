@@ -34,8 +34,7 @@ public class QuizzAdapter extends RecyclerView.Adapter<QuizzAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull QuizzAdapter.ViewHolder holder, int position) {
         QuizzItem quizz = quizzList.get(position);
-        // Add binding here
-        holder.tvTitle.setText(quizz.getTitle());  // Adjust getters as needed
+        holder.tvTitle.setText(quizz.getTitle());
         holder.tvType.setText(quizz.getType());
         holder.tvLevel.setText(quizz.getLevel());
 

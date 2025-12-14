@@ -26,13 +26,6 @@
             android:gravity="center"
             android:clipToOutline="true"
             android:backgroundTint="#FFFFFF"
-            android:translationZ="4dp"
-            android:layout_gravity="center"
-            android:layoutDirection="ltr"
-            android:clipChildren="true"
-            android:clipToPadding="false"
-            android:backgroundTintMode="src_in"
-            android:outlineProvider="background"
             android:paddingVertical="28dp"
             android:paddingHorizontal="20dp">
 
