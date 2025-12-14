@@ -2,7 +2,6 @@ package com.example.vietnamhistoryapplication.forum;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.vietnamhistoryapplication.R;
@@ -21,25 +19,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 import de.hdodenhof.circleimageview.CircleImageView;
-import android.text.format.DateUtils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ViewHolder> {
-
     private List<ForumPost> posts = new ArrayList<>();
-    private final OnPostClickListener listener;
+    private Context context;
 
-    public interface OnPostClickListener {
-        void onPostClick(ForumPost post);
+    public ForumAdapter(Context context) {
+        this.context = context;
     }
-
-    public ForumAdapter(OnPostClickListener listener) {
-        this.listener = listener;
-    }
-
     public void updateList(List<ForumPost> newList) {
         posts = new ArrayList<>(newList);
         notifyDataSetChanged();
@@ -55,6 +46,7 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // Lấy bài đăng + UID người dùng hiện tại.
         ForumPost post = posts.get(position);
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String currentUid = currentUser != null ? currentUser.getUid() : "";
@@ -92,7 +84,7 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ViewHolder> 
             }
             toggleLike(post, holder, v.getContext());
         });
-
+        // hiện menu (3 chấm) nếu là người đăng bài
         if (currentUid.equals(post.authorId)) {
             holder.ivMenu.setVisibility(View.VISIBLE);
             holder.ivMenu.setOnClickListener(v -> showPostMenu(v, post));
@@ -100,7 +92,11 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ViewHolder> 
             holder.ivMenu.setVisibility(View.GONE);
         }
 
-        holder.itemView.setOnClickListener(v -> listener.onPostClick(post));
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ForumDetailActivity.class);
+            intent.putExtra("postId", post.postId);
+            context.startActivity(intent);
+        });
     }
 
     private void toggleLike(ForumPost post, ViewHolder holder, Context context) {
@@ -168,21 +164,18 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ViewHolder> 
                     }
                     batch.commit().addOnCompleteListener(task -> {
                         db.collection("forum").document("posts").collection("all").document(postId).delete()
-                                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Đã xóa sạch!", Toast.LENGTH_SHORT).show());
+                                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Đã xóa!", Toast.LENGTH_SHORT).show());
                     });
                 });
     }
 
     private String formatTime(Timestamp timestamp) {
-        if (timestamp == null) return "Vừa xong";
-        long time = timestamp.toDate().getTime();
-        if (DateUtils.isToday(time)) {
-            return new SimpleDateFormat("HH:mm", Locale.getDefault()).format(timestamp.toDate());
-        } else if (DateUtils.isToday(time - 86400000)) {
-            return "Hôm qua";
-        } else {
-            return new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(timestamp.toDate());
+        if (timestamp == null) {
+            return "Vừa xong";
         }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM", Locale.getDefault());
+        return sdf.format(timestamp.toDate());
     }
 
     @Override

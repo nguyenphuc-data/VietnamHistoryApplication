@@ -41,7 +41,6 @@ public class ProfileFragment extends Fragment {
     private MaterialButton btnLogin, btnGoogle;
     private TextView tvRegister;
 
-    // 🔹 Giữ dữ liệu user hiện tại (dạng Singleton)
     public static UserModel currentUserModel;
 
     @Override
@@ -57,7 +56,6 @@ public class ProfileFragment extends Fragment {
         btnGoogle = view.findViewById(R.id.btnGoogle);
         tvRegister = view.findViewById(R.id.tvRegister);
 
-        // ---------------- GOOGLE LOGIN ----------------
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -79,7 +77,6 @@ public class ProfileFragment extends Fragment {
                 }
         );
 
-        // ---------------- LOGIN BUTTON ----------------
         btnLogin.setOnClickListener(v -> {
             String username = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
@@ -91,13 +88,11 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        // ---------------- GOOGLE LOGIN BUTTON ----------------
         btnGoogle.setOnClickListener(v -> {
             Intent signInIntent = googleSignInClient.getSignInIntent();
             googleSignInLauncher.launch(signInIntent);
         });
 
-        // ---------------- REGISTER ----------------
         tvRegister.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
@@ -109,7 +104,6 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    // ---------------- LOGIN WITH USERNAME ----------------
     private void loginWithUsername(String username, String password) {
         db.collection("users")
                 .whereEqualTo("username", username)
@@ -127,7 +121,6 @@ public class ProfileFragment extends Fragment {
                     if (storedPassword != null && storedPassword.equals(password)) {
                         Toast.makeText(requireContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 
-                        // Lấy các trường an toàn từ DocumentSnapshot
                         String uid = document.getString("uid");
                         String name = document.getString("name");
                         String usern = document.getString("username");
@@ -137,7 +130,6 @@ public class ProfileFragment extends Fragment {
                         Long createdAtLong = document.getLong("createdAt");
                         long createdAt = createdAtLong != null ? createdAtLong : System.currentTimeMillis();
 
-                        // Lưu vào model (theo constructor của UserModel)
                         UserModel user = new UserModel(
                                 uid,
                                 name,
@@ -159,7 +151,6 @@ public class ProfileFragment extends Fragment {
                 );
     }
 
-    // ---------------- GOOGLE LOGIN ----------------
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -195,7 +186,6 @@ public class ProfileFragment extends Fragment {
                                 .addOnSuccessListener(aVoid -> {
                                     Toast.makeText(requireContext(), "Tạo tài khoản mới thành công", Toast.LENGTH_SHORT).show();
 
-                                    // Lưu vào model (điền đủ các trường)
                                     UserModel user = new UserModel(
                                             firebaseUser.getUid(),
                                             firebaseUser.getDisplayName(),
@@ -213,7 +203,6 @@ public class ProfileFragment extends Fragment {
                                         Toast.makeText(requireContext(), "Lỗi tạo tài khoản mới: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                                 );
                     } else {
-                        // Nếu đã có user trong Firestore -> đọc dữ liệu và lưu vào model
                         String uid = documentSnapshot.getString("uid");
                         String name = documentSnapshot.getString("name");
                         String username = documentSnapshot.getString("username");
@@ -241,13 +230,11 @@ public class ProfileFragment extends Fragment {
                 );
     }
 
-    // ---------------- SAVE TO MODEL ----------------
     private void saveUserToModel(UserModel user) {
         currentUserModel = user;
-        UserSession.setCurrentUser(user); // ✅ Lưu vào session dùng chung
+        UserSession.setCurrentUser(user);
     }
 
-    // ---------------- MOVE TO PROFILE OVERVIEW ----------------
     private void moveToProfileOverview() {
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, new ProfileOverviewFragment());

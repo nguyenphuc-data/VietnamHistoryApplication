@@ -11,6 +11,8 @@ import com.example.vietnamhistoryapplication.home.PersonFragment.PersonPeriodFra
 import com.example.vietnamhistoryapplication.models.UserModel;
 import com.example.vietnamhistoryapplication.profile.ProfileOverviewFragment;
 import com.example.vietnamhistoryapplication.utils.UserSession;
+import com.example.vietnamhistoryapplication.utils.AutoBrightnessManager;  // ← ĐÃ THÊM
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -24,25 +26,16 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private AutoBrightnessManager autoBrightnessManager;   // ← ĐÃ THÊM
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.home_activity);
-//        //        ------------------------------
-//        FirebaseAuth.getInstance().signOut(); // đăng xuất Firebase
-//
-////       xóa token Google Sign IN
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.default_web_client_id))
-//                .requestEmail()
-//                .build();
-//
-//        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
-//
-//        googleSignInClient.signOut();
-//
-////------------------------------------
+
+        autoBrightnessManager = new AutoBrightnessManager(this);
+
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(item ->{
             Fragment selectedFragment = null;
@@ -58,10 +51,8 @@ public class HomeActivity extends AppCompatActivity {
             }else if(itemId ==R.id.nav_profile){
                 UserModel user = UserSession.getCurrentUser();
                 if (user != null) {
-                    // Người dùng đã đăng nhập
                     selectedFragment = new ProfileOverviewFragment();
                 } else {
-                    // Chưa đăng nhập
                     selectedFragment = new ProfileFragment();
                 }
             }
@@ -77,5 +68,17 @@ public class HomeActivity extends AppCompatActivity {
                     .commit();
             bottomNav.setSelectedItemId(R.id.nav_period);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        autoBrightnessManager.start();   // Bật tự động sáng/tối
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        autoBrightnessManager.stop();    // Tắt để tiết kiệm pin
     }
 }

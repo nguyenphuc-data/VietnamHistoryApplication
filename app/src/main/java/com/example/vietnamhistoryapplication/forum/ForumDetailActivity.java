@@ -1,8 +1,6 @@
-// src/main/java/com/example/vietnamhistoryapplication/forum/ForumDetailActivity.java
 package com.example.vietnamhistoryapplication.forum;
 
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -74,7 +72,6 @@ public class ForumDetailActivity extends AppCompatActivity {
 
     private void loadPostDetail() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // SỬA: ĐƯỜNG DẪN MỚI
         db.collection("forum").document("posts").collection("all").document(postId).get()
                 .addOnSuccessListener(doc -> {
                     if (doc.exists()) {
@@ -101,7 +98,6 @@ public class ForumDetailActivity extends AppCompatActivity {
 
     private void loadReplies() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // SỬA: ĐƯỜNG DẪN MỚI
         db.collection("forum").document("posts").collection("all").document(postId)
                 .collection("replies")
                 .orderBy("createdAt", Query.Direction.ASCENDING)
@@ -158,14 +154,13 @@ public class ForumDetailActivity extends AppCompatActivity {
 
                     btnSend.setEnabled(false);
 
-                    // SỬA: ĐƯỜNG DẪN MỚI
                     db.collection("forum").document("posts").collection("all").document(postId)
                             .collection("replies")
                             .add(map)
                             .addOnSuccessListener(d -> {
                                 etReply.setText("");
                                 btnSend.setEnabled(true);
-                                // CẬP NHẬT replyCount
+
                                 db.collection("forum").document("posts").collection("all").document(postId)
                                         .update("replyCount", FieldValue.increment(1));
                             })
@@ -177,14 +172,11 @@ public class ForumDetailActivity extends AppCompatActivity {
     }
 
     private String formatTime(Timestamp timestamp) {
-        if (timestamp == null) return "Vừa xong";
-        long time = timestamp.toDate().getTime();
-        if (DateUtils.isToday(time)) {
-            return new SimpleDateFormat("HH:mm", Locale.getDefault()).format(timestamp.toDate());
-        } else if (DateUtils.isToday(time - 86400000)) {
-            return "Hôm qua";
-        } else {
-            return new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(timestamp.toDate());
+        if (timestamp == null) {
+            return "Vừa xong";
         }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM", Locale.getDefault());
+        return sdf.format(timestamp.toDate());
     }
 }

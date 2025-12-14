@@ -4,52 +4,78 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.vietnamhistoryapplication.R;
+import com.google.firebase.Timestamp;
 import de.hdodenhof.circleimageview.CircleImageView;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.VH> {
-    private final List<Reply> list;
+public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> {
 
-    public ReplyAdapter(List<Reply> l) { list = l; }
+    private final List<Reply> replyList;
 
-    @NonNull @Override
-    public VH onCreateViewHolder(ViewGroup p, int t) {
-        return new VH(LayoutInflater.from(p.getContext()).inflate(R.layout.reply_item, p, false));
+    public ReplyAdapter(List<Reply> replyList) {
+        this.replyList = replyList;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.reply_item, parent, false);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(VH h, int p) {
-        Reply r = list.get(p);
-        h.tvAuthor.setText(r.authorName);
-        h.tvContent.setText(r.content);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Reply reply = replyList.get(position);
 
-        if (r.createdAt != null) {
-            h.tvTime.setText(new SimpleDateFormat("HH:mm dd/MM", Locale.getDefault()).format(r.createdAt.toDate()));
-        }
+        holder.tvAuthor.setText(reply.authorName);
+        holder.tvContent.setText(reply.content);
+        holder.tvTime.setText(formatTime(reply.createdAt));
 
-        if (r.authorPhoto != null && !r.authorPhoto.isEmpty()) {
-            Glide.with(h.itemView.getContext())
-                    .load(r.authorPhoto)
+        if (reply.authorPhoto != null && !reply.authorPhoto.isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(reply.authorPhoto)
                     .placeholder(R.drawable.avatar)
-                    .into(h.ivAvatar);
+                    .into(holder.ivAvatar);
         } else {
-            h.ivAvatar.setImageResource(R.drawable.avatar);
+            holder.ivAvatar.setImageResource(R.drawable.avatar);
         }
     }
 
-    @Override public int getItemCount() { return list.size(); }
+    private String formatTime(Timestamp timestamp) {
+        if (timestamp == null) {
+            return "";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM", Locale.getDefault());
+        return sdf.format(timestamp.toDate());
+    }
 
-    static class VH extends RecyclerView.ViewHolder {
-        CircleImageView ivAvatar = itemView.findViewById(R.id.ivAvatar);
-        TextView tvAuthor = itemView.findViewById(R.id.tvAuthor);
-        TextView tvContent = itemView.findViewById(R.id.tvContent);
-        TextView tvTime = itemView.findViewById(R.id.tvTime);
-        VH(View v) { super(v); }
+    @Override
+    public int getItemCount() {
+        return replyList.size();
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        CircleImageView ivAvatar;
+        TextView tvAuthor;
+        TextView tvContent;
+        TextView tvTime;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            ivAvatar = itemView.findViewById(R.id.ivAvatar);
+            tvAuthor = itemView.findViewById(R.id.tvAuthor);
+            tvContent = itemView.findViewById(R.id.tvContent);
+            tvTime = itemView.findViewById(R.id.tvTime);
+        }
     }
 }

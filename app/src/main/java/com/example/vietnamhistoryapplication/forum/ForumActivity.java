@@ -30,7 +30,6 @@ public class ForumActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // ĐÚNG TÊN FILE
         setContentView(R.layout.forum_activity);
 
         initViews();
@@ -39,15 +38,13 @@ public class ForumActivity extends AppCompatActivity {
         loadPosts();
     }
 
+    private void setupFirebase() {
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+    }
     private void initViews() {
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
 
-        // ID trong XML là tvTitleBar → KHÔNG PHẢI tvTitle
-        TextView tvTitleBar = findViewById(R.id.tvTitleBar);
-        tvTitleBar.setText("Diễn đàn Lịch sử");
-        tvTitleBar.setTextColor(0xFFE8582B);
-
-        // FAB là ExtendedFloatingActionButton → ID: fabPost
         fabPost = findViewById(R.id.fabPost);
         fabPost.setOnClickListener(v -> {
             FirebaseUser user = mAuth.getCurrentUser();
@@ -61,19 +58,10 @@ public class ForumActivity extends AppCompatActivity {
         tvNoPosts = findViewById(R.id.tvNoPosts);
     }
 
-    private void setupFirebase() {
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-    }
-
     private void setupRecyclerView() {
         rvForum = findViewById(R.id.rvForum);
         rvForum.setLayoutManager(new LinearLayoutManager(this));
-        forumAdapter = new ForumAdapter(post -> {
-            Intent intent = new Intent(this, ForumDetailActivity.class);
-            intent.putExtra("postId", post.postId);
-            startActivity(intent);
-        });
+        forumAdapter = new ForumAdapter(this);
         rvForum.setAdapter(forumAdapter);
     }
 
@@ -88,7 +76,7 @@ public class ForumActivity extends AppCompatActivity {
 
                     postList.clear();
                     for (DocumentSnapshot doc : snapshots.getDocuments()) {
-                        ForumPost post = doc.toObject(ForumPost.class);
+                        ForumPost post = doc.toObject(ForumPost.class); // ánh xạ dữ liệu Firestore -> đối tượng Java
                         if (post != null) {
                             post.postId = doc.getId();
                             postList.add(post);
