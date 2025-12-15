@@ -44,7 +44,6 @@ public class EraListAdapter extends RecyclerView.Adapter<EraListAdapter.ViewHold
         holder.tvEraName.setText(era.getName());
         holder.tvShortDesc.setText(era.getShortDesc());
 
-        // Load ảnh bằng Glide
         ImageLoader.loadImage(holder.imgThumbnail, era.getThumbnailUrl());
 
         holder.btnPlay.setOnClickListener(v -> {

@@ -1,39 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FEF7FF">
 
-    <!-- Nút Back và Tiêu đề (giữ nguyên ở trên cùng) -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_back_period"
-        app:backgroundTint="#EDE0F9"
-        app:tint="#3a3a3a"
-        app:fabCustomSize="40dp"
-        android:layout_gravity="top|start" />
+        android:orientation="horizontal"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:gravity="center_vertical"
+        android:layout_gravity="top">
 
-    <TextView
-        android:id="@+id/tvQuizTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Kết quả Quiz"
-        android:textColor="#E8582B"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_gravity="top"
-        android:layout_marginStart="72dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_back_period"
+            app:backgroundTint="#EDE0F9"
+            app:tint="#3a3a3a"
+            app:fabCustomSize="40dp"
+            app:borderWidth="0dp"
+            android:elevation="0dp"
+            app:elevation="0dp"
+            android:layout_gravity="center_vertical" />
 
-    <!-- ScrollView để cuộn toàn bộ nội dung -->
+        <TextView
+            android:id="@+id/tvQuizTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Kết quả Quiz"
+            android:textColor="#E8582B"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="72dp"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -45,7 +55,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Khung kết quả chính -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardResultBox"
                 android:layout_width="match_parent"
@@ -119,7 +128,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Khung chi tiết đáp án -->
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardAnswers"
                 android:layout_width="match_parent"
@@ -150,7 +159,7 @@
                         android:id="@+id/rv_answers"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                       />
+                        />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -158,4 +167,6 @@
         </LinearLayout>
     </ScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+</FrameLayout>

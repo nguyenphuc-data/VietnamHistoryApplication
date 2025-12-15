@@ -47,14 +47,13 @@ public class AnswerDetailAdapter extends RecyclerView.Adapter<AnswerDetailAdapte
         holder.tvOptionC.setText("C. " + options.get(2));
         holder.tvOptionD.setText("D. " + options.get(3));
 
-        // Reset màu
         int defaultColor = Color.parseColor("#000000");
         holder.tvOptionA.setTextColor(defaultColor);
         holder.tvOptionB.setTextColor(defaultColor);
         holder.tvOptionC.setTextColor(defaultColor);
         holder.tvOptionD.setTextColor(defaultColor);
 
-        // Đáp án đúng luôn xanh
+        // Đáp án đúng
         int green = Color.parseColor("#4CAF50");
         switch (correctIndex) {
             case 0: holder.tvOptionA.setTextColor(green); break;
@@ -63,7 +62,7 @@ public class AnswerDetailAdapter extends RecyclerView.Adapter<AnswerDetailAdapte
             case 3: holder.tvOptionD.setTextColor(green); break;
         }
 
-        // Nếu người chơi chọn sai → tô đỏ đáp án họ chọn
+        // Đáp án sai
         int red = Color.parseColor("#F44336");
         if (userChoice != -1 && userChoice != correctIndex) {
             switch (userChoice) {
@@ -72,12 +71,6 @@ public class AnswerDetailAdapter extends RecyclerView.Adapter<AnswerDetailAdapte
                 case 2: holder.tvOptionC.setTextColor(red); break;
                 case 3: holder.tvOptionD.setTextColor(red); break;
             }
-        }
-
-        // Nếu chưa chọn (-1) → ghi chú
-        if (userChoice == -1) {
-            holder.tvQuestion.append(" (Chưa chọn)");
-            holder.tvQuestion.setTextColor(Color.parseColor("#9E9E9E"));
         }
     }
 

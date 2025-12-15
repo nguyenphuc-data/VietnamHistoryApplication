@@ -7,12 +7,10 @@ public class Event implements Serializable {
     private int year;
     private String desc = "";
     private String zone = "";
-    private int order; // Trường mới: Thứ tự sự kiện trong dòng thời gian
+    private int order;
 
-    // Constructor rỗng cho Firestore
     public Event() {}
 
-    // Constructor đầy đủ
     public Event(String name, int year, String desc, String zone, int order) {
         this.name = name;
         this.year = year;
@@ -27,10 +25,8 @@ public class Event implements Serializable {
     public String getDesc() { return desc; }
     public String getZone() { return zone; }
 
-    // Getter cho trường mới 'order' (MANDATORY cho Firestore)
     public int getOrder() { return order; }
 
-    // Setters (Nếu cần để hoạt động với Firestore)
     public void setName(String name) { this.name = name; }
     public void setYear(int year) { this.year = year; }
     public void setDesc(String desc) { this.desc = desc; }

@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:padding="24dp">
 
-            <!-- Tiêu đề -->
             <TextView
                 android:id="@+id/tvLoginTitle"
                 android:layout_width="wrap_content"
@@ -122,7 +121,6 @@
                 app:layout_constraintStart_toEndOf="@id/tvRegisterPrompt"
                 />
 
-            <!-- Hoặc đăng nhập bằng -->
             <TextView
                 android:id="@+id/tvOr"
                 android:layout_width="wrap_content"

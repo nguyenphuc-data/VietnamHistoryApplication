@@ -43,7 +43,6 @@ public class QuizzesDetail extends AppCompatActivity {
 
         });
         btnPlay.setOnClickListener(v->{
-            // Chuyển đến màn hình chơi quiz
             Intent intent = new Intent(this, QuizzPlay.class);
             intent.putExtra("gameId","quiz-lich-su-viet-nam");
             intent.putExtra("quizzItem",quizzItem.getQuizzslug());

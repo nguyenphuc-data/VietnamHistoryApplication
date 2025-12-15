@@ -42,8 +42,6 @@ public class StageDetailActivity extends AppCompatActivity {
          String stageSlug = getIntent().getStringExtra("stageSlug");
 
 
-
-
          stageDetailLiveData.observe(this,items->{
              TextView tvDetail = findViewById(R.id.tvDetail);
              TextView tvStageRange = findViewById(R.id.tvstageRange);
@@ -52,12 +50,12 @@ public class StageDetailActivity extends AppCompatActivity {
 
              StringBuilder sb = new StringBuilder();
              for (String item : items.details) {
-                 sb.append("• ").append(item).append("\n"); // thêm bullet point
+                 sb.append("• ").append(item).append("\n");
              }
              tvDetail.setText(sb.toString());
              ImageLoader.loadImage(ivImage,items.image);
              tvStageRange.setText(items.stageRange);
-
+             idTitle.setText(items.title);
              ViewPager2 viewPagerOverview = findViewById(R.id.viewPagerOverview);
              stageOverviewAdapter = new StageOverviewAdapter(items);
              viewPagerOverview.setAdapter(stageOverviewAdapter);
@@ -65,7 +63,6 @@ public class StageDetailActivity extends AppCompatActivity {
              recyclerView = findViewById(R.id.recyclerViewEvents);
              recyclerView.setLayoutManager(new LinearLayoutManager(this));
              eventAdapter = new EventAdapter(events, periodSlug, stageSlug);
-             idTitle.setText(items.title);
              recyclerView.setAdapter(eventAdapter);
          });
 

@@ -73,8 +73,7 @@
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
                 app:cardPreventCornerOverlap="true"
-                app:cardUseCompatPadding="true"
-                android:clipToOutline="true">
+                app:cardUseCompatPadding="true">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -115,6 +114,7 @@
                     </LinearLayout>
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
+
         </LinearLayout>
 
         <!-- Chi tiết -->

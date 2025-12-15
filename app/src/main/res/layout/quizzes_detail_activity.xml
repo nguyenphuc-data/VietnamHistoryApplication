@@ -39,7 +39,6 @@
                 android:textSize="22sp" />
         </RelativeLayout>
 
-        <!-- Ảnh minh họa -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="240dp"
@@ -47,12 +46,8 @@
             android:layout_marginTop="10dp"
             app:cardElevation="4dp"
             app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true"
-            android:clipToOutline="true">
+            app:cardUseCompatPadding="true">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/ivImage"
@@ -61,10 +56,8 @@
                 android:scaleType="centerCrop"
                 android:background="@drawable/quizz_placeholder"/>
 
-        </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Tiêu đề quiz -->
         <TextView
             android:id="@+id/tvQuizName"
             android:layout_width="wrap_content"
@@ -74,21 +67,16 @@
             android:textColor="#1E1E1E"
             android:layout_marginTop="20dp" />
 
-        <!-- Các thông tin nhỏ -->
-
-
-        <!-- Mô tả -->
         <TextView
             android:id="@+id/tvQuizdes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=" Quizzz"
+            android:text="Quizz"
             android:textColor="#3A3A3A"
             android:textSize="20sp"
             android:layout_marginTop="16dp" />
 
     </LinearLayout>
-        <!-- Hai nút hành động -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

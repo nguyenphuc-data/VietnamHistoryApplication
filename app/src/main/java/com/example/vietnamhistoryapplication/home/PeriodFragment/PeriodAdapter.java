@@ -42,7 +42,6 @@ public class PeriodAdapter extends androidx.recyclerview.widget.RecyclerView.Ada
         holder.tvPeriod.setText(period.periodRange != null ? period.periodRange : "No Period");
         holder.tvSummary.setText(period.summary != null ? period.summary : "No Description");
 
-        //load ảnh
         ImageLoader.loadImage(holder.ivImage, period.image);
 
 

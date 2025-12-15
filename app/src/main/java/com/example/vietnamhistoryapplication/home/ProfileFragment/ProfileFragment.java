@@ -171,11 +171,10 @@ public class ProfileFragment extends Fragment {
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (!documentSnapshot.exists()) {
-                        // Tạo dữ liệu mới trong Firestore
                         Map<String, Object> userData = new HashMap<>();
                         userData.put("uid", firebaseUser.getUid());
                         userData.put("name", firebaseUser.getDisplayName());
-                        userData.put("username", null); // chưa có username
+                        userData.put("username", null);
                         userData.put("email", firebaseUser.getEmail());
                         userData.put("photo", firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : null);
                         userData.put("bio", "");
@@ -236,7 +235,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void moveToProfileOverview() {
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, new ProfileOverviewFragment());
         transaction.addToBackStack(null);
         transaction.commit();
