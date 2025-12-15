@@ -29,7 +29,6 @@ public class GameFragment extends Fragment {
         btnQuizz = view.findViewById(R.id.btn_quizz);
         btnTimeline = view.findViewById(R.id.btn_timeline);
 
-        // Mặc định mở QuizzFragment
         replaceFragment(new QuizzFragment());
         highlightButton(btnQuizz);
 

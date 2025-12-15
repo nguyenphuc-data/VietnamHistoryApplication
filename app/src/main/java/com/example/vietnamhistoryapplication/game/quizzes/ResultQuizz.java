@@ -56,7 +56,7 @@ public class ResultQuizz extends AppCompatActivity {
             finish();
         });
 
-        // Hiển thị chi tiết đáp án
+
         RecyclerView rvAnswers = findViewById(R.id.rv_answers);
         rvAnswers.setLayoutManager(new LinearLayoutManager(this));
         AnswerDetailAdapter adapter = new AnswerDetailAdapter(questions, answerResults);

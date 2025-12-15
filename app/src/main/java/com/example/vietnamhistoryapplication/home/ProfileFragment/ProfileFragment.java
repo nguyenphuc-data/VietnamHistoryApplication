@@ -171,7 +171,6 @@ public class ProfileFragment extends Fragment {
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (!documentSnapshot.exists()) {
-                        // Tạo dữ liệu mới trong Firestore
                         Map<String, Object> userData = new HashMap<>();
                         userData.put("uid", firebaseUser.getUid());
                         userData.put("name", firebaseUser.getDisplayName());

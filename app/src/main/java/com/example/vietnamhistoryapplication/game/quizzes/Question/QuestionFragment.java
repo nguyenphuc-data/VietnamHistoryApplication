@@ -48,7 +48,7 @@ public class QuestionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
          view = inflater.inflate(R.layout.fragment_question, container, false);
 
-        // Khởi tạo các thành phần
+
         TextView tvQuestion = view.findViewById(R.id.tv_question);
         tvResult = view.findViewById(R.id.tv_result);
         tvCorrectAnswer = view.findViewById(R.id.tv_correct_answer);
@@ -64,7 +64,7 @@ public class QuestionFragment extends Fragment {
 
 
 
-//        Gán câu hỏi và câu trả lời
+
         tvQuestionOrder.setText("Câu "+(position+1));
         tvQuestion.setText(question.getQuestion());
         btn_option_a.setText(question.getOptions().get(0));
@@ -73,16 +73,16 @@ public class QuestionFragment extends Fragment {
         btn_option_d.setText(question.getOptions().get(3));
 
 
-        // Xử lí quizzGroup
+
         quizGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked ) {
 
-                countDownTimer.cancel(); // Dừng đếm ngược
+                countDownTimer.cancel();
 
                 int selectedIndex = -1;
                 MaterialButton selectedButton = null;
 
-                // Xác định nút được chọn
+
                 if (checkedId == R.id.btn_option_a) {
                     selectedIndex = 0;
                     selectedButton = btn_option_a;
@@ -98,14 +98,12 @@ public class QuestionFragment extends Fragment {
                 }
 
 
-
-                // Disable các nút sau khi chọn
                 btn_option_a.setEnabled(false);
                 btn_option_b.setEnabled(false);
                 btn_option_c.setEnabled(false);
                 btn_option_d.setEnabled(false);
 
-                // Xác định đáp án đúng
+
                 int correctIndex = question.getCorrectAnswer();
                 MaterialButton correctButton = null;
 
@@ -130,7 +128,6 @@ public class QuestionFragment extends Fragment {
         });
 
 
-        // Xử lý Submit
         btnNext.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onNextClicked(position);
@@ -149,7 +146,6 @@ public class QuestionFragment extends Fragment {
     }
     private void showAnswerResult(View view, int selectedIndex, MaterialButton selectedButton, MaterialButton correctButton, int correctIndex) {
         LinearLayout layoutResult = view.findViewById(R.id.layout_result);
-
 
 
         layoutResult.setVisibility(View.VISIBLE);

@@ -12,7 +12,7 @@ import com.example.vietnamhistoryapplication.home.PersonFragment.PersonPeriodFra
 import com.example.vietnamhistoryapplication.models.UserModel;
 import com.example.vietnamhistoryapplication.profile.ProfileOverviewFragment;
 import com.example.vietnamhistoryapplication.utils.UserSession;
-import com.example.vietnamhistoryapplication.utils.AutoBrightnessManager;  // ← ĐÃ THÊM
+import com.example.vietnamhistoryapplication.utils.AutoBrightnessManager;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,7 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private AutoBrightnessManager autoBrightnessManager;   // ← ĐÃ THÊM
+    private AutoBrightnessManager autoBrightnessManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -78,6 +78,16 @@ public class TimeLineActivity extends AppCompatActivity implements CardAdapter.O
         loadEraData();
     }
 
+    private void setupGameAnimations() {
+        ivWarrior.setBackgroundResource(R.drawable.warrior2_idle);
+        warriorIdleAnimation = (AnimationDrawable) ivWarrior.getBackground();
+
+        ivTurret.setBackgroundResource(R.drawable.turret_idle);
+        AnimationDrawable turretAnim = (AnimationDrawable) ivTurret.getBackground();
+
+        ivWarrior.post(() -> warriorIdleAnimation.start());
+        ivTurret.post(() -> turretAnim.start());
+    }
     private void loadEraData() {
         Era era = (Era) getIntent().getSerializableExtra("era");
         if (era == null || era.getEvents() == null || era.getEvents().isEmpty()) {
@@ -109,16 +119,7 @@ public class TimeLineActivity extends AppCompatActivity implements CardAdapter.O
         rvTimelineSlots.setAdapter(slotAdapter);
     }
 
-    private void setupGameAnimations() {
-        ivWarrior.setBackgroundResource(R.drawable.warrior2_idle);
-        warriorIdleAnimation = (AnimationDrawable) ivWarrior.getBackground();
 
-        ivTurret.setBackgroundResource(R.drawable.turret_idle);
-        AnimationDrawable turretAnim = (AnimationDrawable) ivTurret.getBackground();
-
-        ivWarrior.post(() -> warriorIdleAnimation.start());
-        ivTurret.post(() -> turretAnim.start());
-    }
 
     private void lockScreen() {
         isProcessing = true;
@@ -151,7 +152,7 @@ public class TimeLineActivity extends AppCompatActivity implements CardAdapter.O
             walkAnim.start();
 
             float currentBias = ((ConstraintLayout.LayoutParams) ivWarrior.getLayoutParams()).horizontalBias;
-            float newBias = Math.min(currentBias + STEP_DISTANCE, 0.79f);
+            float newBias = Math.min(currentBias + STEP_DISTANCE, 0.68f);
 
             ValueAnimator animator = ValueAnimator.ofFloat(currentBias, newBias);
             animator.setDuration(800);
@@ -201,7 +202,7 @@ public class TimeLineActivity extends AppCompatActivity implements CardAdapter.O
         ivWarrior.post(() -> warriorIdleAnimation.start());
     }
 
-    // =================== DIALOG THẮNG / THUA KIỂU CLASH OF CLANS ===================
+    // =================== DIALOG THẮNG / THUA ===================
     private String getCorrectTimelineText() {
         StringBuilder sb = new StringBuilder();
         sb.append("Đáp án đúng theo thứ tự:\n\n");
@@ -220,7 +221,7 @@ public class TimeLineActivity extends AppCompatActivity implements CardAdapter.O
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_victory, null);
 
         TextView tvCorrectAnswers = view.findViewById(R.id.tv_correct_answers);
-        tvCorrectAnswers.setText(getCorrectTimelineText()); // HIỂN THỊ ĐÁP ÁN
+        tvCorrectAnswers.setText(getCorrectTimelineText());
 
         Button btnReplay = view.findViewById(R.id.btnReplay);
         Button btnMenu = view.findViewById(R.id.btnMenu);
@@ -248,7 +249,7 @@ public class TimeLineActivity extends AppCompatActivity implements CardAdapter.O
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_game_over, null);
 
-        // Dòng mới: hiển thị đáp án ngay cả khi thua
+
         TextView tvCorrectAnswers = view.findViewById(R.id.tv_correct_answers);
         tvCorrectAnswers.setText(getCorrectTimelineText());
 

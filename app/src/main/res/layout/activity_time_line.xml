@@ -9,7 +9,6 @@
     android:background="#000000"
     tools:context=".game.timelinepuzzle.TimeLineActivity">
 
-    <!-- NÚT BACK -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
@@ -34,8 +33,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.5"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintHeight_percent="0.5" />
 
     <!-- 2. CÁI BÀN  -->
     <ImageView
@@ -47,8 +45,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.55"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintHeight_percent="0.55" />
 
     <!-- WARRIOR -->
     <ImageView
@@ -64,8 +61,6 @@
         app:layout_constraintHorizontal_bias="0.05" />
 
     <!-- (TURRET) -->
-
-    <!-- RecyclerView các ô timeline -->
 
     <ImageView
         android:id="@+id/hp1"
@@ -134,7 +129,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/ivTable"
-        app:layout_constraintWidth_percent="1"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/item_timeline_slot"
         tools:spanCount="4" />
@@ -146,9 +140,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/ivTable"
-        app:layout_constraintVertical_bias="0.98">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCards"

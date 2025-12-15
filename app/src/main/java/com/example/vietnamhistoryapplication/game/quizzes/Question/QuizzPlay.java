@@ -44,10 +44,10 @@ public class QuizzPlay extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.quizz_play_activity);
 
-         totalTimer = new CountDownTimer(Long.MAX_VALUE, 1000) { // đếm "vô hạn"
+         totalTimer = new CountDownTimer(Long.MAX_VALUE, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                    totalTime++; // mỗi giây tăng 1
+                    totalTime++;
             }
 
             @Override
@@ -64,7 +64,6 @@ public class QuizzPlay extends AppCompatActivity {
         TextView tvTitle = findViewById(R.id.tvQuizName);
         tvTitle.setText(title);
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
-
 
         setupViewPager();
 
@@ -113,12 +112,12 @@ public class QuizzPlay extends AppCompatActivity {
             }
         });
         viewPager.setAdapter(adapter);
-        viewPager.setUserInputEnabled(false); // Vô hiệu swipe để kiểm soát flow
+        viewPager.setUserInputEnabled(false);
     }
 
     private void endQuiz() {
 
-        Intent intent = new Intent(this, ResultQuizz.class); // Giả sử có ResultActivity
+        Intent intent = new Intent(this, ResultQuizz.class);
         intent.putExtra("score", score);
         intent.putExtra("questionCount", questionCount);
         intent.putExtra("title",title);

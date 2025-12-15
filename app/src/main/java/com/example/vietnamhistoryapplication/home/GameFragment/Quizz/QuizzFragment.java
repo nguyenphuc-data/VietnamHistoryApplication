@@ -48,7 +48,7 @@ public class QuizzFragment extends  Fragment{
     private void loadGameFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Lấy argument(có thể null)
+
         Bundle args = getArguments();
         String periodSlug = args != null ? args.getString("periodSlug") : null;
         String stageSlug = args != null ? args.getString("stageSlug") : null;

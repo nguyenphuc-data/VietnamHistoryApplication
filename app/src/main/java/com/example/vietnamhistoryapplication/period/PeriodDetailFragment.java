@@ -45,7 +45,6 @@ public class PeriodDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.period_detail_fragment, container, false);
         TextView tvTitle = view.findViewById(R.id.tvTitle);
         TextView tvDescriptoin = view.findViewById(R.id.tvDescription);
@@ -54,7 +53,7 @@ public class PeriodDetailFragment extends Fragment {
 
         tvTitle.setText(period.getTitle());
         tvDescriptoin.setText(period.getDescription());
-        //load ảnh
+
         ImageLoader.loadImage(ivImage, period.getImage());
 
         btnReadMore.setOnClickListener(v->{

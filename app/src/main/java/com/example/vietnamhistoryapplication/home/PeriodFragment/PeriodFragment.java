@@ -33,7 +33,6 @@ public class PeriodFragment extends Fragment {
     private List<Period> periodList = new ArrayList<>();
 
     public PeriodFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -62,7 +61,7 @@ public class PeriodFragment extends Fragment {
                         if (task.isSuccessful()) {
                             periodList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                String slug = document.getId(); // lấy slug từ document ID
+                                String slug = document.getId();
                                 String title = document.getString("title");
                                 Timestamp startTimestamp = document.getTimestamp("startDate");
                                 Timestamp endTimestamp = document.getTimestamp("endDate");
@@ -92,11 +91,7 @@ public class PeriodFragment extends Fragment {
         return String.valueOf(cal.get(Calendar.YEAR));
     }
 
-    // chuyển sang StageActivity (không phải PeriodDetailActivity)
     private void startStageActivity(Period period) {
-//        Intent intent = new Intent(getActivity(), StageActivity.class);
-//        intent.putExtra("slug", slug); // gửi slug sang StageActivity
-//        startActivity(intent);
         Fragment fragment = PeriodDetailFragment.newInstance(period);
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -104,9 +99,4 @@ public class PeriodFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
-
-
-
-    // Adapter cho ViewPager2
-
 }

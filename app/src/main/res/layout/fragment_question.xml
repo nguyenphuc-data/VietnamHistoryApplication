@@ -6,7 +6,6 @@
     android:orientation="vertical"
     >
 
-    <!-- Thanh trên: Thời gian và Câu số -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +27,7 @@
             android:id="@+id/tv_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00:30"
+            android:text="00:59"
             android:textColor="#E8582B"
             android:textStyle="bold"
             android:textSize="22sp"
@@ -130,7 +129,7 @@
 
 
 
-
+    <!--Kết quả ẩn -->
     <LinearLayout
         android:id="@+id/layout_result"
         android:layout_width="match_parent"
@@ -144,7 +143,7 @@
         android:visibility="gone"
         >
 
-        <!-- Hàng trên cùng: Kết quả & Nút Tiếp -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -178,14 +177,13 @@
                 android:layout_gravity="end" />
         </LinearLayout>
 
-        <!-- Đường kẻ phân chia -->
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#DDDDDD"
             android:layout_marginBottom="12dp" />
 
-        <!-- Hiển thị đáp án đúng -->
         <TextView
             android:id="@+id/tv_correct_label"
             android:layout_width="match_parent"
@@ -208,7 +206,6 @@
             android:gravity="center"
             android:layout_marginTop="4dp" />
 
-        <!-- Giải thích -->
         <TextView
             android:id="@+id/tv_explanation"
             android:layout_width="match_parent"

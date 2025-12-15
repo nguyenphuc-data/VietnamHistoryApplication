@@ -57,7 +57,7 @@ public class RegisterFragment extends Fragment {
         String password = etPassword.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
 
-        // Kiểm tra bắt buộc
+//        validate
         if (TextUtils.isEmpty(name)) {
             etName.setError("Vui lòng nhập tên");
             etName.requestFocus();
@@ -74,21 +74,19 @@ public class RegisterFragment extends Fragment {
             return;
         }
 
-        // Kiểm tra độ dài mật khẩu
         if (password.length() < 6) {
             etPassword.setError("Mật khẩu phải từ 6 ký tự trở lên");
             etPassword.requestFocus();
             return;
         }
 
-        // Kiểm tra email (nếu có)
         if (!TextUtils.isEmpty(email) && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             etEmail.setError("Email không hợp lệ");
             etEmail.requestFocus();
             return;
         }
 
-        // Kiểm tra username trùng
+        // check trùng tài khoản
         db.collection("users")
                 .whereEqualTo("username", username)
                 .get()
@@ -97,7 +95,6 @@ public class RegisterFragment extends Fragment {
                         etUsername.setError("Tên tài khoản đã được sử dụng");
                         etUsername.requestFocus();
                     } else {
-                        // Nếu không trùng -> tạo mới
                         String uid = UUID.randomUUID().toString();
                         long createdAt = System.currentTimeMillis();
 

@@ -7,9 +7,8 @@ public class GameItem {
     private String type;
     private String description;
     private String thumbnailUrl;
-    private List<QuizzItem> quizzes; // danh sách quiz con
+    private List<QuizzItem> quizzes;
 
-    // Bắt buộc cần constructor rỗng cho Firestore
     public GameItem() {}
 
     public GameItem(String name, String type, String description, String thumbnailUrl) {
@@ -19,7 +18,6 @@ public class GameItem {
         this.thumbnailUrl = thumbnailUrl;
     }
 
-    // Getter & Setter
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 

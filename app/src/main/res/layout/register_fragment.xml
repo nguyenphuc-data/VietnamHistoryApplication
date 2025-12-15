@@ -12,7 +12,6 @@
         android:gravity="center"
         android:padding="24dp">
 
-        <!-- Card container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,9 +24,7 @@
             android:layout_marginHorizontal="8dp"
             android:gravity="center"
             android:clipToOutline="true"
-            android:backgroundTint="#FFFFFF"
-            android:paddingVertical="28dp"
-            android:paddingHorizontal="20dp">
+            android:backgroundTint="#FFFFFF">
 
             <TextView
                 android:id="@+id/tvTitle"

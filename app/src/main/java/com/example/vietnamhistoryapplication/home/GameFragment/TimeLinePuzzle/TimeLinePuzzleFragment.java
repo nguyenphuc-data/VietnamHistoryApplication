@@ -38,8 +38,14 @@ public class TimeLinePuzzleFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         loadErasFromFirestore();
-
+        adapter = new EraListAdapter(eraList, era -> {
+            Intent intent = new Intent(getActivity(), TimeLinePuzzleDetail.class);
+            intent.putExtra("era", era);
+            startActivity(intent);
+        });
+        recyclerEras.setAdapter(adapter);
         return view;
+
     }
 
     private void loadErasFromFirestore() {
@@ -56,12 +62,7 @@ public class TimeLinePuzzleFragment extends Fragment {
                             eraList.add(era);
                         }
 
-                        adapter = new EraListAdapter(eraList, era -> {
-                            Intent intent = new Intent(getActivity(), TimeLinePuzzleDetail.class);
-                            intent.putExtra("era", era);
-                            startActivity(intent);
-                        });
-                        recyclerEras.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(getContext(), "Lỗi tải dữ liệu", Toast.LENGTH_SHORT).show();
                     }

@@ -23,7 +23,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     private String stageSlug;
     private Context context;
 
-    // Constructor yêu cầu List<EventItem>, periodSlug và stageSlug
     public EventAdapter(List<EventItem> eventList, String periodSlug, String stageSlug) {
         this.eventList = eventList;
         this.periodSlug = periodSlug;
@@ -43,7 +42,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         EventItem event = eventList.get(position);
 
-        // Gán dữ liệu vào các TextView và ImageView của item
         holder.tvsortOrder.setText(event.sortOrder != null ? event.sortOrder.toString() : "0");
         holder.tvTitle.setText(event.title != null ? event.title : "No Title");
         holder.tvPeriod.setText(event.dateRange != null ? event.dateRange : "No Period");
@@ -51,7 +49,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.tvType.setText(event.type != null ? event.type : "No Type");
         ImageLoader.loadImage(holder.ivImage, event.image);
 
-        // Thêm listener cho item, khi click vào sẽ mở EventDetailActivity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context,EventHomeActivity.class);
             intent.putExtra("periodSlug", periodSlug);
@@ -63,10 +60,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return eventList.size();  // Trả về số lượng sự kiện
+        return eventList.size();
     }
 
-    // ViewHolder để liên kết các view của từng item trong RecyclerView
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvsortOrder, tvTitle, tvPeriod, tvsmallTitle, tvType;
         ImageView ivImage;
